@@ -8275,6 +8275,7 @@ so Rustup may install the documentation for a similar tier 1 target instead.</p>
 <tr><td><code>wasm32-unknown-emscripten</code></td><td style="text-align: center">✓</td><td>WebAssembly via Emscripten</td></tr>
 <tr><td><code>wasm32-unknown-unknown</code></td><td style="text-align: center">✓</td><td>WebAssembly</td></tr>
 <tr><td><code>wasm32-wasi</code></td><td style="text-align: center">✓</td><td>WebAssembly with WASI</td></tr>
+<tr><td><a href="platform-support/wasm32-wasi-preview1-threads.html"><code>wasm32-wasi-preview1-threads</code></a></td><td style="text-align: center">✓</td><td></td></tr>
 <tr><td><code>x86_64-apple-ios</code></td><td style="text-align: center">✓</td><td>64-bit x86 iOS</td></tr>
 <tr><td><a href="platform-support/x86_64-fortanix-unknown-sgx.html"><code>x86_64-fortanix-unknown-sgx</code></a></td><td style="text-align: center">✓</td><td><a href="https://edp.fortanix.com/">Fortanix ABI</a> for 64-bit Intel SGX</td></tr>
 <tr><td><code>x86_64-fuchsia</code></td><td style="text-align: center">✓</td><td>Alias for <code>x86_64-unknown-fuchsia</code></td></tr>
@@ -8410,7 +8411,6 @@ host tools.</p>
 <tr><td><code>thumbv7a-pc-windows-msvc</code></td><td style="text-align: center">?</td><td style="text-align: center"></td><td></td></tr>
 <tr><td><code>thumbv7a-uwp-windows-msvc</code></td><td style="text-align: center">✓</td><td style="text-align: center"></td><td></td></tr>
 <tr><td><code>thumbv7neon-unknown-linux-musleabihf</code></td><td style="text-align: center">?</td><td style="text-align: center"></td><td>Thumb2-mode ARMv7-A Linux with NEON, MUSL</td></tr>
-<tr><td><a href="platform-support/wasm32-wasi-preview1-threads.html"><code>wasm32-wasi-preview1-threads</code></a></td><td style="text-align: center">✓</td><td style="text-align: center"></td><td>WebAssembly with WASI Preview 1 and threads</td></tr>
 <tr><td><a href="platform-support/wasm64-unknown-unknown.html"><code>wasm64-unknown-unknown</code></a></td><td style="text-align: center">?</td><td style="text-align: center"></td><td>WebAssembly</td></tr>
 <tr><td><code>x86_64-apple-ios-macabi</code></td><td style="text-align: center">✓</td><td style="text-align: center"></td><td>Apple Catalyst on x86_64</td></tr>
 <tr><td><a href="platform-support/apple-tvos.html"><code>x86_64-apple-tvos</code></a></td><td style="text-align: center">?</td><td style="text-align: center"></td><td>x86 64-bit tvOS</td></tr>
@@ -12187,7 +12187,7 @@ pub extern &quot;C&quot; fn main(_h: efi::Handle, st: *mut efi::SystemTable) -&g
     efi::Status::SUCCESS
 }</code></pre>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="wasm32-wasi-preview1-threads"><a class="header" href="#wasm32-wasi-preview1-threads"><code>wasm32-wasi-preview1-threads</code></a></h1>
-<p><strong>Tier: 3</strong></p>
+<p><strong>Tier: 2</strong></p>
 <p>The <code>wasm32-wasi-preview1-threads</code> target is a new and still (as of July 2023) an
 experimental target. This target is an extension to <code>wasm32-wasi-preview1</code> target,
 originally known as <code>wasm32-wasi</code>. It extends the original target with a
@@ -12248,12 +12248,6 @@ compiling with <code>-C target-feature=-crt-static</code> is all you need to do.
 <p>All in all, by default, no external dependencies are required. You can
 compile <code>wasm32-wasi-preview1-threads</code> binaries straight out of the box. You can't, however,
 reliably interoperate with C code in this mode (yet).</p>
-<p>This target is not a stable target. This means that there are not many engines
-which implement the <code>wasi-threads</code> feature and if they do they're likely behind a
-flag, for example:</p>
-<ul>
-<li>Wasmtime - <code>--wasm-features=threads --wasi-modules=experimental-wasi-threads</code></li>
-</ul>
 <p>Also note that at this time the <code>wasm32-wasi-preview1-threads</code> target assumes the
 presence of other merged wasm proposals such as (with their LLVM feature flags):</p>
 <ul>
@@ -12269,6 +12263,15 @@ with this target you may encounter LLVM bugs. If an assertion hit or a bug is
 found it's recommended to open an issue either with rust-lang/rust or ideally
 with LLVM itself.</p>
 </blockquote>
+<h2 id="platform-requirements"><a class="header" href="#platform-requirements">Platform requirements</a></h2>
+<p>The runtime should support the same set of APIs as any other supported wasi target for interacting with the host environment through the WASI standard. The runtime also should have implemetation of <a href="https://github.com/WebAssembly/wasi-threads">wasi-threads proposal</a>.</p>
+<p>This target is not a stable target. This means that there are a few engines
+which implement the <code>wasi-threads</code> feature and if they do they're likely behind a
+flag, for example:</p>
+<ul>
+<li>Wasmtime - <code>--wasm-features=threads --wasi-modules=experimental-wasi-threads</code></li>
+<li><a href="https://github.com/bytecodealliance/wasm-micro-runtime">WAMR</a> - needs to be built with WAMR_BUILD_LIB_WASI_THREADS=1</li>
+</ul>
 <h2 id="building-the-target-20"><a class="header" href="#building-the-target-20">Building the target</a></h2>
 <p>Users need to install or built wasi-sdk since release 20.0
 https://github.com/WebAssembly/wasi-sdk/releases/tag/wasi-sdk-20
@@ -12279,10 +12282,11 @@ wasi-root = &quot;.../wasi-libc/sysroot&quot;
 <p>After that users can build this by adding it to the <code>target</code> list in
 <code>config.toml</code>, or with <code>-Zbuild-std</code>.</p>
 <h2 id="building-rust-programs-29"><a class="header" href="#building-rust-programs-29">Building Rust programs</a></h2>
-<p>Since it is Tier 3, rust doesn't ship pre-compiled artifacts for this target.</p>
-<p>Specify <code>wasi-root</code> as explained in the previous section and then use the <code>build-std</code>
-nightly cargo feature to build the standard library:</p>
-<pre><code class="language-shell">cargo +nightly build --target=wasm32-wasi-preview1-threads -Zbuild-std
+<p>From Rust Nightly 1.71.1 (2023-08-03) on the artifacts are shipped pre-compiled:</p>
+<pre><code class="language-text">rustup target add wasm32-wasi-preview1-threads --toolchain nightly
+</code></pre>
+<p>Rust programs can be built for that target:</p>
+<pre><code class="language-text">rustc --target wasm32-wasi-preview1-threads your-code.rs
 </code></pre>
 <h2 id="cross-compilation-11"><a class="header" href="#cross-compilation-11">Cross-compilation</a></h2>
 <p>This target can be cross-compiled from any hosts.</p>
