@@ -1,0 +1,1 @@
+window.SIDEBAR_ITEMS = {"fn":["bar","foo","sub_fn"],"struct":["Bar"]};

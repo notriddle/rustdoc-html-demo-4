@@ -1,0 +1,3 @@
+(function() {var implementors = {
+"implementors":[["impl <a class=\"trait\" href=\"http/trait.HttpTrait.html\" title=\"trait http::HttpTrait\">HttpTrait</a> for <a class=\"struct\" href=\"implementors/struct.Struct.html\" title=\"struct implementors::Struct\">Struct</a>"]]
+};if (window.register_implementors) {window.register_implementors(implementors);} else {window.pending_implementors = implementors;}})()

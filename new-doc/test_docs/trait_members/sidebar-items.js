@@ -1,0 +1,1 @@
+window.SIDEBAR_ITEMS = {"struct":["HasTrait"],"trait":["TraitMembers"]};

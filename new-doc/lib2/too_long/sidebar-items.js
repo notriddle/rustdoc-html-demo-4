@@ -1,0 +1,1 @@
+window.SIDEBAR_ITEMS = {"constant":["ReallyLongTypeNameLongLongLongConstBecauseWhyNotAConstRightGigaGigaSupraLong"],"struct":["SuperIncrediblyLongLongLongLongLongLongLongGigaGigaGigaMegaLongLongLongStructName"],"type":["ReallyLongTypeNameLongLongLong"]};

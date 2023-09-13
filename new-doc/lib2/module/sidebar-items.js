@@ -1,0 +1,1 @@
+window.SIDEBAR_ITEMS = {"fn":["whatever"],"mod":["sub_module"]};
