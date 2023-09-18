@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `library/core/src/num/saturating.rs`."><title>saturating.rs - source</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../static.files/SourceSerif4-Regular-46f98efaafac5295.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../static.files/FiraSans-Regular-018c141bf0843ffd.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../static.files/FiraSans-Medium-8f9a781e4970d388.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../static.files/SourceCodePro-Regular-562dcc5011b6de7d.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../static.files/SourceSerif4-Bold-a2c9cd1067f8b328.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../static.files/SourceCodePro-Semibold-d899c5a5c4aeb14a.ttf.woff2"><link rel="stylesheet" href="../../../static.files/normalize-76eba96aa4d2e634.css"><link rel="stylesheet" href="../../../static.files/rustdoc-fe4440e387e3fb8f.css"><meta name="rustdoc-vars" data-root-path="../../../" data-static-root-path="../../../static.files/" data-current-crate="core" data-themes="" data-resource-suffix="1.74.0" data-rustdoc-version="1.74.0-dev" data-channel="nightly" data-search-js="search-5d3eaacf19ebf04f.js" data-settings-js="settings-925b57a9971953a2.js" data-settings-css="settings-8c76f75bfb6bd192.css" data-theme-light-css="light-3d682914e0c9968a.css" data-theme-dark-css="dark-edbfb09359fa2bf1.css" data-theme-ayu-css="ayu-246d1861b5f1e6a9.css" ><script src="../../../static.files/storage-9a905772e9be0936.js"></script><script defer src="../../../static.files/src-script-773e3d15fece4507.js"></script><script defer src="../../../src-files1.74.0.js"></script><script defer src="../../../static.files/main-b5698614d54525b5.js"></script><noscript><link rel="stylesheet" media="(prefers-color-scheme:light)" href="../../../static.files/light-3d682914e0c9968a.css"><link rel="stylesheet" media="(prefers-color-scheme:dark)" href="../../../static.files/dark-edbfb09359fa2bf1.css"><link rel="stylesheet" href="../../../static.files/noscript-72ee2c17755a8f0e.css"></noscript><link rel="alternate icon" type="image/png" href="../../../static.files/favicon-16x16-8b506e7a72182f1c.png"><link rel="alternate icon" type="image/png" href="../../../static.files/favicon-32x32-422f7d1d52889060.png"><link rel="icon" type="image/svg+xml" href="../../../static.files/favicon-2c020d218678b618.svg"></head><body class="rustdoc src"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"></nav><div class="sidebar-resizer"></div>
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `library/core/src/num/saturating.rs`."><title>saturating.rs - source</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../static.files/SourceSerif4-Regular-46f98efaafac5295.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../static.files/FiraSans-Regular-018c141bf0843ffd.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../static.files/FiraSans-Medium-8f9a781e4970d388.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../static.files/SourceCodePro-Regular-562dcc5011b6de7d.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../static.files/SourceSerif4-Bold-a2c9cd1067f8b328.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../static.files/SourceCodePro-Semibold-d899c5a5c4aeb14a.ttf.woff2"><link rel="stylesheet" href="../../../static.files/normalize-76eba96aa4d2e634.css"><link rel="stylesheet" href="../../../static.files/rustdoc-8beae72b1634c5d7.css"><meta name="rustdoc-vars" data-root-path="../../../" data-static-root-path="../../../static.files/" data-current-crate="core" data-themes="" data-resource-suffix="1.74.0" data-rustdoc-version="1.74.0-dev" data-channel="nightly" data-search-js="search-5d3eaacf19ebf04f.js" data-settings-js="settings-3c6e833083d168bb.js" ><script src="../../../static.files/storage-7dc664d4fe557020.js"></script><script defer src="../../../static.files/src-script-773e3d15fece4507.js"></script><script defer src="../../../src-files1.74.0.js"></script><script defer src="../../../static.files/main-449b36a80424d589.js"></script><noscript><link rel="stylesheet" href="../../../static.files/noscript-b0b99e5a5d041793.css"></noscript><link rel="alternate icon" type="image/png" href="../../../static.files/favicon-16x16-8b506e7a72182f1c.png"><link rel="alternate icon" type="image/png" href="../../../static.files/favicon-32x32-422f7d1d52889060.png"><link rel="icon" type="image/svg+xml" href="../../../static.files/favicon-2c020d218678b618.svg"></head><body class="rustdoc src"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"></nav><div class="sidebar-resizer"></div>
     <main><nav class="sub"><a class="sub-logo-container" href="../../../core/index.html"><img class="rust-logo" src="../../../static.files/rust-logo-151179464ae7ed46.svg" alt="logo"></a><form class="search-form"><span></span><input class="search-input" name="search" aria-label="Run search in the documentation" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><div id="help-button" tabindex="-1"><a href="../../../help.html" title="help">?</a></div><div id="settings-menu" tabindex="-1"><a href="../../../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../../../static.files/wheel-7b819b6101059cd0.svg"></a></div></form></nav><section id="main-content" class="content"><div class="example-wrap"><div data-nosnippet><pre class="src-line-numbers"><a href="#1" id="1">1</a>
 <a href="#2" id="2">2</a>
 <a href="#3" id="3">3</a>
@@ -1078,16 +1078,13 @@
 <a href="#1077" id="1077">1077</a>
 <a href="#1078" id="1078">1078</a>
 <a href="#1079" id="1079">1079</a>
-<a href="#1080" id="1080">1080</a>
-<a href="#1081" id="1081">1081</a>
-<a href="#1082" id="1082">1082</a>
 </pre></div><pre class="rust"><code><span class="doccomment">//! Definitions of `Saturating&lt;T&gt;`.
 
 </span><span class="kw">use </span><span class="kw">crate</span>::fmt;
 <span class="kw">use </span><span class="kw">crate</span>::ops::{Add, AddAssign, BitAnd, BitAndAssign, BitOr, BitOrAssign};
 <span class="kw">use </span><span class="kw">crate</span>::ops::{BitXor, BitXorAssign, Div, DivAssign};
 <span class="kw">use </span><span class="kw">crate</span>::ops::{Mul, MulAssign, Neg, Not, Rem, RemAssign};
-<span class="kw">use </span><span class="kw">crate</span>::ops::{Shl, ShlAssign, Shr, ShrAssign, Sub, SubAssign};
+<span class="kw">use </span><span class="kw">crate</span>::ops::{Sub, SubAssign};
 
 <span class="doccomment">/// Provides intentionally-saturating arithmetic on `T`.
 ///
@@ -1107,7 +1104,6 @@
 /// # Examples
 ///
 /// ```
-/// #![feature(saturating_int_impl)]
 /// use std::num::Saturating;
 ///
 /// let max = Saturating(u32::MAX);
@@ -1115,181 +1111,186 @@
 ///
 /// assert_eq!(u32::MAX, (max + one).0);
 /// ```
-</span><span class="attr">#[unstable(feature = <span class="string">&quot;saturating_int_impl&quot;</span>, issue = <span class="string">&quot;87920&quot;</span>)]
+</span><span class="attr">#[stable(feature = <span class="string">&quot;saturating_int_impl&quot;</span>, since = <span class="string">&quot;CURRENT_RUSTC_VERSION&quot;</span>)]
 #[derive(PartialEq, Eq, PartialOrd, Ord, Clone, Copy, Default, Hash)]
 #[repr(transparent)]
 #[rustc_diagnostic_item = <span class="string">&quot;Saturating&quot;</span>]
-</span><span class="kw">pub struct </span>Saturating&lt;T&gt;(<span class="attr">#[unstable(feature = <span class="string">&quot;saturating_int_impl&quot;</span>, issue = <span class="string">&quot;87920&quot;</span>)] </span><span class="kw">pub </span>T);
+</span><span class="kw">pub struct </span>Saturating&lt;T&gt;(
+    <span class="attr">#[stable(feature = <span class="string">&quot;saturating_int_impl&quot;</span>, since = <span class="string">&quot;CURRENT_RUSTC_VERSION&quot;</span>)] </span><span class="kw">pub </span>T,
+);
 
-<span class="attr">#[unstable(feature = <span class="string">&quot;saturating_int_impl&quot;</span>, issue = <span class="string">&quot;87920&quot;</span>)]
+<span class="attr">#[stable(feature = <span class="string">&quot;saturating_int_impl&quot;</span>, since = <span class="string">&quot;CURRENT_RUSTC_VERSION&quot;</span>)]
 </span><span class="kw">impl</span>&lt;T: fmt::Debug&gt; fmt::Debug <span class="kw">for </span>Saturating&lt;T&gt; {
     <span class="kw">fn </span>fmt(<span class="kw-2">&amp;</span><span class="self">self</span>, f: <span class="kw-2">&amp;mut </span>fmt::Formatter&lt;<span class="lifetime">&#39;_</span>&gt;) -&gt; fmt::Result {
         <span class="self">self</span>.<span class="number">0</span>.fmt(f)
     }
 }
 
-<span class="attr">#[unstable(feature = <span class="string">&quot;saturating_int_impl&quot;</span>, issue = <span class="string">&quot;87920&quot;</span>)]
+<span class="attr">#[stable(feature = <span class="string">&quot;saturating_int_impl&quot;</span>, since = <span class="string">&quot;CURRENT_RUSTC_VERSION&quot;</span>)]
 </span><span class="kw">impl</span>&lt;T: fmt::Display&gt; fmt::Display <span class="kw">for </span>Saturating&lt;T&gt; {
     <span class="kw">fn </span>fmt(<span class="kw-2">&amp;</span><span class="self">self</span>, f: <span class="kw-2">&amp;mut </span>fmt::Formatter&lt;<span class="lifetime">&#39;_</span>&gt;) -&gt; fmt::Result {
         <span class="self">self</span>.<span class="number">0</span>.fmt(f)
     }
 }
 
-<span class="attr">#[unstable(feature = <span class="string">&quot;saturating_int_impl&quot;</span>, issue = <span class="string">&quot;87920&quot;</span>)]
+<span class="attr">#[stable(feature = <span class="string">&quot;saturating_int_impl&quot;</span>, since = <span class="string">&quot;CURRENT_RUSTC_VERSION&quot;</span>)]
 </span><span class="kw">impl</span>&lt;T: fmt::Binary&gt; fmt::Binary <span class="kw">for </span>Saturating&lt;T&gt; {
     <span class="kw">fn </span>fmt(<span class="kw-2">&amp;</span><span class="self">self</span>, f: <span class="kw-2">&amp;mut </span>fmt::Formatter&lt;<span class="lifetime">&#39;_</span>&gt;) -&gt; fmt::Result {
         <span class="self">self</span>.<span class="number">0</span>.fmt(f)
     }
 }
 
-<span class="attr">#[unstable(feature = <span class="string">&quot;saturating_int_impl&quot;</span>, issue = <span class="string">&quot;87920&quot;</span>)]
+<span class="attr">#[stable(feature = <span class="string">&quot;saturating_int_impl&quot;</span>, since = <span class="string">&quot;CURRENT_RUSTC_VERSION&quot;</span>)]
 </span><span class="kw">impl</span>&lt;T: fmt::Octal&gt; fmt::Octal <span class="kw">for </span>Saturating&lt;T&gt; {
     <span class="kw">fn </span>fmt(<span class="kw-2">&amp;</span><span class="self">self</span>, f: <span class="kw-2">&amp;mut </span>fmt::Formatter&lt;<span class="lifetime">&#39;_</span>&gt;) -&gt; fmt::Result {
         <span class="self">self</span>.<span class="number">0</span>.fmt(f)
     }
 }
 
-<span class="attr">#[unstable(feature = <span class="string">&quot;saturating_int_impl&quot;</span>, issue = <span class="string">&quot;87920&quot;</span>)]
+<span class="attr">#[stable(feature = <span class="string">&quot;saturating_int_impl&quot;</span>, since = <span class="string">&quot;CURRENT_RUSTC_VERSION&quot;</span>)]
 </span><span class="kw">impl</span>&lt;T: fmt::LowerHex&gt; fmt::LowerHex <span class="kw">for </span>Saturating&lt;T&gt; {
     <span class="kw">fn </span>fmt(<span class="kw-2">&amp;</span><span class="self">self</span>, f: <span class="kw-2">&amp;mut </span>fmt::Formatter&lt;<span class="lifetime">&#39;_</span>&gt;) -&gt; fmt::Result {
         <span class="self">self</span>.<span class="number">0</span>.fmt(f)
     }
 }
 
-<span class="attr">#[unstable(feature = <span class="string">&quot;saturating_int_impl&quot;</span>, issue = <span class="string">&quot;87920&quot;</span>)]
+<span class="attr">#[stable(feature = <span class="string">&quot;saturating_int_impl&quot;</span>, since = <span class="string">&quot;CURRENT_RUSTC_VERSION&quot;</span>)]
 </span><span class="kw">impl</span>&lt;T: fmt::UpperHex&gt; fmt::UpperHex <span class="kw">for </span>Saturating&lt;T&gt; {
     <span class="kw">fn </span>fmt(<span class="kw-2">&amp;</span><span class="self">self</span>, f: <span class="kw-2">&amp;mut </span>fmt::Formatter&lt;<span class="lifetime">&#39;_</span>&gt;) -&gt; fmt::Result {
         <span class="self">self</span>.<span class="number">0</span>.fmt(f)
     }
 }
-<span class="attr">#[allow(unused_macros)]
-</span><span class="macro">macro_rules! </span>sh_impl_signed {
-    (<span class="macro-nonterminal">$t</span>:ident, <span class="macro-nonterminal">$f</span>:ident) =&gt; {
-        <span class="comment">// FIXME what is the correct implementation here? see discussion https://github.com/rust-lang/rust/pull/87921#discussion_r695870065
-        //
-        // #[unstable(feature = &quot;saturating_int_impl&quot;, issue = &quot;87920&quot;)]
-        // impl Shl&lt;$f&gt; for Saturating&lt;$t&gt; {
-        //     type Output = Saturating&lt;$t&gt;;
-        //
-        //     #[inline]
-        //     fn shl(self, other: $f) -&gt; Saturating&lt;$t&gt; {
-        //         if other &lt; 0 {
-        //             Saturating(self.0.shr((-other &amp; self::shift_max::$t as $f) as u32))
-        //         } else {
-        //             Saturating(self.0.shl((other &amp; self::shift_max::$t as $f) as u32))
-        //         }
-        //     }
-        // }
-        // forward_ref_binop! { impl Shl, shl for Saturating&lt;$t&gt;, $f,
-        // #[unstable(feature = &quot;saturating_int_impl&quot;, issue = &quot;87920&quot;)] }
-        //
-        // #[unstable(feature = &quot;saturating_int_impl&quot;, issue = &quot;87920&quot;)]
-        // impl ShlAssign&lt;$f&gt; for Saturating&lt;$t&gt; {
-        //     #[inline]
-        //     fn shl_assign(&amp;mut self, other: $f) {
-        //         *self = *self &lt;&lt; other;
-        //     }
-        // }
-        // forward_ref_op_assign! { impl ShlAssign, shl_assign for Saturating&lt;$t&gt;, $f }
 
-        </span><span class="attr">#[unstable(feature = <span class="string">&quot;saturating_int_impl&quot;</span>, issue = <span class="string">&quot;87920&quot;</span>)]
-        </span><span class="kw">impl </span>Shr&lt;<span class="macro-nonterminal">$f</span>&gt; <span class="kw">for </span>Saturating&lt;<span class="macro-nonterminal">$t</span>&gt; {
-            <span class="kw">type </span>Output = Saturating&lt;<span class="macro-nonterminal">$t</span>&gt;;
+<span class="comment">// FIXME the correct implementation is not clear. Waiting for a real world use case at https://github.com/rust-lang/libs-team/issues/230
+//
+// #[allow(unused_macros)]
+// macro_rules! sh_impl_signed {
+//     ($t:ident, $f:ident) =&gt; {
+//         // FIXME what is the correct implementation here? see discussion https://github.com/rust-lang/rust/pull/87921#discussion_r695870065
+//         //
+//         // #[unstable(feature = &quot;saturating_int_impl&quot;, issue = &quot;87920&quot;)]
+//         // impl Shl&lt;$f&gt; for Saturating&lt;$t&gt; {
+//         //     type Output = Saturating&lt;$t&gt;;
+//         //
+//         //     #[inline]
+//         //     fn shl(self, other: $f) -&gt; Saturating&lt;$t&gt; {
+//         //         if other &lt; 0 {
+//         //             Saturating(self.0.shr((-other &amp; self::shift_max::$t as $f) as u32))
+//         //         } else {
+//         //             Saturating(self.0.shl((other &amp; self::shift_max::$t as $f) as u32))
+//         //         }
+//         //     }
+//         // }
+//         // forward_ref_binop! { impl Shl, shl for Saturating&lt;$t&gt;, $f,
+//         // #[unstable(feature = &quot;saturating_int_impl&quot;, issue = &quot;87920&quot;)] }
+//         //
+//         // #[unstable(feature = &quot;saturating_int_impl&quot;, issue = &quot;87920&quot;)]
+//         // impl ShlAssign&lt;$f&gt; for Saturating&lt;$t&gt; {
+//         //     #[inline]
+//         //     fn shl_assign(&amp;mut self, other: $f) {
+//         //         *self = *self &lt;&lt; other;
+//         //     }
+//         // }
+//         // forward_ref_op_assign! { impl ShlAssign, shl_assign for Saturating&lt;$t&gt;, $f }
+//
+//         #[unstable(feature = &quot;saturating_int_impl&quot;, issue = &quot;87920&quot;)]
+//         impl Shr&lt;$f&gt; for Saturating&lt;$t&gt; {
+//             type Output = Saturating&lt;$t&gt;;
+//
+//             #[inline]
+//             fn shr(self, other: $f) -&gt; Saturating&lt;$t&gt; {
+//                 if other &lt; 0 {
+//                     Saturating(self.0.shl((-other &amp; self::shift_max::$t as $f) as u32))
+//                 } else {
+//                     Saturating(self.0.shr((other &amp; self::shift_max::$t as $f) as u32))
+//                 }
+//             }
+//         }
+//         forward_ref_binop! { impl Shr, shr for Saturating&lt;$t&gt;, $f,
+//         #[unstable(feature = &quot;saturating_int_impl&quot;, issue = &quot;87920&quot;)] }
+//
+//         #[unstable(feature = &quot;saturating_int_impl&quot;, issue = &quot;87920&quot;)]
+//         impl ShrAssign&lt;$f&gt; for Saturating&lt;$t&gt; {
+//             #[inline]
+//             fn shr_assign(&amp;mut self, other: $f) {
+//                 *self = *self &gt;&gt; other;
+//             }
+//         }
+//         forward_ref_op_assign! { impl ShrAssign, shr_assign for Saturating&lt;$t&gt;, $f }
+//     };
+// }
+//
+// macro_rules! sh_impl_unsigned {
+//     ($t:ident, $f:ident) =&gt; {
+//         #[unstable(feature = &quot;saturating_int_impl&quot;, issue = &quot;87920&quot;)]
+//         impl Shl&lt;$f&gt; for Saturating&lt;$t&gt; {
+//             type Output = Saturating&lt;$t&gt;;
+//
+//             #[inline]
+//             fn shl(self, other: $f) -&gt; Saturating&lt;$t&gt; {
+//                 Saturating(self.0.wrapping_shl(other as u32))
+//             }
+//         }
+//         forward_ref_binop! { impl Shl, shl for Saturating&lt;$t&gt;, $f,
+//         #[unstable(feature = &quot;saturating_int_impl&quot;, issue = &quot;87920&quot;)] }
+//
+//         #[unstable(feature = &quot;saturating_int_impl&quot;, issue = &quot;87920&quot;)]
+//         impl ShlAssign&lt;$f&gt; for Saturating&lt;$t&gt; {
+//             #[inline]
+//             fn shl_assign(&amp;mut self, other: $f) {
+//                 *self = *self &lt;&lt; other;
+//             }
+//         }
+//         forward_ref_op_assign! { impl ShlAssign, shl_assign for Saturating&lt;$t&gt;, $f }
+//
+//         #[unstable(feature = &quot;saturating_int_impl&quot;, issue = &quot;87920&quot;)]
+//         impl Shr&lt;$f&gt; for Saturating&lt;$t&gt; {
+//             type Output = Saturating&lt;$t&gt;;
+//
+//             #[inline]
+//             fn shr(self, other: $f) -&gt; Saturating&lt;$t&gt; {
+//                 Saturating(self.0.wrapping_shr(other as u32))
+//             }
+//         }
+//         forward_ref_binop! { impl Shr, shr for Saturating&lt;$t&gt;, $f,
+//         #[unstable(feature = &quot;saturating_int_impl&quot;, issue = &quot;87920&quot;)] }
+//
+//         #[unstable(feature = &quot;saturating_int_impl&quot;, issue = &quot;87920&quot;)]
+//         impl ShrAssign&lt;$f&gt; for Saturating&lt;$t&gt; {
+//             #[inline]
+//             fn shr_assign(&amp;mut self, other: $f) {
+//                 *self = *self &gt;&gt; other;
+//             }
+//         }
+//         forward_ref_op_assign! { impl ShrAssign, shr_assign for Saturating&lt;$t&gt;, $f }
+//     };
+// }
+//
+// // FIXME (#23545): uncomment the remaining impls
+// macro_rules! sh_impl_all {
+//     ($($t:ident)*) =&gt; ($(
+//         //sh_impl_unsigned! { $t, u8 }
+//         //sh_impl_unsigned! { $t, u16 }
+//         //sh_impl_unsigned! { $t, u32 }
+//         //sh_impl_unsigned! { $t, u64 }
+//         //sh_impl_unsigned! { $t, u128 }
+//         sh_impl_unsigned! { $t, usize }
+//
+//         //sh_impl_signed! { $t, i8 }
+//         //sh_impl_signed! { $t, i16 }
+//         //sh_impl_signed! { $t, i32 }
+//         //sh_impl_signed! { $t, i64 }
+//         //sh_impl_signed! { $t, i128 }
+//         //sh_impl_signed! { $t, isize }
+//     )*)
+// }
+//
+// sh_impl_all! { u8 u16 u32 u64 u128 usize i8 i16 i32 i64 i128 isize }
 
-            <span class="attr">#[inline]
-            </span><span class="kw">fn </span>shr(<span class="self">self</span>, other: <span class="macro-nonterminal">$f</span>) -&gt; Saturating&lt;<span class="macro-nonterminal">$t</span>&gt; {
-                <span class="kw">if </span>other &lt; <span class="number">0 </span>{
-                    Saturating(<span class="self">self</span>.<span class="number">0</span>.shl((-other &amp; <span class="self">self</span>::shift_max::<span class="macro-nonterminal">$t </span><span class="kw">as </span><span class="macro-nonterminal">$f</span>) <span class="kw">as </span>u32))
-                } <span class="kw">else </span>{
-                    Saturating(<span class="self">self</span>.<span class="number">0</span>.shr((other &amp; <span class="self">self</span>::shift_max::<span class="macro-nonterminal">$t </span><span class="kw">as </span><span class="macro-nonterminal">$f</span>) <span class="kw">as </span>u32))
-                }
-            }
-        }
-        <span class="macro">forward_ref_binop! </span>{ <span class="kw">impl </span>Shr, shr <span class="kw">for </span>Saturating&lt;<span class="macro-nonterminal">$t</span>&gt;, <span class="macro-nonterminal">$f</span>,
-        <span class="attr">#[unstable(feature = <span class="string">&quot;saturating_int_impl&quot;</span>, issue = <span class="string">&quot;87920&quot;</span>)] </span>}
-
-        <span class="attr">#[unstable(feature = <span class="string">&quot;saturating_int_impl&quot;</span>, issue = <span class="string">&quot;87920&quot;</span>)]
-        </span><span class="kw">impl </span>ShrAssign&lt;<span class="macro-nonterminal">$f</span>&gt; <span class="kw">for </span>Saturating&lt;<span class="macro-nonterminal">$t</span>&gt; {
-            <span class="attr">#[inline]
-            </span><span class="kw">fn </span>shr_assign(<span class="kw-2">&amp;mut </span><span class="self">self</span>, other: <span class="macro-nonterminal">$f</span>) {
-                <span class="kw-2">*</span><span class="self">self </span>= <span class="kw-2">*</span><span class="self">self </span>&gt;&gt; other;
-            }
-        }
-        <span class="macro">forward_ref_op_assign! </span>{ <span class="kw">impl </span>ShrAssign, shr_assign <span class="kw">for </span>Saturating&lt;<span class="macro-nonterminal">$t</span>&gt;, <span class="macro-nonterminal">$f </span>}
-    };
-}
-
-<span class="macro">macro_rules! </span>sh_impl_unsigned {
-    (<span class="macro-nonterminal">$t</span>:ident, <span class="macro-nonterminal">$f</span>:ident) =&gt; {
-        <span class="attr">#[unstable(feature = <span class="string">&quot;saturating_int_impl&quot;</span>, issue = <span class="string">&quot;87920&quot;</span>)]
-        </span><span class="kw">impl </span>Shl&lt;<span class="macro-nonterminal">$f</span>&gt; <span class="kw">for </span>Saturating&lt;<span class="macro-nonterminal">$t</span>&gt; {
-            <span class="kw">type </span>Output = Saturating&lt;<span class="macro-nonterminal">$t</span>&gt;;
-
-            <span class="attr">#[inline]
-            </span><span class="kw">fn </span>shl(<span class="self">self</span>, other: <span class="macro-nonterminal">$f</span>) -&gt; Saturating&lt;<span class="macro-nonterminal">$t</span>&gt; {
-                Saturating(<span class="self">self</span>.<span class="number">0</span>.wrapping_shl(other <span class="kw">as </span>u32))
-            }
-        }
-        <span class="macro">forward_ref_binop! </span>{ <span class="kw">impl </span>Shl, shl <span class="kw">for </span>Saturating&lt;<span class="macro-nonterminal">$t</span>&gt;, <span class="macro-nonterminal">$f</span>,
-        <span class="attr">#[unstable(feature = <span class="string">&quot;saturating_int_impl&quot;</span>, issue = <span class="string">&quot;87920&quot;</span>)] </span>}
-
-        <span class="attr">#[unstable(feature = <span class="string">&quot;saturating_int_impl&quot;</span>, issue = <span class="string">&quot;87920&quot;</span>)]
-        </span><span class="kw">impl </span>ShlAssign&lt;<span class="macro-nonterminal">$f</span>&gt; <span class="kw">for </span>Saturating&lt;<span class="macro-nonterminal">$t</span>&gt; {
-            <span class="attr">#[inline]
-            </span><span class="kw">fn </span>shl_assign(<span class="kw-2">&amp;mut </span><span class="self">self</span>, other: <span class="macro-nonterminal">$f</span>) {
-                <span class="kw-2">*</span><span class="self">self </span>= <span class="kw-2">*</span><span class="self">self </span>&lt;&lt; other;
-            }
-        }
-        <span class="macro">forward_ref_op_assign! </span>{ <span class="kw">impl </span>ShlAssign, shl_assign <span class="kw">for </span>Saturating&lt;<span class="macro-nonterminal">$t</span>&gt;, <span class="macro-nonterminal">$f </span>}
-
-        <span class="attr">#[unstable(feature = <span class="string">&quot;saturating_int_impl&quot;</span>, issue = <span class="string">&quot;87920&quot;</span>)]
-        </span><span class="kw">impl </span>Shr&lt;<span class="macro-nonterminal">$f</span>&gt; <span class="kw">for </span>Saturating&lt;<span class="macro-nonterminal">$t</span>&gt; {
-            <span class="kw">type </span>Output = Saturating&lt;<span class="macro-nonterminal">$t</span>&gt;;
-
-            <span class="attr">#[inline]
-            </span><span class="kw">fn </span>shr(<span class="self">self</span>, other: <span class="macro-nonterminal">$f</span>) -&gt; Saturating&lt;<span class="macro-nonterminal">$t</span>&gt; {
-                Saturating(<span class="self">self</span>.<span class="number">0</span>.wrapping_shr(other <span class="kw">as </span>u32))
-            }
-        }
-        <span class="macro">forward_ref_binop! </span>{ <span class="kw">impl </span>Shr, shr <span class="kw">for </span>Saturating&lt;<span class="macro-nonterminal">$t</span>&gt;, <span class="macro-nonterminal">$f</span>,
-        <span class="attr">#[unstable(feature = <span class="string">&quot;saturating_int_impl&quot;</span>, issue = <span class="string">&quot;87920&quot;</span>)] </span>}
-
-        <span class="attr">#[unstable(feature = <span class="string">&quot;saturating_int_impl&quot;</span>, issue = <span class="string">&quot;87920&quot;</span>)]
-        </span><span class="kw">impl </span>ShrAssign&lt;<span class="macro-nonterminal">$f</span>&gt; <span class="kw">for </span>Saturating&lt;<span class="macro-nonterminal">$t</span>&gt; {
-            <span class="attr">#[inline]
-            </span><span class="kw">fn </span>shr_assign(<span class="kw-2">&amp;mut </span><span class="self">self</span>, other: <span class="macro-nonterminal">$f</span>) {
-                <span class="kw-2">*</span><span class="self">self </span>= <span class="kw-2">*</span><span class="self">self </span>&gt;&gt; other;
-            }
-        }
-        <span class="macro">forward_ref_op_assign! </span>{ <span class="kw">impl </span>ShrAssign, shr_assign <span class="kw">for </span>Saturating&lt;<span class="macro-nonterminal">$t</span>&gt;, <span class="macro-nonterminal">$f </span>}
-    };
-}
-
-<span class="comment">// FIXME (#23545): uncomment the remaining impls
-</span><span class="macro">macro_rules! </span>sh_impl_all {
-    ($(<span class="macro-nonterminal">$t</span>:ident)<span class="kw-2">*</span>) =&gt; ($(
-        <span class="comment">//sh_impl_unsigned! { $t, u8 }
-        //sh_impl_unsigned! { $t, u16 }
-        //sh_impl_unsigned! { $t, u32 }
-        //sh_impl_unsigned! { $t, u64 }
-        //sh_impl_unsigned! { $t, u128 }
-        </span><span class="macro">sh_impl_unsigned! </span>{ <span class="macro-nonterminal">$t</span>, usize }
-
-        <span class="comment">//sh_impl_signed! { $t, i8 }
-        //sh_impl_signed! { $t, i16 }
-        //sh_impl_signed! { $t, i32 }
-        //sh_impl_signed! { $t, i64 }
-        //sh_impl_signed! { $t, i128 }
-        //sh_impl_signed! { $t, isize }
-    </span>)<span class="kw-2">*</span>)
-}
-
-<span class="macro">sh_impl_all! </span>{ u8 u16 u32 u64 u128 usize i8 i16 i32 i64 i128 isize }
-
-<span class="comment">// FIXME(30524): impl Op&lt;T&gt; for Saturating&lt;T&gt;, impl OpAssign&lt;T&gt; for Saturating&lt;T&gt;
+// FIXME(30524): impl Op&lt;T&gt; for Saturating&lt;T&gt;, impl OpAssign&lt;T&gt; for Saturating&lt;T&gt;
 </span><span class="macro">macro_rules! </span>saturating_impl {
     ($(<span class="macro-nonterminal">$t</span>:ty)<span class="kw-2">*</span>) =&gt; ($(
-        <span class="attr">#[unstable(feature = <span class="string">&quot;saturating_int_impl&quot;</span>, issue = <span class="string">&quot;87920&quot;</span>)]
+        <span class="attr">#[stable(feature = <span class="string">&quot;saturating_int_impl&quot;</span>, since = <span class="string">&quot;CURRENT_RUSTC_VERSION&quot;</span>)]
         </span><span class="kw">impl </span>Add <span class="kw">for </span>Saturating&lt;<span class="macro-nonterminal">$t</span>&gt; {
             <span class="kw">type </span>Output = Saturating&lt;<span class="macro-nonterminal">$t</span>&gt;;
 
@@ -1299,9 +1300,9 @@
             }
         }
         <span class="macro">forward_ref_binop! </span>{ <span class="kw">impl </span>Add, add <span class="kw">for </span>Saturating&lt;<span class="macro-nonterminal">$t</span>&gt;, Saturating&lt;<span class="macro-nonterminal">$t</span>&gt;,
-                <span class="attr">#[unstable(feature = <span class="string">&quot;saturating_int_impl&quot;</span>, issue = <span class="string">&quot;87920&quot;</span>)] </span>}
+                <span class="attr">#[stable(feature = <span class="string">&quot;saturating_int_impl&quot;</span>, since = <span class="string">&quot;CURRENT_RUSTC_VERSION&quot;</span>)] </span>}
 
-        <span class="attr">#[unstable(feature = <span class="string">&quot;saturating_int_impl&quot;</span>, issue = <span class="string">&quot;87920&quot;</span>)]
+        <span class="attr">#[stable(feature = <span class="string">&quot;saturating_int_impl&quot;</span>, since = <span class="string">&quot;CURRENT_RUSTC_VERSION&quot;</span>)]
         </span><span class="kw">impl </span>AddAssign <span class="kw">for </span>Saturating&lt;<span class="macro-nonterminal">$t</span>&gt; {
             <span class="attr">#[inline]
             </span><span class="kw">fn </span>add_assign(<span class="kw-2">&amp;mut </span><span class="self">self</span>, other: Saturating&lt;<span class="macro-nonterminal">$t</span>&gt;) {
@@ -1310,7 +1311,7 @@
         }
         <span class="macro">forward_ref_op_assign! </span>{ <span class="kw">impl </span>AddAssign, add_assign <span class="kw">for </span>Saturating&lt;<span class="macro-nonterminal">$t</span>&gt;, Saturating&lt;<span class="macro-nonterminal">$t</span>&gt; }
 
-        <span class="attr">#[unstable(feature = <span class="string">&quot;saturating_int_assign_impl&quot;</span>, issue = <span class="string">&quot;92354&quot;</span>)]
+        <span class="attr">#[stable(feature = <span class="string">&quot;saturating_int_assign_impl&quot;</span>, since = <span class="string">&quot;CURRENT_RUSTC_VERSION&quot;</span>)]
         </span><span class="kw">impl </span>AddAssign&lt;<span class="macro-nonterminal">$t</span>&gt; <span class="kw">for </span>Saturating&lt;<span class="macro-nonterminal">$t</span>&gt; {
             <span class="attr">#[inline]
             </span><span class="kw">fn </span>add_assign(<span class="kw-2">&amp;mut </span><span class="self">self</span>, other: <span class="macro-nonterminal">$t</span>) {
@@ -1319,7 +1320,7 @@
         }
         <span class="macro">forward_ref_op_assign! </span>{ <span class="kw">impl </span>AddAssign, add_assign <span class="kw">for </span>Saturating&lt;<span class="macro-nonterminal">$t</span>&gt;, <span class="macro-nonterminal">$t </span>}
 
-        <span class="attr">#[unstable(feature = <span class="string">&quot;saturating_int_impl&quot;</span>, issue = <span class="string">&quot;87920&quot;</span>)]
+        <span class="attr">#[stable(feature = <span class="string">&quot;saturating_int_impl&quot;</span>, since = <span class="string">&quot;CURRENT_RUSTC_VERSION&quot;</span>)]
         </span><span class="kw">impl </span>Sub <span class="kw">for </span>Saturating&lt;<span class="macro-nonterminal">$t</span>&gt; {
             <span class="kw">type </span>Output = Saturating&lt;<span class="macro-nonterminal">$t</span>&gt;;
 
@@ -1329,9 +1330,9 @@
             }
         }
         <span class="macro">forward_ref_binop! </span>{ <span class="kw">impl </span>Sub, sub <span class="kw">for </span>Saturating&lt;<span class="macro-nonterminal">$t</span>&gt;, Saturating&lt;<span class="macro-nonterminal">$t</span>&gt;,
-                <span class="attr">#[unstable(feature = <span class="string">&quot;saturating_int_impl&quot;</span>, issue = <span class="string">&quot;87920&quot;</span>)] </span>}
+                <span class="attr">#[stable(feature = <span class="string">&quot;saturating_int_impl&quot;</span>, since = <span class="string">&quot;CURRENT_RUSTC_VERSION&quot;</span>)] </span>}
 
-        <span class="attr">#[unstable(feature = <span class="string">&quot;saturating_int_impl&quot;</span>, issue = <span class="string">&quot;87920&quot;</span>)]
+        <span class="attr">#[stable(feature = <span class="string">&quot;saturating_int_impl&quot;</span>, since = <span class="string">&quot;CURRENT_RUSTC_VERSION&quot;</span>)]
         </span><span class="kw">impl </span>SubAssign <span class="kw">for </span>Saturating&lt;<span class="macro-nonterminal">$t</span>&gt; {
             <span class="attr">#[inline]
             </span><span class="kw">fn </span>sub_assign(<span class="kw-2">&amp;mut </span><span class="self">self</span>, other: Saturating&lt;<span class="macro-nonterminal">$t</span>&gt;) {
@@ -1340,7 +1341,7 @@
         }
         <span class="macro">forward_ref_op_assign! </span>{ <span class="kw">impl </span>SubAssign, sub_assign <span class="kw">for </span>Saturating&lt;<span class="macro-nonterminal">$t</span>&gt;, Saturating&lt;<span class="macro-nonterminal">$t</span>&gt; }
 
-        <span class="attr">#[unstable(feature = <span class="string">&quot;saturating_int_assign_impl&quot;</span>, issue = <span class="string">&quot;92354&quot;</span>)]
+        <span class="attr">#[stable(feature = <span class="string">&quot;saturating_int_assign_impl&quot;</span>, since = <span class="string">&quot;CURRENT_RUSTC_VERSION&quot;</span>)]
         </span><span class="kw">impl </span>SubAssign&lt;<span class="macro-nonterminal">$t</span>&gt; <span class="kw">for </span>Saturating&lt;<span class="macro-nonterminal">$t</span>&gt; {
             <span class="attr">#[inline]
             </span><span class="kw">fn </span>sub_assign(<span class="kw-2">&amp;mut </span><span class="self">self</span>, other: <span class="macro-nonterminal">$t</span>) {
@@ -1349,7 +1350,7 @@
         }
         <span class="macro">forward_ref_op_assign! </span>{ <span class="kw">impl </span>SubAssign, sub_assign <span class="kw">for </span>Saturating&lt;<span class="macro-nonterminal">$t</span>&gt;, <span class="macro-nonterminal">$t </span>}
 
-        <span class="attr">#[unstable(feature = <span class="string">&quot;saturating_int_impl&quot;</span>, issue = <span class="string">&quot;87920&quot;</span>)]
+        <span class="attr">#[stable(feature = <span class="string">&quot;saturating_int_impl&quot;</span>, since = <span class="string">&quot;CURRENT_RUSTC_VERSION&quot;</span>)]
         </span><span class="kw">impl </span>Mul <span class="kw">for </span>Saturating&lt;<span class="macro-nonterminal">$t</span>&gt; {
             <span class="kw">type </span>Output = Saturating&lt;<span class="macro-nonterminal">$t</span>&gt;;
 
@@ -1359,9 +1360,9 @@
             }
         }
         <span class="macro">forward_ref_binop! </span>{ <span class="kw">impl </span>Mul, mul <span class="kw">for </span>Saturating&lt;<span class="macro-nonterminal">$t</span>&gt;, Saturating&lt;<span class="macro-nonterminal">$t</span>&gt;,
-                <span class="attr">#[unstable(feature = <span class="string">&quot;saturating_int_impl&quot;</span>, issue = <span class="string">&quot;87920&quot;</span>)] </span>}
+                <span class="attr">#[stable(feature = <span class="string">&quot;saturating_int_impl&quot;</span>, since = <span class="string">&quot;CURRENT_RUSTC_VERSION&quot;</span>)] </span>}
 
-        <span class="attr">#[unstable(feature = <span class="string">&quot;saturating_int_impl&quot;</span>, issue = <span class="string">&quot;87920&quot;</span>)]
+        <span class="attr">#[stable(feature = <span class="string">&quot;saturating_int_impl&quot;</span>, since = <span class="string">&quot;CURRENT_RUSTC_VERSION&quot;</span>)]
         </span><span class="kw">impl </span>MulAssign <span class="kw">for </span>Saturating&lt;<span class="macro-nonterminal">$t</span>&gt; {
             <span class="attr">#[inline]
             </span><span class="kw">fn </span>mul_assign(<span class="kw-2">&amp;mut </span><span class="self">self</span>, other: Saturating&lt;<span class="macro-nonterminal">$t</span>&gt;) {
@@ -1370,7 +1371,7 @@
         }
         <span class="macro">forward_ref_op_assign! </span>{ <span class="kw">impl </span>MulAssign, mul_assign <span class="kw">for </span>Saturating&lt;<span class="macro-nonterminal">$t</span>&gt;, Saturating&lt;<span class="macro-nonterminal">$t</span>&gt; }
 
-        <span class="attr">#[unstable(feature = <span class="string">&quot;saturating_int_assign_impl&quot;</span>, issue = <span class="string">&quot;92354&quot;</span>)]
+        <span class="attr">#[stable(feature = <span class="string">&quot;saturating_int_assign_impl&quot;</span>, since = <span class="string">&quot;CURRENT_RUSTC_VERSION&quot;</span>)]
         </span><span class="kw">impl </span>MulAssign&lt;<span class="macro-nonterminal">$t</span>&gt; <span class="kw">for </span>Saturating&lt;<span class="macro-nonterminal">$t</span>&gt; {
             <span class="attr">#[inline]
             </span><span class="kw">fn </span>mul_assign(<span class="kw-2">&amp;mut </span><span class="self">self</span>, other: <span class="macro-nonterminal">$t</span>) {
@@ -1384,7 +1385,6 @@
         /// Basic usage:
         ///
         /// ```
-        /// #![feature(saturating_int_impl)]
         /// use std::num::Saturating;
         ///
         </span><span class="attr">#[doc = <span class="macro">concat!</span>(<span class="string">&quot;assert_eq!(Saturating(2&quot;</span>, <span class="macro">stringify!</span>(<span class="macro-nonterminal">$t</span>), <span class="string">&quot;), Saturating(5&quot;</span>, <span class="macro">stringify!</span>(<span class="macro-nonterminal">$t</span>), <span class="string">&quot;) / Saturating(2));&quot;</span>)]
@@ -1393,12 +1393,11 @@
         </span><span class="doccomment">/// ```
         ///
         /// ```should_panic
-        /// #![feature(saturating_int_impl)]
         /// use std::num::Saturating;
         ///
         </span><span class="attr">#[doc = <span class="macro">concat!</span>(<span class="string">&quot;let _ = Saturating(0&quot;</span>, <span class="macro">stringify!</span>(<span class="macro-nonterminal">$t</span>), <span class="string">&quot;) / Saturating(0);&quot;</span>)]
         </span><span class="doccomment">/// ```
-        </span><span class="attr">#[unstable(feature = <span class="string">&quot;saturating_int_impl&quot;</span>, issue = <span class="string">&quot;87920&quot;</span>)]
+        </span><span class="attr">#[stable(feature = <span class="string">&quot;saturating_int_impl&quot;</span>, since = <span class="string">&quot;CURRENT_RUSTC_VERSION&quot;</span>)]
         </span><span class="kw">impl </span>Div <span class="kw">for </span>Saturating&lt;<span class="macro-nonterminal">$t</span>&gt; {
             <span class="kw">type </span>Output = Saturating&lt;<span class="macro-nonterminal">$t</span>&gt;;
 
@@ -1408,10 +1407,10 @@
             }
         }
         <span class="macro">forward_ref_binop! </span>{ <span class="kw">impl </span>Div, div <span class="kw">for </span>Saturating&lt;<span class="macro-nonterminal">$t</span>&gt;, Saturating&lt;<span class="macro-nonterminal">$t</span>&gt;,
-                <span class="attr">#[unstable(feature = <span class="string">&quot;saturating_int_impl&quot;</span>, issue = <span class="string">&quot;87920&quot;</span>)] </span>}
+                <span class="attr">#[stable(feature = <span class="string">&quot;saturating_int_impl&quot;</span>, since = <span class="string">&quot;CURRENT_RUSTC_VERSION&quot;</span>)] </span>}
 
 
-        <span class="attr">#[unstable(feature = <span class="string">&quot;saturating_int_impl&quot;</span>, issue = <span class="string">&quot;87920&quot;</span>)]
+        <span class="attr">#[stable(feature = <span class="string">&quot;saturating_int_impl&quot;</span>, since = <span class="string">&quot;CURRENT_RUSTC_VERSION&quot;</span>)]
         </span><span class="kw">impl </span>DivAssign <span class="kw">for </span>Saturating&lt;<span class="macro-nonterminal">$t</span>&gt; {
             <span class="attr">#[inline]
             </span><span class="kw">fn </span>div_assign(<span class="kw-2">&amp;mut </span><span class="self">self</span>, other: Saturating&lt;<span class="macro-nonterminal">$t</span>&gt;) {
@@ -1420,7 +1419,7 @@
         }
         <span class="macro">forward_ref_op_assign! </span>{ <span class="kw">impl </span>DivAssign, div_assign <span class="kw">for </span>Saturating&lt;<span class="macro-nonterminal">$t</span>&gt;, Saturating&lt;<span class="macro-nonterminal">$t</span>&gt; }
 
-        <span class="attr">#[unstable(feature = <span class="string">&quot;saturating_int_assign_impl&quot;</span>, issue = <span class="string">&quot;92354&quot;</span>)]
+        <span class="attr">#[stable(feature = <span class="string">&quot;saturating_int_assign_impl&quot;</span>, since = <span class="string">&quot;CURRENT_RUSTC_VERSION&quot;</span>)]
         </span><span class="kw">impl </span>DivAssign&lt;<span class="macro-nonterminal">$t</span>&gt; <span class="kw">for </span>Saturating&lt;<span class="macro-nonterminal">$t</span>&gt; {
             <span class="attr">#[inline]
             </span><span class="kw">fn </span>div_assign(<span class="kw-2">&amp;mut </span><span class="self">self</span>, other: <span class="macro-nonterminal">$t</span>) {
@@ -1429,7 +1428,7 @@
         }
         <span class="macro">forward_ref_op_assign! </span>{ <span class="kw">impl </span>DivAssign, div_assign <span class="kw">for </span>Saturating&lt;<span class="macro-nonterminal">$t</span>&gt;, <span class="macro-nonterminal">$t </span>}
 
-        <span class="attr">#[unstable(feature = <span class="string">&quot;saturating_int_impl&quot;</span>, issue = <span class="string">&quot;87920&quot;</span>)]
+        <span class="attr">#[stable(feature = <span class="string">&quot;saturating_int_impl&quot;</span>, since = <span class="string">&quot;CURRENT_RUSTC_VERSION&quot;</span>)]
         </span><span class="kw">impl </span>Rem <span class="kw">for </span>Saturating&lt;<span class="macro-nonterminal">$t</span>&gt; {
             <span class="kw">type </span>Output = Saturating&lt;<span class="macro-nonterminal">$t</span>&gt;;
 
@@ -1439,9 +1438,9 @@
             }
         }
         <span class="macro">forward_ref_binop! </span>{ <span class="kw">impl </span>Rem, rem <span class="kw">for </span>Saturating&lt;<span class="macro-nonterminal">$t</span>&gt;, Saturating&lt;<span class="macro-nonterminal">$t</span>&gt;,
-                <span class="attr">#[unstable(feature = <span class="string">&quot;saturating_int_impl&quot;</span>, issue = <span class="string">&quot;87920&quot;</span>)] </span>}
+                <span class="attr">#[stable(feature = <span class="string">&quot;saturating_int_impl&quot;</span>, since = <span class="string">&quot;CURRENT_RUSTC_VERSION&quot;</span>)] </span>}
 
-        <span class="attr">#[unstable(feature = <span class="string">&quot;saturating_int_impl&quot;</span>, issue = <span class="string">&quot;87920&quot;</span>)]
+        <span class="attr">#[stable(feature = <span class="string">&quot;saturating_int_impl&quot;</span>, since = <span class="string">&quot;CURRENT_RUSTC_VERSION&quot;</span>)]
         </span><span class="kw">impl </span>RemAssign <span class="kw">for </span>Saturating&lt;<span class="macro-nonterminal">$t</span>&gt; {
             <span class="attr">#[inline]
             </span><span class="kw">fn </span>rem_assign(<span class="kw-2">&amp;mut </span><span class="self">self</span>, other: Saturating&lt;<span class="macro-nonterminal">$t</span>&gt;) {
@@ -1450,7 +1449,7 @@
         }
         <span class="macro">forward_ref_op_assign! </span>{ <span class="kw">impl </span>RemAssign, rem_assign <span class="kw">for </span>Saturating&lt;<span class="macro-nonterminal">$t</span>&gt;, Saturating&lt;<span class="macro-nonterminal">$t</span>&gt; }
 
-        <span class="attr">#[unstable(feature = <span class="string">&quot;saturating_int_assign_impl&quot;</span>, issue = <span class="string">&quot;92354&quot;</span>)]
+        <span class="attr">#[stable(feature = <span class="string">&quot;saturating_int_assign_impl&quot;</span>, since = <span class="string">&quot;CURRENT_RUSTC_VERSION&quot;</span>)]
         </span><span class="kw">impl </span>RemAssign&lt;<span class="macro-nonterminal">$t</span>&gt; <span class="kw">for </span>Saturating&lt;<span class="macro-nonterminal">$t</span>&gt; {
             <span class="attr">#[inline]
             </span><span class="kw">fn </span>rem_assign(<span class="kw-2">&amp;mut </span><span class="self">self</span>, other: <span class="macro-nonterminal">$t</span>) {
@@ -1459,7 +1458,7 @@
         }
         <span class="macro">forward_ref_op_assign! </span>{ <span class="kw">impl </span>RemAssign, rem_assign <span class="kw">for </span>Saturating&lt;<span class="macro-nonterminal">$t</span>&gt;, <span class="macro-nonterminal">$t </span>}
 
-        <span class="attr">#[unstable(feature = <span class="string">&quot;saturating_int_impl&quot;</span>, issue = <span class="string">&quot;87920&quot;</span>)]
+        <span class="attr">#[stable(feature = <span class="string">&quot;saturating_int_impl&quot;</span>, since = <span class="string">&quot;CURRENT_RUSTC_VERSION&quot;</span>)]
         </span><span class="kw">impl </span>Not <span class="kw">for </span>Saturating&lt;<span class="macro-nonterminal">$t</span>&gt; {
             <span class="kw">type </span>Output = Saturating&lt;<span class="macro-nonterminal">$t</span>&gt;;
 
@@ -1469,9 +1468,9 @@
             }
         }
         <span class="macro">forward_ref_unop! </span>{ <span class="kw">impl </span>Not, not <span class="kw">for </span>Saturating&lt;<span class="macro-nonterminal">$t</span>&gt;,
-                <span class="attr">#[unstable(feature = <span class="string">&quot;saturating_int_impl&quot;</span>, issue = <span class="string">&quot;87920&quot;</span>)] </span>}
+                <span class="attr">#[stable(feature = <span class="string">&quot;saturating_int_impl&quot;</span>, since = <span class="string">&quot;CURRENT_RUSTC_VERSION&quot;</span>)] </span>}
 
-        <span class="attr">#[unstable(feature = <span class="string">&quot;saturating_int_impl&quot;</span>, issue = <span class="string">&quot;87920&quot;</span>)]
+        <span class="attr">#[stable(feature = <span class="string">&quot;saturating_int_impl&quot;</span>, since = <span class="string">&quot;CURRENT_RUSTC_VERSION&quot;</span>)]
         </span><span class="kw">impl </span>BitXor <span class="kw">for </span>Saturating&lt;<span class="macro-nonterminal">$t</span>&gt; {
             <span class="kw">type </span>Output = Saturating&lt;<span class="macro-nonterminal">$t</span>&gt;;
 
@@ -1481,9 +1480,9 @@
             }
         }
         <span class="macro">forward_ref_binop! </span>{ <span class="kw">impl </span>BitXor, bitxor <span class="kw">for </span>Saturating&lt;<span class="macro-nonterminal">$t</span>&gt;, Saturating&lt;<span class="macro-nonterminal">$t</span>&gt;,
-                <span class="attr">#[unstable(feature = <span class="string">&quot;saturating_int_impl&quot;</span>, issue = <span class="string">&quot;87920&quot;</span>)] </span>}
+                <span class="attr">#[stable(feature = <span class="string">&quot;saturating_int_impl&quot;</span>, since = <span class="string">&quot;CURRENT_RUSTC_VERSION&quot;</span>)] </span>}
 
-        <span class="attr">#[unstable(feature = <span class="string">&quot;saturating_int_impl&quot;</span>, issue = <span class="string">&quot;87920&quot;</span>)]
+        <span class="attr">#[stable(feature = <span class="string">&quot;saturating_int_impl&quot;</span>, since = <span class="string">&quot;CURRENT_RUSTC_VERSION&quot;</span>)]
         </span><span class="kw">impl </span>BitXorAssign <span class="kw">for </span>Saturating&lt;<span class="macro-nonterminal">$t</span>&gt; {
             <span class="attr">#[inline]
             </span><span class="kw">fn </span>bitxor_assign(<span class="kw-2">&amp;mut </span><span class="self">self</span>, other: Saturating&lt;<span class="macro-nonterminal">$t</span>&gt;) {
@@ -1492,7 +1491,7 @@
         }
         <span class="macro">forward_ref_op_assign! </span>{ <span class="kw">impl </span>BitXorAssign, bitxor_assign <span class="kw">for </span>Saturating&lt;<span class="macro-nonterminal">$t</span>&gt;, Saturating&lt;<span class="macro-nonterminal">$t</span>&gt; }
 
-        <span class="attr">#[unstable(feature = <span class="string">&quot;saturating_int_assign_impl&quot;</span>, issue = <span class="string">&quot;92354&quot;</span>)]
+        <span class="attr">#[stable(feature = <span class="string">&quot;saturating_int_assign_impl&quot;</span>, since = <span class="string">&quot;CURRENT_RUSTC_VERSION&quot;</span>)]
         </span><span class="kw">impl </span>BitXorAssign&lt;<span class="macro-nonterminal">$t</span>&gt; <span class="kw">for </span>Saturating&lt;<span class="macro-nonterminal">$t</span>&gt; {
             <span class="attr">#[inline]
             </span><span class="kw">fn </span>bitxor_assign(<span class="kw-2">&amp;mut </span><span class="self">self</span>, other: <span class="macro-nonterminal">$t</span>) {
@@ -1501,7 +1500,7 @@
         }
         <span class="macro">forward_ref_op_assign! </span>{ <span class="kw">impl </span>BitXorAssign, bitxor_assign <span class="kw">for </span>Saturating&lt;<span class="macro-nonterminal">$t</span>&gt;, <span class="macro-nonterminal">$t </span>}
 
-        <span class="attr">#[unstable(feature = <span class="string">&quot;saturating_int_impl&quot;</span>, issue = <span class="string">&quot;87920&quot;</span>)]
+        <span class="attr">#[stable(feature = <span class="string">&quot;saturating_int_impl&quot;</span>, since = <span class="string">&quot;CURRENT_RUSTC_VERSION&quot;</span>)]
         </span><span class="kw">impl </span>BitOr <span class="kw">for </span>Saturating&lt;<span class="macro-nonterminal">$t</span>&gt; {
             <span class="kw">type </span>Output = Saturating&lt;<span class="macro-nonterminal">$t</span>&gt;;
 
@@ -1511,9 +1510,9 @@
             }
         }
         <span class="macro">forward_ref_binop! </span>{ <span class="kw">impl </span>BitOr, bitor <span class="kw">for </span>Saturating&lt;<span class="macro-nonterminal">$t</span>&gt;, Saturating&lt;<span class="macro-nonterminal">$t</span>&gt;,
-                <span class="attr">#[unstable(feature = <span class="string">&quot;saturating_int_impl&quot;</span>, issue = <span class="string">&quot;87920&quot;</span>)] </span>}
+                <span class="attr">#[stable(feature = <span class="string">&quot;saturating_int_impl&quot;</span>, since = <span class="string">&quot;CURRENT_RUSTC_VERSION&quot;</span>)] </span>}
 
-        <span class="attr">#[unstable(feature = <span class="string">&quot;saturating_int_impl&quot;</span>, issue = <span class="string">&quot;87920&quot;</span>)]
+        <span class="attr">#[stable(feature = <span class="string">&quot;saturating_int_impl&quot;</span>, since = <span class="string">&quot;CURRENT_RUSTC_VERSION&quot;</span>)]
         </span><span class="kw">impl </span>BitOrAssign <span class="kw">for </span>Saturating&lt;<span class="macro-nonterminal">$t</span>&gt; {
             <span class="attr">#[inline]
             </span><span class="kw">fn </span>bitor_assign(<span class="kw-2">&amp;mut </span><span class="self">self</span>, other: Saturating&lt;<span class="macro-nonterminal">$t</span>&gt;) {
@@ -1522,7 +1521,7 @@
         }
         <span class="macro">forward_ref_op_assign! </span>{ <span class="kw">impl </span>BitOrAssign, bitor_assign <span class="kw">for </span>Saturating&lt;<span class="macro-nonterminal">$t</span>&gt;, Saturating&lt;<span class="macro-nonterminal">$t</span>&gt; }
 
-        <span class="attr">#[unstable(feature = <span class="string">&quot;saturating_int_assign_impl&quot;</span>, issue = <span class="string">&quot;92354&quot;</span>)]
+        <span class="attr">#[stable(feature = <span class="string">&quot;saturating_int_assign_impl&quot;</span>, since = <span class="string">&quot;CURRENT_RUSTC_VERSION&quot;</span>)]
         </span><span class="kw">impl </span>BitOrAssign&lt;<span class="macro-nonterminal">$t</span>&gt; <span class="kw">for </span>Saturating&lt;<span class="macro-nonterminal">$t</span>&gt; {
             <span class="attr">#[inline]
             </span><span class="kw">fn </span>bitor_assign(<span class="kw-2">&amp;mut </span><span class="self">self</span>, other: <span class="macro-nonterminal">$t</span>) {
@@ -1531,7 +1530,7 @@
         }
         <span class="macro">forward_ref_op_assign! </span>{ <span class="kw">impl </span>BitOrAssign, bitor_assign <span class="kw">for </span>Saturating&lt;<span class="macro-nonterminal">$t</span>&gt;, <span class="macro-nonterminal">$t </span>}
 
-        <span class="attr">#[unstable(feature = <span class="string">&quot;saturating_int_impl&quot;</span>, issue = <span class="string">&quot;87920&quot;</span>)]
+        <span class="attr">#[stable(feature = <span class="string">&quot;saturating_int_impl&quot;</span>, since = <span class="string">&quot;CURRENT_RUSTC_VERSION&quot;</span>)]
         </span><span class="kw">impl </span>BitAnd <span class="kw">for </span>Saturating&lt;<span class="macro-nonterminal">$t</span>&gt; {
             <span class="kw">type </span>Output = Saturating&lt;<span class="macro-nonterminal">$t</span>&gt;;
 
@@ -1541,9 +1540,9 @@
             }
         }
         <span class="macro">forward_ref_binop! </span>{ <span class="kw">impl </span>BitAnd, bitand <span class="kw">for </span>Saturating&lt;<span class="macro-nonterminal">$t</span>&gt;, Saturating&lt;<span class="macro-nonterminal">$t</span>&gt;,
-                <span class="attr">#[unstable(feature = <span class="string">&quot;saturating_int_impl&quot;</span>, issue = <span class="string">&quot;87920&quot;</span>)] </span>}
+                <span class="attr">#[stable(feature = <span class="string">&quot;saturating_int_impl&quot;</span>, since = <span class="string">&quot;CURRENT_RUSTC_VERSION&quot;</span>)] </span>}
 
-        <span class="attr">#[unstable(feature = <span class="string">&quot;saturating_int_impl&quot;</span>, issue = <span class="string">&quot;87920&quot;</span>)]
+        <span class="attr">#[stable(feature = <span class="string">&quot;saturating_int_impl&quot;</span>, since = <span class="string">&quot;CURRENT_RUSTC_VERSION&quot;</span>)]
         </span><span class="kw">impl </span>BitAndAssign <span class="kw">for </span>Saturating&lt;<span class="macro-nonterminal">$t</span>&gt; {
             <span class="attr">#[inline]
             </span><span class="kw">fn </span>bitand_assign(<span class="kw-2">&amp;mut </span><span class="self">self</span>, other: Saturating&lt;<span class="macro-nonterminal">$t</span>&gt;) {
@@ -1552,7 +1551,7 @@
         }
         <span class="macro">forward_ref_op_assign! </span>{ <span class="kw">impl </span>BitAndAssign, bitand_assign <span class="kw">for </span>Saturating&lt;<span class="macro-nonterminal">$t</span>&gt;, Saturating&lt;<span class="macro-nonterminal">$t</span>&gt; }
 
-        <span class="attr">#[unstable(feature = <span class="string">&quot;saturating_int_assign_impl&quot;</span>, issue = <span class="string">&quot;92354&quot;</span>)]
+        <span class="attr">#[stable(feature = <span class="string">&quot;saturating_int_assign_impl&quot;</span>, since = <span class="string">&quot;CURRENT_RUSTC_VERSION&quot;</span>)]
         </span><span class="kw">impl </span>BitAndAssign&lt;<span class="macro-nonterminal">$t</span>&gt; <span class="kw">for </span>Saturating&lt;<span class="macro-nonterminal">$t</span>&gt; {
             <span class="attr">#[inline]
             </span><span class="kw">fn </span>bitand_assign(<span class="kw-2">&amp;mut </span><span class="self">self</span>, other: <span class="macro-nonterminal">$t</span>) {
@@ -1576,12 +1575,11 @@
             /// Basic usage:
             ///
             /// ```
-            /// #![feature(saturating_int_impl)]
             /// use std::num::Saturating;
             ///
             </span><span class="attr">#[doc = <span class="macro">concat!</span>(<span class="string">&quot;assert_eq!(&lt;Saturating&lt;&quot;</span>, <span class="macro">stringify!</span>(<span class="macro-nonterminal">$t</span>), <span class="string">&quot;&gt;&gt;::MIN, Saturating(&quot;</span>, <span class="macro">stringify!</span>(<span class="macro-nonterminal">$t</span>), <span class="string">&quot;::MIN));&quot;</span>)]
             </span><span class="doccomment">/// ```
-            </span><span class="attr">#[unstable(feature = <span class="string">&quot;saturating_int_impl&quot;</span>, issue = <span class="string">&quot;87920&quot;</span>)]
+            </span><span class="attr">#[stable(feature = <span class="string">&quot;saturating_int_impl&quot;</span>, since = <span class="string">&quot;CURRENT_RUSTC_VERSION&quot;</span>)]
             </span><span class="kw">pub const </span>MIN: <span class="self">Self </span>= <span class="self">Self</span>(&lt;<span class="macro-nonterminal">$t</span>&gt;::MIN);
 
             <span class="doccomment">/// Returns the largest value that can be represented by this integer type.
@@ -1591,12 +1589,11 @@
             /// Basic usage:
             ///
             /// ```
-            /// #![feature(saturating_int_impl)]
             /// use std::num::Saturating;
             ///
             </span><span class="attr">#[doc = <span class="macro">concat!</span>(<span class="string">&quot;assert_eq!(&lt;Saturating&lt;&quot;</span>, <span class="macro">stringify!</span>(<span class="macro-nonterminal">$t</span>), <span class="string">&quot;&gt;&gt;::MAX, Saturating(&quot;</span>, <span class="macro">stringify!</span>(<span class="macro-nonterminal">$t</span>), <span class="string">&quot;::MAX));&quot;</span>)]
             </span><span class="doccomment">/// ```
-            </span><span class="attr">#[unstable(feature = <span class="string">&quot;saturating_int_impl&quot;</span>, issue = <span class="string">&quot;87920&quot;</span>)]
+            </span><span class="attr">#[stable(feature = <span class="string">&quot;saturating_int_impl&quot;</span>, since = <span class="string">&quot;CURRENT_RUSTC_VERSION&quot;</span>)]
             </span><span class="kw">pub const </span>MAX: <span class="self">Self </span>= <span class="self">Self</span>(&lt;<span class="macro-nonterminal">$t</span>&gt;::MAX);
 
             <span class="doccomment">/// Returns the size of this integer type in bits.
@@ -1606,12 +1603,11 @@
             /// Basic usage:
             ///
             /// ```
-            /// #![feature(saturating_int_impl)]
             /// use std::num::Saturating;
             ///
             </span><span class="attr">#[doc = <span class="macro">concat!</span>(<span class="string">&quot;assert_eq!(&lt;Saturating&lt;&quot;</span>, <span class="macro">stringify!</span>(<span class="macro-nonterminal">$t</span>), <span class="string">&quot;&gt;&gt;::BITS, &quot;</span>, <span class="macro">stringify!</span>(<span class="macro-nonterminal">$t</span>), <span class="string">&quot;::BITS);&quot;</span>)]
             </span><span class="doccomment">/// ```
-            </span><span class="attr">#[unstable(feature = <span class="string">&quot;saturating_int_impl&quot;</span>, issue = <span class="string">&quot;87920&quot;</span>)]
+            </span><span class="attr">#[stable(feature = <span class="string">&quot;saturating_int_impl&quot;</span>, since = <span class="string">&quot;CURRENT_RUSTC_VERSION&quot;</span>)]
             </span><span class="kw">pub const </span>BITS: u32 = &lt;<span class="macro-nonterminal">$t</span>&gt;::BITS;
 
             <span class="doccomment">/// Returns the number of ones in the binary representation of `self`.
@@ -1621,7 +1617,6 @@
             /// Basic usage:
             ///
             /// ```
-            /// #![feature(saturating_int_impl)]
             /// use std::num::Saturating;
             ///
             </span><span class="attr">#[doc = <span class="macro">concat!</span>(<span class="string">&quot;let n = Saturating(0b01001100&quot;</span>, <span class="macro">stringify!</span>(<span class="macro-nonterminal">$t</span>), <span class="string">&quot;);&quot;</span>)]
@@ -1633,7 +1628,8 @@
             #[doc(alias = <span class="string">&quot;popcnt&quot;</span>)]
             #[must_use = <span class="string">&quot;this returns the result of the operation, \
                           without modifying the original&quot;</span>]
-            #[unstable(feature = <span class="string">&quot;saturating_int_impl&quot;</span>, issue = <span class="string">&quot;87920&quot;</span>)]
+            #[rustc_const_stable(feature = <span class="string">&quot;saturating_int_impl&quot;</span>, since = <span class="string">&quot;CURRENT_RUSTC_VERSION&quot;</span>)]
+            #[stable(feature = <span class="string">&quot;saturating_int_impl&quot;</span>, since = <span class="string">&quot;CURRENT_RUSTC_VERSION&quot;</span>)]
             </span><span class="kw">pub const fn </span>count_ones(<span class="self">self</span>) -&gt; u32 {
                 <span class="self">self</span>.<span class="number">0</span>.count_ones()
             }
@@ -1645,7 +1641,6 @@
             /// Basic usage:
             ///
             /// ```
-            /// #![feature(saturating_int_impl)]
             /// use std::num::Saturating;
             ///
             </span><span class="attr">#[doc = <span class="macro">concat!</span>(<span class="string">&quot;assert_eq!(Saturating(!0&quot;</span>, <span class="macro">stringify!</span>(<span class="macro-nonterminal">$t</span>), <span class="string">&quot;).count_zeros(), 0);&quot;</span>)]
@@ -1653,7 +1648,8 @@
             </span><span class="attr">#[inline]
             #[must_use = <span class="string">&quot;this returns the result of the operation, \
                           without modifying the original&quot;</span>]
-            #[unstable(feature = <span class="string">&quot;saturating_int_impl&quot;</span>, issue = <span class="string">&quot;87920&quot;</span>)]
+            #[rustc_const_stable(feature = <span class="string">&quot;saturating_int_impl&quot;</span>, since = <span class="string">&quot;CURRENT_RUSTC_VERSION&quot;</span>)]
+            #[stable(feature = <span class="string">&quot;saturating_int_impl&quot;</span>, since = <span class="string">&quot;CURRENT_RUSTC_VERSION&quot;</span>)]
             </span><span class="kw">pub const fn </span>count_zeros(<span class="self">self</span>) -&gt; u32 {
                 <span class="self">self</span>.<span class="number">0</span>.count_zeros()
             }
@@ -1665,7 +1661,6 @@
             /// Basic usage:
             ///
             /// ```
-            /// #![feature(saturating_int_impl)]
             /// use std::num::Saturating;
             ///
             </span><span class="attr">#[doc = <span class="macro">concat!</span>(<span class="string">&quot;let n = Saturating(0b0101000&quot;</span>, <span class="macro">stringify!</span>(<span class="macro-nonterminal">$t</span>), <span class="string">&quot;);&quot;</span>)]
@@ -1675,7 +1670,8 @@
             </span><span class="attr">#[inline]
             #[must_use = <span class="string">&quot;this returns the result of the operation, \
                           without modifying the original&quot;</span>]
-            #[unstable(feature = <span class="string">&quot;saturating_int_impl&quot;</span>, issue = <span class="string">&quot;87920&quot;</span>)]
+            #[rustc_const_stable(feature = <span class="string">&quot;saturating_int_impl&quot;</span>, since = <span class="string">&quot;CURRENT_RUSTC_VERSION&quot;</span>)]
+            #[stable(feature = <span class="string">&quot;saturating_int_impl&quot;</span>, since = <span class="string">&quot;CURRENT_RUSTC_VERSION&quot;</span>)]
             </span><span class="kw">pub const fn </span>trailing_zeros(<span class="self">self</span>) -&gt; u32 {
                 <span class="self">self</span>.<span class="number">0</span>.trailing_zeros()
             }
@@ -1692,7 +1688,6 @@
             /// Basic usage:
             ///
             /// ```
-            /// #![feature(saturating_int_impl)]
             /// use std::num::Saturating;
             ///
             /// let n: Saturating&lt;i64&gt; = Saturating(0x0123456789ABCDEF);
@@ -1703,7 +1698,8 @@
             </span><span class="attr">#[inline]
             #[must_use = <span class="string">&quot;this returns the result of the operation, \
                           without modifying the original&quot;</span>]
-            #[unstable(feature = <span class="string">&quot;saturating_int_impl&quot;</span>, issue = <span class="string">&quot;87920&quot;</span>)]
+            #[rustc_const_stable(feature = <span class="string">&quot;saturating_int_impl&quot;</span>, since = <span class="string">&quot;CURRENT_RUSTC_VERSION&quot;</span>)]
+            #[stable(feature = <span class="string">&quot;saturating_int_impl&quot;</span>, since = <span class="string">&quot;CURRENT_RUSTC_VERSION&quot;</span>)]
             </span><span class="kw">pub const fn </span>rotate_left(<span class="self">self</span>, n: u32) -&gt; <span class="self">Self </span>{
                 Saturating(<span class="self">self</span>.<span class="number">0</span>.rotate_left(n))
             }
@@ -1720,7 +1716,6 @@
             /// Basic usage:
             ///
             /// ```
-            /// #![feature(saturating_int_impl)]
             /// use std::num::Saturating;
             ///
             /// let n: Saturating&lt;i64&gt; = Saturating(0x0123456789ABCDEF);
@@ -1731,7 +1726,8 @@
             </span><span class="attr">#[inline]
             #[must_use = <span class="string">&quot;this returns the result of the operation, \
                           without modifying the original&quot;</span>]
-            #[unstable(feature = <span class="string">&quot;saturating_int_impl&quot;</span>, issue = <span class="string">&quot;87920&quot;</span>)]
+            #[rustc_const_stable(feature = <span class="string">&quot;saturating_int_impl&quot;</span>, since = <span class="string">&quot;CURRENT_RUSTC_VERSION&quot;</span>)]
+            #[stable(feature = <span class="string">&quot;saturating_int_impl&quot;</span>, since = <span class="string">&quot;CURRENT_RUSTC_VERSION&quot;</span>)]
             </span><span class="kw">pub const fn </span>rotate_right(<span class="self">self</span>, n: u32) -&gt; <span class="self">Self </span>{
                 Saturating(<span class="self">self</span>.<span class="number">0</span>.rotate_right(n))
             }
@@ -1743,7 +1739,6 @@
             /// Basic usage:
             ///
             /// ```
-            /// #![feature(saturating_int_impl)]
             /// use std::num::Saturating;
             ///
             /// let n: Saturating&lt;i16&gt; = Saturating(0b0000000_01010101);
@@ -1757,7 +1752,8 @@
             </span><span class="attr">#[inline]
             #[must_use = <span class="string">&quot;this returns the result of the operation, \
                           without modifying the original&quot;</span>]
-            #[unstable(feature = <span class="string">&quot;saturating_int_impl&quot;</span>, issue = <span class="string">&quot;87920&quot;</span>)]
+            #[rustc_const_stable(feature = <span class="string">&quot;saturating_int_impl&quot;</span>, since = <span class="string">&quot;CURRENT_RUSTC_VERSION&quot;</span>)]
+            #[stable(feature = <span class="string">&quot;saturating_int_impl&quot;</span>, since = <span class="string">&quot;CURRENT_RUSTC_VERSION&quot;</span>)]
             </span><span class="kw">pub const fn </span>swap_bytes(<span class="self">self</span>) -&gt; <span class="self">Self </span>{
                 Saturating(<span class="self">self</span>.<span class="number">0</span>.swap_bytes())
             }
@@ -1772,7 +1768,6 @@
             /// Basic usage:
             ///
             /// ```
-            /// #![feature(saturating_int_impl)]
             /// use std::num::Saturating;
             ///
             /// let n = Saturating(0b0000000_01010101i16);
@@ -1784,8 +1779,8 @@
             /// assert_eq!(m, Saturating(-22016));
             /// ```
             </span><span class="attr">#[inline]
-            #[unstable(feature = <span class="string">&quot;saturating_int_impl&quot;</span>, issue = <span class="string">&quot;87920&quot;</span>)]
-            #[rustc_const_unstable(feature = <span class="string">&quot;saturating_int_impl&quot;</span>, issue = <span class="string">&quot;87920&quot;</span>)]
+            #[rustc_const_stable(feature = <span class="string">&quot;saturating_int_impl&quot;</span>, since = <span class="string">&quot;CURRENT_RUSTC_VERSION&quot;</span>)]
+            #[stable(feature = <span class="string">&quot;saturating_int_impl&quot;</span>, since = <span class="string">&quot;CURRENT_RUSTC_VERSION&quot;</span>)]
             #[must_use = <span class="string">&quot;this returns the result of the operation, \
                           without modifying the original&quot;</span>]
             </span><span class="kw">pub const fn </span>reverse_bits(<span class="self">self</span>) -&gt; <span class="self">Self </span>{
@@ -1802,7 +1797,6 @@
             /// Basic usage:
             ///
             /// ```
-            /// #![feature(saturating_int_impl)]
             /// use std::num::Saturating;
             ///
             </span><span class="attr">#[doc = <span class="macro">concat!</span>(<span class="string">&quot;let n = Saturating(0x1A&quot;</span>, <span class="macro">stringify!</span>(<span class="macro-nonterminal">$t</span>), <span class="string">&quot;);&quot;</span>)]
@@ -1815,7 +1809,8 @@
             /// ```
             </span><span class="attr">#[inline]
             #[must_use]
-            #[unstable(feature = <span class="string">&quot;saturating_int_impl&quot;</span>, issue = <span class="string">&quot;87920&quot;</span>)]
+            #[rustc_const_stable(feature = <span class="string">&quot;saturating_int_impl&quot;</span>, since = <span class="string">&quot;CURRENT_RUSTC_VERSION&quot;</span>)]
+            #[stable(feature = <span class="string">&quot;saturating_int_impl&quot;</span>, since = <span class="string">&quot;CURRENT_RUSTC_VERSION&quot;</span>)]
             </span><span class="kw">pub const fn </span>from_be(x: <span class="self">Self</span>) -&gt; <span class="self">Self </span>{
                 Saturating(&lt;<span class="macro-nonterminal">$t</span>&gt;::from_be(x.<span class="number">0</span>))
             }
@@ -1830,7 +1825,6 @@
             /// Basic usage:
             ///
             /// ```
-            /// #![feature(saturating_int_impl)]
             /// use std::num::Saturating;
             ///
             </span><span class="attr">#[doc = <span class="macro">concat!</span>(<span class="string">&quot;let n = Saturating(0x1A&quot;</span>, <span class="macro">stringify!</span>(<span class="macro-nonterminal">$t</span>), <span class="string">&quot;);&quot;</span>)]
@@ -1843,7 +1837,8 @@
             /// ```
             </span><span class="attr">#[inline]
             #[must_use]
-            #[unstable(feature = <span class="string">&quot;saturating_int_impl&quot;</span>, issue = <span class="string">&quot;87920&quot;</span>)]
+            #[rustc_const_stable(feature = <span class="string">&quot;saturating_int_impl&quot;</span>, since = <span class="string">&quot;CURRENT_RUSTC_VERSION&quot;</span>)]
+            #[stable(feature = <span class="string">&quot;saturating_int_impl&quot;</span>, since = <span class="string">&quot;CURRENT_RUSTC_VERSION&quot;</span>)]
             </span><span class="kw">pub const fn </span>from_le(x: <span class="self">Self</span>) -&gt; <span class="self">Self </span>{
                 Saturating(&lt;<span class="macro-nonterminal">$t</span>&gt;::from_le(x.<span class="number">0</span>))
             }
@@ -1858,7 +1853,6 @@
             /// Basic usage:
             ///
             /// ```
-            /// #![feature(saturating_int_impl)]
             /// use std::num::Saturating;
             ///
             </span><span class="attr">#[doc = <span class="macro">concat!</span>(<span class="string">&quot;let n = Saturating(0x1A&quot;</span>, <span class="macro">stringify!</span>(<span class="macro-nonterminal">$t</span>), <span class="string">&quot;);&quot;</span>)]
@@ -1870,7 +1864,8 @@
             /// }
             /// ```
             </span><span class="attr">#[inline]
-            #[unstable(feature = <span class="string">&quot;saturating_int_impl&quot;</span>, issue = <span class="string">&quot;87920&quot;</span>)]
+            #[rustc_const_stable(feature = <span class="string">&quot;saturating_int_impl&quot;</span>, since = <span class="string">&quot;CURRENT_RUSTC_VERSION&quot;</span>)]
+            #[stable(feature = <span class="string">&quot;saturating_int_impl&quot;</span>, since = <span class="string">&quot;CURRENT_RUSTC_VERSION&quot;</span>)]
             #[must_use = <span class="string">&quot;this returns the result of the operation, \
                           without modifying the original&quot;</span>]
             </span><span class="kw">pub const fn </span>to_be(<span class="self">self</span>) -&gt; <span class="self">Self </span>{
@@ -1887,7 +1882,6 @@
             /// Basic usage:
             ///
             /// ```
-            /// #![feature(saturating_int_impl)]
             /// use std::num::Saturating;
             ///
             </span><span class="attr">#[doc = <span class="macro">concat!</span>(<span class="string">&quot;let n = Saturating(0x1A&quot;</span>, <span class="macro">stringify!</span>(<span class="macro-nonterminal">$t</span>), <span class="string">&quot;);&quot;</span>)]
@@ -1899,7 +1893,8 @@
             /// }
             /// ```
             </span><span class="attr">#[inline]
-            #[unstable(feature = <span class="string">&quot;saturating_int_impl&quot;</span>, issue = <span class="string">&quot;87920&quot;</span>)]
+            #[rustc_const_stable(feature = <span class="string">&quot;saturating_int_impl&quot;</span>, since = <span class="string">&quot;CURRENT_RUSTC_VERSION&quot;</span>)]
+            #[stable(feature = <span class="string">&quot;saturating_int_impl&quot;</span>, since = <span class="string">&quot;CURRENT_RUSTC_VERSION&quot;</span>)]
             #[must_use = <span class="string">&quot;this returns the result of the operation, \
                           without modifying the original&quot;</span>]
             </span><span class="kw">pub const fn </span>to_le(<span class="self">self</span>) -&gt; <span class="self">Self </span>{
@@ -1913,7 +1908,6 @@
             /// Basic usage:
             ///
             /// ```
-            /// #![feature(saturating_int_impl)]
             /// use std::num::Saturating;
             ///
             </span><span class="attr">#[doc = <span class="macro">concat!</span>(<span class="string">&quot;assert_eq!(Saturating(3&quot;</span>, <span class="macro">stringify!</span>(<span class="macro-nonterminal">$t</span>), <span class="string">&quot;).pow(4), Saturating(81));&quot;</span>)]
@@ -1922,17 +1916,17 @@
             /// Results that are too large are saturated:
             ///
             /// ```
-            /// #![feature(saturating_int_impl)]
             /// use std::num::Saturating;
             ///
             /// assert_eq!(Saturating(3i8).pow(5), Saturating(127));
             /// assert_eq!(Saturating(3i8).pow(6), Saturating(127));
             /// ```
             </span><span class="attr">#[inline]
-            #[unstable(feature = <span class="string">&quot;saturating_int_impl&quot;</span>, issue = <span class="string">&quot;87920&quot;</span>)]
+            #[rustc_const_stable(feature = <span class="string">&quot;saturating_int_impl&quot;</span>, since = <span class="string">&quot;CURRENT_RUSTC_VERSION&quot;</span>)]
+            #[stable(feature = <span class="string">&quot;saturating_int_impl&quot;</span>, since = <span class="string">&quot;CURRENT_RUSTC_VERSION&quot;</span>)]
             #[must_use = <span class="string">&quot;this returns the result of the operation, \
                           without modifying the original&quot;</span>]
-            </span><span class="kw">pub fn </span>pow(<span class="self">self</span>, exp: u32) -&gt; <span class="self">Self </span>{
+            </span><span class="kw">pub const fn </span>pow(<span class="self">self</span>, exp: u32) -&gt; <span class="self">Self </span>{
                 Saturating(<span class="self">self</span>.<span class="number">0</span>.saturating_pow(exp))
             }
         }
@@ -1951,7 +1945,6 @@
             /// Basic usage:
             ///
             /// ```
-            /// #![feature(saturating_int_impl)]
             /// use std::num::Saturating;
             ///
             </span><span class="attr">#[doc = <span class="macro">concat!</span>(<span class="string">&quot;let n = Saturating(&quot;</span>, <span class="macro">stringify!</span>(<span class="macro-nonterminal">$t</span>), <span class="string">&quot;::MAX &gt;&gt; 2);&quot;</span>)]
@@ -1959,7 +1952,8 @@
             /// assert_eq!(n.leading_zeros(), 3);
             /// ```
             </span><span class="attr">#[inline]
-            #[unstable(feature = <span class="string">&quot;saturating_int_impl&quot;</span>, issue = <span class="string">&quot;87920&quot;</span>)]
+            #[rustc_const_stable(feature = <span class="string">&quot;saturating_int_impl&quot;</span>, since = <span class="string">&quot;CURRENT_RUSTC_VERSION&quot;</span>)]
+            #[stable(feature = <span class="string">&quot;saturating_int_impl&quot;</span>, since = <span class="string">&quot;CURRENT_RUSTC_VERSION&quot;</span>)]
             #[must_use = <span class="string">&quot;this returns the result of the operation, \
                           without modifying the original&quot;</span>]
             </span><span class="kw">pub const fn </span>leading_zeros(<span class="self">self</span>) -&gt; u32 {
@@ -1974,7 +1968,6 @@
             /// Basic usage:
             ///
             /// ```
-            /// #![feature(saturating_int_impl)]
             /// use std::num::Saturating;
             ///
             </span><span class="attr">#[doc = <span class="macro">concat!</span>(<span class="string">&quot;assert_eq!(Saturating(100&quot;</span>, <span class="macro">stringify!</span>(<span class="macro-nonterminal">$t</span>), <span class="string">&quot;).abs(), Saturating(100));&quot;</span>)]
@@ -1984,10 +1977,11 @@
             #[doc = <span class="macro">concat!</span>(<span class="string">&quot;assert_eq!(Saturating(&quot;</span>, <span class="macro">stringify!</span>(<span class="macro-nonterminal">$t</span>), <span class="string">&quot;::MIN).abs(), Saturating(&quot;</span>, <span class="macro">stringify!</span>(<span class="macro-nonterminal">$t</span>), <span class="string">&quot;::MAX));&quot;</span>)]
             </span><span class="doccomment">/// ```
             </span><span class="attr">#[inline]
-            #[unstable(feature = <span class="string">&quot;saturating_int_impl&quot;</span>, issue = <span class="string">&quot;87920&quot;</span>)]
+            #[rustc_const_stable(feature = <span class="string">&quot;saturating_int_impl&quot;</span>, since = <span class="string">&quot;CURRENT_RUSTC_VERSION&quot;</span>)]
+            #[stable(feature = <span class="string">&quot;saturating_int_impl&quot;</span>, since = <span class="string">&quot;CURRENT_RUSTC_VERSION&quot;</span>)]
             #[must_use = <span class="string">&quot;this returns the result of the operation, \
                           without modifying the original&quot;</span>]
-            </span><span class="kw">pub fn </span>abs(<span class="self">self</span>) -&gt; Saturating&lt;<span class="macro-nonterminal">$t</span>&gt; {
+            </span><span class="kw">pub const fn </span>abs(<span class="self">self</span>) -&gt; Saturating&lt;<span class="macro-nonterminal">$t</span>&gt; {
                 Saturating(<span class="self">self</span>.<span class="number">0</span>.saturating_abs())
             }
 
@@ -2002,7 +1996,6 @@
             /// Basic usage:
             ///
             /// ```
-            /// #![feature(saturating_int_impl)]
             /// use std::num::Saturating;
             ///
             </span><span class="attr">#[doc = <span class="macro">concat!</span>(<span class="string">&quot;assert_eq!(Saturating(10&quot;</span>, <span class="macro">stringify!</span>(<span class="macro-nonterminal">$t</span>), <span class="string">&quot;).signum(), Saturating(1));&quot;</span>)]
@@ -2010,10 +2003,11 @@
             #[doc = <span class="macro">concat!</span>(<span class="string">&quot;assert_eq!(Saturating(-10&quot;</span>, <span class="macro">stringify!</span>(<span class="macro-nonterminal">$t</span>), <span class="string">&quot;).signum(), Saturating(-1));&quot;</span>)]
             </span><span class="doccomment">/// ```
             </span><span class="attr">#[inline]
-            #[unstable(feature = <span class="string">&quot;saturating_int_impl&quot;</span>, issue = <span class="string">&quot;87920&quot;</span>)]
+            #[rustc_const_stable(feature = <span class="string">&quot;saturating_int_impl&quot;</span>, since = <span class="string">&quot;CURRENT_RUSTC_VERSION&quot;</span>)]
+            #[stable(feature = <span class="string">&quot;saturating_int_impl&quot;</span>, since = <span class="string">&quot;CURRENT_RUSTC_VERSION&quot;</span>)]
             #[must_use = <span class="string">&quot;this returns the result of the operation, \
                           without modifying the original&quot;</span>]
-            </span><span class="kw">pub fn </span>signum(<span class="self">self</span>) -&gt; Saturating&lt;<span class="macro-nonterminal">$t</span>&gt; {
+            </span><span class="kw">pub const fn </span>signum(<span class="self">self</span>) -&gt; Saturating&lt;<span class="macro-nonterminal">$t</span>&gt; {
                 Saturating(<span class="self">self</span>.<span class="number">0</span>.signum())
             }
 
@@ -2025,7 +2019,6 @@
             /// Basic usage:
             ///
             /// ```
-            /// #![feature(saturating_int_impl)]
             /// use std::num::Saturating;
             ///
             </span><span class="attr">#[doc = <span class="macro">concat!</span>(<span class="string">&quot;assert!(Saturating(10&quot;</span>, <span class="macro">stringify!</span>(<span class="macro-nonterminal">$t</span>), <span class="string">&quot;).is_positive());&quot;</span>)]
@@ -2033,7 +2026,8 @@
             </span><span class="doccomment">/// ```
             </span><span class="attr">#[must_use]
             #[inline]
-            #[unstable(feature = <span class="string">&quot;saturating_int_impl&quot;</span>, issue = <span class="string">&quot;87920&quot;</span>)]
+            #[rustc_const_stable(feature = <span class="string">&quot;saturating_int_impl&quot;</span>, since = <span class="string">&quot;CURRENT_RUSTC_VERSION&quot;</span>)]
+            #[stable(feature = <span class="string">&quot;saturating_int_impl&quot;</span>, since = <span class="string">&quot;CURRENT_RUSTC_VERSION&quot;</span>)]
             </span><span class="kw">pub const fn </span>is_positive(<span class="self">self</span>) -&gt; bool {
                 <span class="self">self</span>.<span class="number">0</span>.is_positive()
             }
@@ -2046,7 +2040,6 @@
             /// Basic usage:
             ///
             /// ```
-            /// #![feature(saturating_int_impl)]
             /// use std::num::Saturating;
             ///
             </span><span class="attr">#[doc = <span class="macro">concat!</span>(<span class="string">&quot;assert!(Saturating(-10&quot;</span>, <span class="macro">stringify!</span>(<span class="macro-nonterminal">$t</span>), <span class="string">&quot;).is_negative());&quot;</span>)]
@@ -2054,13 +2047,14 @@
             </span><span class="doccomment">/// ```
             </span><span class="attr">#[must_use]
             #[inline]
-            #[unstable(feature = <span class="string">&quot;saturating_int_impl&quot;</span>, issue = <span class="string">&quot;87920&quot;</span>)]
+            #[rustc_const_stable(feature = <span class="string">&quot;saturating_int_impl&quot;</span>, since = <span class="string">&quot;CURRENT_RUSTC_VERSION&quot;</span>)]
+            #[stable(feature = <span class="string">&quot;saturating_int_impl&quot;</span>, since = <span class="string">&quot;CURRENT_RUSTC_VERSION&quot;</span>)]
             </span><span class="kw">pub const fn </span>is_negative(<span class="self">self</span>) -&gt; bool {
                 <span class="self">self</span>.<span class="number">0</span>.is_negative()
             }
         }
 
-        <span class="attr">#[unstable(feature = <span class="string">&quot;saturating_int_impl&quot;</span>, issue = <span class="string">&quot;87920&quot;</span>)]
+        <span class="attr">#[stable(feature = <span class="string">&quot;saturating_int_impl&quot;</span>, since = <span class="string">&quot;CURRENT_RUSTC_VERSION&quot;</span>)]
         </span><span class="kw">impl </span>Neg <span class="kw">for </span>Saturating&lt;<span class="macro-nonterminal">$t</span>&gt; {
             <span class="kw">type </span>Output = <span class="self">Self</span>;
             <span class="attr">#[inline]
@@ -2069,7 +2063,7 @@
             }
         }
         <span class="macro">forward_ref_unop! </span>{ <span class="kw">impl </span>Neg, neg <span class="kw">for </span>Saturating&lt;<span class="macro-nonterminal">$t</span>&gt;,
-                <span class="attr">#[unstable(feature = <span class="string">&quot;saturating_int_impl&quot;</span>, issue = <span class="string">&quot;87920&quot;</span>)] </span>}
+                <span class="attr">#[stable(feature = <span class="string">&quot;saturating_int_impl&quot;</span>, since = <span class="string">&quot;CURRENT_RUSTC_VERSION&quot;</span>)] </span>}
     )<span class="kw-2">*</span>)
 }
 
@@ -2085,7 +2079,6 @@
             /// Basic usage:
             ///
             /// ```
-            /// #![feature(saturating_int_impl)]
             /// use std::num::Saturating;
             ///
             </span><span class="attr">#[doc = <span class="macro">concat!</span>(<span class="string">&quot;let n = Saturating(&quot;</span>, <span class="macro">stringify!</span>(<span class="macro-nonterminal">$t</span>), <span class="string">&quot;::MAX &gt;&gt; 2);&quot;</span>)]
@@ -2093,7 +2086,8 @@
             /// assert_eq!(n.leading_zeros(), 2);
             /// ```
             </span><span class="attr">#[inline]
-            #[unstable(feature = <span class="string">&quot;saturating_int_impl&quot;</span>, issue = <span class="string">&quot;87920&quot;</span>)]
+            #[rustc_const_stable(feature = <span class="string">&quot;saturating_int_impl&quot;</span>, since = <span class="string">&quot;CURRENT_RUSTC_VERSION&quot;</span>)]
+            #[stable(feature = <span class="string">&quot;saturating_int_impl&quot;</span>, since = <span class="string">&quot;CURRENT_RUSTC_VERSION&quot;</span>)]
             #[must_use = <span class="string">&quot;this returns the result of the operation, \
                           without modifying the original&quot;</span>]
             </span><span class="kw">pub const fn </span>leading_zeros(<span class="self">self</span>) -&gt; u32 {
@@ -2107,7 +2101,6 @@
             /// Basic usage:
             ///
             /// ```
-            /// #![feature(saturating_int_impl)]
             /// use std::num::Saturating;
             ///
             </span><span class="attr">#[doc = <span class="macro">concat!</span>(<span class="string">&quot;assert!(Saturating(16&quot;</span>, <span class="macro">stringify!</span>(<span class="macro-nonterminal">$t</span>), <span class="string">&quot;).is_power_of_two());&quot;</span>)]
@@ -2115,8 +2108,9 @@
             </span><span class="doccomment">/// ```
             </span><span class="attr">#[must_use]
             #[inline]
-            #[unstable(feature = <span class="string">&quot;saturating_int_impl&quot;</span>, issue = <span class="string">&quot;87920&quot;</span>)]
-            </span><span class="kw">pub fn </span>is_power_of_two(<span class="self">self</span>) -&gt; bool {
+            #[rustc_const_stable(feature = <span class="string">&quot;saturating_int_impl&quot;</span>, since = <span class="string">&quot;CURRENT_RUSTC_VERSION&quot;</span>)]
+            #[stable(feature = <span class="string">&quot;saturating_int_impl&quot;</span>, since = <span class="string">&quot;CURRENT_RUSTC_VERSION&quot;</span>)]
+            </span><span class="kw">pub const fn </span>is_power_of_two(<span class="self">self</span>) -&gt; bool {
                 <span class="self">self</span>.<span class="number">0</span>.is_power_of_two()
             }
 
