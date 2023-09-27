@@ -1377,7 +1377,7 @@ href="https://doc.rust-lang.org/${channel}/rustdoc/how-to-read-rustdoc.html\
         stopResize();
         if (desiredSidebarSize >= (window.innerWidth - BODY_MIN)) {
             changeSidebarSize(window.innerWidth - BODY_MIN);
-        } else if (desiredSidebarSize !== null) {
+        } else if (desiredSidebarSize !== null && desiredSidebarSize > 0) {
             changeSidebarSize(desiredSidebarSize);
         }
     });
