@@ -1375,22 +1375,20 @@ href="https://doc.rust-lang.org/${channel}/rustdoc/how-to-read-rustdoc.html\
     // Respond to the window resize event.
     window.addEventListener("resize", () => {
         stopResize();
-        if (desiredSidebarSize === null) {
-            desiredSidebarSize = sidebar.getBoundingClientRect().width;
-        }
         if (desiredSidebarSize >= (window.innerWidth - BODY_MIN)) {
             changeSidebarSize(window.innerWidth - BODY_MIN);
         } else if (desiredSidebarSize !== null) {
             changeSidebarSize(desiredSidebarSize);
-            desiredSidebarSize = null;
         }
     });
     function stopResize(e) {
         if (currentPointerId === null) {
             return;
         }
-        desiredSidebarSize = null;
-        e.preventDefault();
+        if (e) {
+            e.preventDefault();
+        }
+        desiredSidebarSize = sidebar.getBoundingClientRect().width;
         removeClass(resizer, "active");
         window.removeEventListener("pointermove", resize, false);
         window.removeEventListener("pointerup", stopResize, false);
@@ -1420,6 +1418,7 @@ href="https://doc.rust-lang.org/${channel}/rustdoc/how-to-read-rustdoc.html\
         window.addEventListener("pointerup", stopResize, false);
         addClass(resizer, "active");
         addClass(document.documentElement, "sidebar-resizing");
+        desiredSidebarSize = null;
     }
     resizer.addEventListener("pointerdown", initResize, false);
 }());
