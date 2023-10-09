@@ -588,7 +588,7 @@ const FOO: () = unsafe {
 };</code></pre>
 <p>This will produce:</p>
 <pre><code class="language-text">error: accessing memory with alignment 1, but alignment 4 is required
-    --&gt; /Users/michaelhowell/rust/library/core/src/intrinsics.rs:2687:9
+    --&gt; /home/michael/Development/rust/library/core/src/intrinsics.rs:2687:9
      |
 2687 |         copy_nonoverlapping(src, dst, count)
      |         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -596,12 +596,12 @@ const FOO: () = unsafe {
      = warning: this was previously accepted by the compiler but is being phased out; it will become a hard error in a future release!
      = note: for more information, see issue #68585 &lt;https://github.com/rust-lang/rust/issues/104616&gt;
 note: inside `FOO`
-    --&gt; /Users/michaelhowell/rust/library/core/src/intrinsics.rs:2687:9
+    --&gt; /home/michael/Development/rust/library/core/src/intrinsics.rs:2687:9
      |
 2687 |         copy_nonoverlapping(src, dst, count)
      |         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 note: inside `FOO`
-    --&gt; /Users/michaelhowell/rust/library/core/src/ptr/const_ptr.rs:1291:18
+    --&gt; /home/michael/Development/rust/library/core/src/ptr/const_ptr.rs:1291:18
      |
 1291 |         unsafe { copy_nonoverlapping(self, dest, count) }
      |                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
