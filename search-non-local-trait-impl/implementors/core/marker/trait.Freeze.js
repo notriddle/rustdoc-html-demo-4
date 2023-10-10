@@ -1,0 +1,3 @@
+(function() {var implementors = {
+"search_non_local_trait_impl":[["impl Freeze for <a class=\"struct\" href=\"search_non_local_trait_impl/struct.LayoutError.html\" title=\"struct search_non_local_trait_impl::LayoutError\">LayoutError</a>",1,["search_non_local_trait_impl::LayoutError"]]]
+};if (window.register_implementors) {window.register_implementors(implementors);} else {window.pending_implementors = implementors;}})()

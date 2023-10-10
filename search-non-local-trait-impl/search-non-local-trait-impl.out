@@ -1,0 +1,2 @@
+Testing /home/michael/Development/rust/tests/rustdoc-js/search-non-local-trait-impl.js ... FAILED
+==> Expected exactly 0 results but found 1 in 'others'
