@@ -179,7 +179,7 @@
 <span class="boring">fn main() {
 </span>#[start]
 fn start(_: isize, _: *const *const u8) -&gt; isize where (): Copy {
-    //^ error: start function is not allowed to have a where clause
+    //^ error: `#[start]` function is not allowed to have a where clause
     0
 }
 <span class="boring">}</span></code></pre></pre>

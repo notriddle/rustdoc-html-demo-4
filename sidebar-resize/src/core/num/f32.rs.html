@@ -1,5 +1,5 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `library/core/src/num/f32.rs`."><title>f32.rs - source</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../static.files/SourceSerif4-Regular-46f98efaafac5295.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../static.files/FiraSans-Regular-018c141bf0843ffd.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../static.files/FiraSans-Medium-8f9a781e4970d388.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../static.files/SourceCodePro-Regular-562dcc5011b6de7d.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../static.files/SourceSerif4-Bold-a2c9cd1067f8b328.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../static.files/SourceCodePro-Semibold-d899c5a5c4aeb14a.ttf.woff2"><link rel="stylesheet" href="../../../static.files/normalize-76eba96aa4d2e634.css"><link rel="stylesheet" href="../../../static.files/rustdoc-2baeb68bba9ca696.css"><meta name="rustdoc-vars" data-root-path="../../../" data-static-root-path="../../../static.files/" data-current-crate="core" data-themes="" data-resource-suffix="1.74.0" data-rustdoc-version="1.74.0-dev" data-channel="nightly" data-search-js="search-5d3eaacf19ebf04f.js" data-settings-js="settings-3c6e833083d168bb.js" ><script src="../../../static.files/storage-dc6dee2b776f9a53.js"></script><script defer src="../../../static.files/src-script-0f5d2696cdf44bd3.js"></script><script defer src="../../../src-files1.74.0.js"></script><script defer src="../../../static.files/main-462d7caac759d94a.js"></script><noscript><link rel="stylesheet" href="../../../static.files/noscript-feafe1bb7466e4bd.css"></noscript><link rel="alternate icon" type="image/png" href="../../../static.files/favicon-16x16-8b506e7a72182f1c.png"><link rel="alternate icon" type="image/png" href="../../../static.files/favicon-32x32-422f7d1d52889060.png"><link rel="icon" type="image/svg+xml" href="../../../static.files/favicon-2c020d218678b618.svg"></head><body class="rustdoc src"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"></nav><div class="sidebar-resizer"></div>
-    <main><nav class="sub"><a class="sub-logo-container" href="../../../core/index.html"><img class="rust-logo" src="../../../static.files/rust-logo-151179464ae7ed46.svg" alt="logo"></a><form class="search-form"><span></span><input class="search-input" name="search" aria-label="Run search in the documentation" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><div id="help-button" tabindex="-1"><a href="../../../help.html" title="help">?</a></div><div id="settings-menu" tabindex="-1"><a href="../../../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../../../static.files/wheel-7b819b6101059cd0.svg"></a></div></form></nav><section id="main-content" class="content"><div class="example-wrap"><div data-nosnippet><pre class="src-line-numbers"><a href="#1" id="1">1</a>
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `library/core/src/num/f32.rs`."><title>f32.rs - source</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../static.files/SourceSerif4-Regular-46f98efaafac5295.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../static.files/FiraSans-Regular-018c141bf0843ffd.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../static.files/FiraSans-Medium-8f9a781e4970d388.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../static.files/SourceCodePro-Regular-562dcc5011b6de7d.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../static.files/SourceSerif4-Bold-a2c9cd1067f8b328.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../static.files/SourceCodePro-Semibold-d899c5a5c4aeb14a.ttf.woff2"><link rel="stylesheet" href="../../../static.files/normalize-76eba96aa4d2e634.css"><link rel="stylesheet" href="../../../static.files/rustdoc-4c1914efbd6b11e9.css"><meta name="rustdoc-vars" data-root-path="../../../" data-static-root-path="../../../static.files/" data-current-crate="core" data-themes="" data-resource-suffix="1.75.0" data-rustdoc-version="1.75.0-dev" data-channel="nightly" data-search-js="search-8fbf244ebcf71464.js" data-settings-js="settings-3c6e833083d168bb.js" ><script src="../../../static.files/storage-dc6dee2b776f9a53.js"></script><script defer src="../../../static.files/src-script-0f5d2696cdf44bd3.js"></script><script defer src="../../../src-files1.75.0.js"></script><script defer src="../../../static.files/main-8f5a221be21b7e80.js"></script><noscript><link rel="stylesheet" href="../../../static.files/noscript-feafe1bb7466e4bd.css"></noscript><link rel="alternate icon" type="image/png" href="../../../static.files/favicon-16x16-8b506e7a72182f1c.png"><link rel="alternate icon" type="image/png" href="../../../static.files/favicon-32x32-422f7d1d52889060.png"><link rel="icon" type="image/svg+xml" href="../../../static.files/favicon-2c020d218678b618.svg"></head><body class="rustdoc src"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"></nav><div class="sidebar-resizer"></div>
+    <main><nav class="sub"><a class="sub-logo-container" href="../../../core/index.html"><img class="rust-logo" src="../../../static.files/rust-logo-151179464ae7ed46.svg" alt="core"></a><form class="search-form"><span></span><input class="search-input" name="search" aria-label="Run search in the documentation" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><div id="help-button" tabindex="-1"><a href="../../../help.html" title="help">?</a></div><div id="settings-menu" tabindex="-1"><a href="../../../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../../../static.files/wheel-7b819b6101059cd0.svg"></a></div></form></nav><section id="main-content" class="content"><div class="example-wrap"><div data-nosnippet><pre class="src-line-numbers"><a href="#1" id="1">1</a>
 <a href="#2" id="2">2</a>
 <a href="#3" id="3">3</a>
 <a href="#4" id="4">4</a>
@@ -1459,6 +1459,45 @@
 <a href="#1458" id="1458">1458</a>
 <a href="#1459" id="1459">1459</a>
 <a href="#1460" id="1460">1460</a>
+<a href="#1461" id="1461">1461</a>
+<a href="#1462" id="1462">1462</a>
+<a href="#1463" id="1463">1463</a>
+<a href="#1464" id="1464">1464</a>
+<a href="#1465" id="1465">1465</a>
+<a href="#1466" id="1466">1466</a>
+<a href="#1467" id="1467">1467</a>
+<a href="#1468" id="1468">1468</a>
+<a href="#1469" id="1469">1469</a>
+<a href="#1470" id="1470">1470</a>
+<a href="#1471" id="1471">1471</a>
+<a href="#1472" id="1472">1472</a>
+<a href="#1473" id="1473">1473</a>
+<a href="#1474" id="1474">1474</a>
+<a href="#1475" id="1475">1475</a>
+<a href="#1476" id="1476">1476</a>
+<a href="#1477" id="1477">1477</a>
+<a href="#1478" id="1478">1478</a>
+<a href="#1479" id="1479">1479</a>
+<a href="#1480" id="1480">1480</a>
+<a href="#1481" id="1481">1481</a>
+<a href="#1482" id="1482">1482</a>
+<a href="#1483" id="1483">1483</a>
+<a href="#1484" id="1484">1484</a>
+<a href="#1485" id="1485">1485</a>
+<a href="#1486" id="1486">1486</a>
+<a href="#1487" id="1487">1487</a>
+<a href="#1488" id="1488">1488</a>
+<a href="#1489" id="1489">1489</a>
+<a href="#1490" id="1490">1490</a>
+<a href="#1491" id="1491">1491</a>
+<a href="#1492" id="1492">1492</a>
+<a href="#1493" id="1493">1493</a>
+<a href="#1494" id="1494">1494</a>
+<a href="#1495" id="1495">1495</a>
+<a href="#1496" id="1496">1496</a>
+<a href="#1497" id="1497">1497</a>
+<a href="#1498" id="1498">1498</a>
+<a href="#1499" id="1499">1499</a>
 </pre></div><pre class="rust"><code><span class="doccomment">//! Constants for the `f32` single-precision floating point type.
 //!
 //! *[See also the `f32` primitive type][f32].*
@@ -1838,6 +1877,13 @@
     </span><span class="kw">pub const </span>MANTISSA_DIGITS: u32 = <span class="number">24</span>;
 
     <span class="doccomment">/// Approximate number of significant digits in base 10.
+    ///
+    /// This is the maximum &lt;i&gt;x&lt;/i&gt; such that any decimal number with &lt;i&gt;x&lt;/i&gt;
+    /// significant digits can be converted to `f32` and back without loss.
+    ///
+    /// Equal to floor(log&lt;sub&gt;10&lt;/sub&gt;&amp;nbsp;2&lt;sup&gt;[`MANTISSA_DIGITS`]&amp;nbsp;&amp;minus;&amp;nbsp;1&lt;/sup&gt;).
+    ///
+    /// [`MANTISSA_DIGITS`]: f32::MANTISSA_DIGITS
     </span><span class="attr">#[stable(feature = <span class="string">&quot;assoc_int_consts&quot;</span>, since = <span class="string">&quot;1.43.0&quot;</span>)]
     </span><span class="kw">pub const </span>DIGITS: u32 = <span class="number">6</span>;
 
@@ -1845,31 +1891,62 @@
     ///
     /// This is the difference between `1.0` and the next larger representable number.
     ///
+    /// Equal to 2&lt;sup&gt;1&amp;nbsp;&amp;minus;&amp;nbsp;[`MANTISSA_DIGITS`]&lt;/sup&gt;.
+    ///
     /// [Machine epsilon]: https://en.wikipedia.org/wiki/Machine_epsilon
+    /// [`MANTISSA_DIGITS`]: f32::MANTISSA_DIGITS
     </span><span class="attr">#[stable(feature = <span class="string">&quot;assoc_int_consts&quot;</span>, since = <span class="string">&quot;1.43.0&quot;</span>)]
     </span><span class="kw">pub const </span>EPSILON: f32 = <span class="number">1.19209290e-07_f32</span>;
 
     <span class="doccomment">/// Smallest finite `f32` value.
+    ///
+    /// Equal to &amp;minus;[`MAX`].
+    ///
+    /// [`MAX`]: f32::MAX
     </span><span class="attr">#[stable(feature = <span class="string">&quot;assoc_int_consts&quot;</span>, since = <span class="string">&quot;1.43.0&quot;</span>)]
     </span><span class="kw">pub const </span>MIN: f32 = -<span class="number">3.40282347e+38_f32</span>;
     <span class="doccomment">/// Smallest positive normal `f32` value.
+    ///
+    /// Equal to 2&lt;sup&gt;[`MIN_EXP`]&amp;nbsp;&amp;minus;&amp;nbsp;1&lt;/sup&gt;.
+    ///
+    /// [`MIN_EXP`]: f32::MIN_EXP
     </span><span class="attr">#[stable(feature = <span class="string">&quot;assoc_int_consts&quot;</span>, since = <span class="string">&quot;1.43.0&quot;</span>)]
     </span><span class="kw">pub const </span>MIN_POSITIVE: f32 = <span class="number">1.17549435e-38_f32</span>;
     <span class="doccomment">/// Largest finite `f32` value.
+    ///
+    /// Equal to
+    /// (1&amp;nbsp;&amp;minus;&amp;nbsp;2&lt;sup&gt;&amp;minus;[`MANTISSA_DIGITS`]&lt;/sup&gt;)&amp;nbsp;2&lt;sup&gt;[`MAX_EXP`]&lt;/sup&gt;.
+    ///
+    /// [`MANTISSA_DIGITS`]: f32::MANTISSA_DIGITS
+    /// [`MAX_EXP`]: f32::MAX_EXP
     </span><span class="attr">#[stable(feature = <span class="string">&quot;assoc_int_consts&quot;</span>, since = <span class="string">&quot;1.43.0&quot;</span>)]
     </span><span class="kw">pub const </span>MAX: f32 = <span class="number">3.40282347e+38_f32</span>;
 
     <span class="doccomment">/// One greater than the minimum possible normal power of 2 exponent.
+    ///
+    /// If &lt;i&gt;x&lt;/i&gt;&amp;nbsp;=&amp;nbsp;`MIN_EXP`, then normal numbers
+    /// ≥&amp;nbsp;0.5&amp;nbsp;×&amp;nbsp;2&lt;sup&gt;&lt;i&gt;x&lt;/i&gt;&lt;/sup&gt;.
     </span><span class="attr">#[stable(feature = <span class="string">&quot;assoc_int_consts&quot;</span>, since = <span class="string">&quot;1.43.0&quot;</span>)]
     </span><span class="kw">pub const </span>MIN_EXP: i32 = -<span class="number">125</span>;
     <span class="doccomment">/// Maximum possible power of 2 exponent.
+    ///
+    /// If &lt;i&gt;x&lt;/i&gt;&amp;nbsp;=&amp;nbsp;`MAX_EXP`, then normal numbers
+    /// &amp;lt;&amp;nbsp;1&amp;nbsp;×&amp;nbsp;2&lt;sup&gt;&lt;i&gt;x&lt;/i&gt;&lt;/sup&gt;.
     </span><span class="attr">#[stable(feature = <span class="string">&quot;assoc_int_consts&quot;</span>, since = <span class="string">&quot;1.43.0&quot;</span>)]
     </span><span class="kw">pub const </span>MAX_EXP: i32 = <span class="number">128</span>;
 
-    <span class="doccomment">/// Minimum possible normal power of 10 exponent.
+    <span class="doccomment">/// Minimum &lt;i&gt;x&lt;/i&gt; for which 10&lt;sup&gt;&lt;i&gt;x&lt;/i&gt;&lt;/sup&gt; is normal.
+    ///
+    /// Equal to ceil(log&lt;sub&gt;10&lt;/sub&gt;&amp;nbsp;[`MIN_POSITIVE`]).
+    ///
+    /// [`MIN_POSITIVE`]: f32::MIN_POSITIVE
     </span><span class="attr">#[stable(feature = <span class="string">&quot;assoc_int_consts&quot;</span>, since = <span class="string">&quot;1.43.0&quot;</span>)]
     </span><span class="kw">pub const </span>MIN_10_EXP: i32 = -<span class="number">37</span>;
-    <span class="doccomment">/// Maximum possible power of 10 exponent.
+    <span class="doccomment">/// Maximum &lt;i&gt;x&lt;/i&gt; for which 10&lt;sup&gt;&lt;i&gt;x&lt;/i&gt;&lt;/sup&gt; is normal.
+    ///
+    /// Equal to floor(log&lt;sub&gt;10&lt;/sub&gt;&amp;nbsp;[`MAX`]).
+    ///
+    /// [`MAX`]: f32::MAX
     </span><span class="attr">#[stable(feature = <span class="string">&quot;assoc_int_consts&quot;</span>, since = <span class="string">&quot;1.43.0&quot;</span>)]
     </span><span class="kw">pub const </span>MAX_10_EXP: i32 = <span class="number">38</span>;
 
@@ -2281,7 +2358,7 @@
     /// let angle = std::f32::consts::PI;
     ///
     /// let abs_difference = (angle.to_degrees() - 180.0).abs();
-    ///
+    /// # #[cfg(any(not(target_arch = &quot;x86&quot;), target_feature = &quot;sse2&quot;))]
     /// assert!(abs_difference &lt;= f32::EPSILON);
     /// ```
     </span><span class="attr">#[must_use = <span class="string">&quot;this returns the result of the operation, \
@@ -2418,7 +2495,8 @@
         } <span class="kw">else if </span><span class="self">self </span>== other {
             <span class="kw">if </span><span class="self">self</span>.is_sign_negative() &amp;&amp; other.is_sign_positive() { <span class="self">self </span>} <span class="kw">else </span>{ other }
         } <span class="kw">else </span>{
-            <span class="self">self </span>+ other
+            <span class="comment">// At least one input is NaN. Use `+` to perform NaN propagation and quieting.
+            </span><span class="self">self </span>+ other
         }
     }
 

@@ -1,5 +1,5 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `library/std/src/io/mod.rs`."><title>mod.rs - source</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../static.files/SourceSerif4-Regular-46f98efaafac5295.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../static.files/FiraSans-Regular-018c141bf0843ffd.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../static.files/FiraSans-Medium-8f9a781e4970d388.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../static.files/SourceCodePro-Regular-562dcc5011b6de7d.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../static.files/SourceSerif4-Bold-a2c9cd1067f8b328.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../static.files/SourceCodePro-Semibold-d899c5a5c4aeb14a.ttf.woff2"><link rel="stylesheet" href="../../../static.files/normalize-76eba96aa4d2e634.css"><link rel="stylesheet" href="../../../static.files/rustdoc-2baeb68bba9ca696.css"><meta name="rustdoc-vars" data-root-path="../../../" data-static-root-path="../../../static.files/" data-current-crate="std" data-themes="" data-resource-suffix="1.74.0" data-rustdoc-version="1.74.0-dev" data-channel="nightly" data-search-js="search-5d3eaacf19ebf04f.js" data-settings-js="settings-3c6e833083d168bb.js" ><script src="../../../static.files/storage-dc6dee2b776f9a53.js"></script><script defer src="../../../static.files/src-script-0f5d2696cdf44bd3.js"></script><script defer src="../../../src-files1.74.0.js"></script><script defer src="../../../static.files/main-462d7caac759d94a.js"></script><noscript><link rel="stylesheet" href="../../../static.files/noscript-feafe1bb7466e4bd.css"></noscript><link rel="alternate icon" type="image/png" href="../../../static.files/favicon-16x16-8b506e7a72182f1c.png"><link rel="alternate icon" type="image/png" href="../../../static.files/favicon-32x32-422f7d1d52889060.png"><link rel="icon" type="image/svg+xml" href="../../../static.files/favicon-2c020d218678b618.svg"></head><body class="rustdoc src"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"></nav><div class="sidebar-resizer"></div>
-    <main><nav class="sub"><a class="sub-logo-container" href="../../../std/index.html"><img class="rust-logo" src="../../../static.files/rust-logo-151179464ae7ed46.svg" alt="logo"></a><form class="search-form"><span></span><input class="search-input" name="search" aria-label="Run search in the documentation" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><div id="help-button" tabindex="-1"><a href="../../../help.html" title="help">?</a></div><div id="settings-menu" tabindex="-1"><a href="../../../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../../../static.files/wheel-7b819b6101059cd0.svg"></a></div></form></nav><section id="main-content" class="content"><div class="example-wrap"><div data-nosnippet><pre class="src-line-numbers"><a href="#1" id="1">1</a>
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `library/std/src/io/mod.rs`."><title>mod.rs - source</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../static.files/SourceSerif4-Regular-46f98efaafac5295.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../static.files/FiraSans-Regular-018c141bf0843ffd.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../static.files/FiraSans-Medium-8f9a781e4970d388.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../static.files/SourceCodePro-Regular-562dcc5011b6de7d.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../static.files/SourceSerif4-Bold-a2c9cd1067f8b328.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../static.files/SourceCodePro-Semibold-d899c5a5c4aeb14a.ttf.woff2"><link rel="stylesheet" href="../../../static.files/normalize-76eba96aa4d2e634.css"><link rel="stylesheet" href="../../../static.files/rustdoc-4c1914efbd6b11e9.css"><meta name="rustdoc-vars" data-root-path="../../../" data-static-root-path="../../../static.files/" data-current-crate="std" data-themes="" data-resource-suffix="1.75.0" data-rustdoc-version="1.75.0-dev" data-channel="nightly" data-search-js="search-8fbf244ebcf71464.js" data-settings-js="settings-3c6e833083d168bb.js" ><script src="../../../static.files/storage-dc6dee2b776f9a53.js"></script><script defer src="../../../static.files/src-script-0f5d2696cdf44bd3.js"></script><script defer src="../../../src-files1.75.0.js"></script><script defer src="../../../static.files/main-8f5a221be21b7e80.js"></script><noscript><link rel="stylesheet" href="../../../static.files/noscript-feafe1bb7466e4bd.css"></noscript><link rel="alternate icon" type="image/png" href="../../../static.files/favicon-16x16-8b506e7a72182f1c.png"><link rel="alternate icon" type="image/png" href="../../../static.files/favicon-32x32-422f7d1d52889060.png"><link rel="icon" type="image/svg+xml" href="../../../static.files/favicon-2c020d218678b618.svg"></head><body class="rustdoc src"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"></nav><div class="sidebar-resizer"></div>
+    <main><nav class="sub"><a class="sub-logo-container" href="../../../std/index.html"><img class="rust-logo" src="../../../static.files/rust-logo-151179464ae7ed46.svg" alt="std"></a><form class="search-form"><span></span><input class="search-input" name="search" aria-label="Run search in the documentation" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><div id="help-button" tabindex="-1"><a href="../../../help.html" title="help">?</a></div><div id="settings-menu" tabindex="-1"><a href="../../../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../../../static.files/wheel-7b819b6101059cd0.svg"></a></div></form></nav><section id="main-content" class="content"><div class="example-wrap"><div data-nosnippet><pre class="src-line-numbers"><a href="#1" id="1">1</a>
 <a href="#2" id="2">2</a>
 <a href="#3" id="3">3</a>
 <a href="#4" id="4">4</a>
@@ -2870,6 +2870,57 @@
 <a href="#2869" id="2869">2869</a>
 <a href="#2870" id="2870">2870</a>
 <a href="#2871" id="2871">2871</a>
+<a href="#2872" id="2872">2872</a>
+<a href="#2873" id="2873">2873</a>
+<a href="#2874" id="2874">2874</a>
+<a href="#2875" id="2875">2875</a>
+<a href="#2876" id="2876">2876</a>
+<a href="#2877" id="2877">2877</a>
+<a href="#2878" id="2878">2878</a>
+<a href="#2879" id="2879">2879</a>
+<a href="#2880" id="2880">2880</a>
+<a href="#2881" id="2881">2881</a>
+<a href="#2882" id="2882">2882</a>
+<a href="#2883" id="2883">2883</a>
+<a href="#2884" id="2884">2884</a>
+<a href="#2885" id="2885">2885</a>
+<a href="#2886" id="2886">2886</a>
+<a href="#2887" id="2887">2887</a>
+<a href="#2888" id="2888">2888</a>
+<a href="#2889" id="2889">2889</a>
+<a href="#2890" id="2890">2890</a>
+<a href="#2891" id="2891">2891</a>
+<a href="#2892" id="2892">2892</a>
+<a href="#2893" id="2893">2893</a>
+<a href="#2894" id="2894">2894</a>
+<a href="#2895" id="2895">2895</a>
+<a href="#2896" id="2896">2896</a>
+<a href="#2897" id="2897">2897</a>
+<a href="#2898" id="2898">2898</a>
+<a href="#2899" id="2899">2899</a>
+<a href="#2900" id="2900">2900</a>
+<a href="#2901" id="2901">2901</a>
+<a href="#2902" id="2902">2902</a>
+<a href="#2903" id="2903">2903</a>
+<a href="#2904" id="2904">2904</a>
+<a href="#2905" id="2905">2905</a>
+<a href="#2906" id="2906">2906</a>
+<a href="#2907" id="2907">2907</a>
+<a href="#2908" id="2908">2908</a>
+<a href="#2909" id="2909">2909</a>
+<a href="#2910" id="2910">2910</a>
+<a href="#2911" id="2911">2911</a>
+<a href="#2912" id="2912">2912</a>
+<a href="#2913" id="2913">2913</a>
+<a href="#2914" id="2914">2914</a>
+<a href="#2915" id="2915">2915</a>
+<a href="#2916" id="2916">2916</a>
+<a href="#2917" id="2917">2917</a>
+<a href="#2918" id="2918">2918</a>
+<a href="#2919" id="2919">2919</a>
+<a href="#2920" id="2920">2920</a>
+<a href="#2921" id="2921">2921</a>
+<a href="#2922" id="2922">2922</a>
 </pre></div><pre class="rust"><code><span class="doccomment">//! Traits, helpers, and type definitions for core I/O functionality.
 //!
 //! The `std::io` module contains a number of common things you&#39;ll need
@@ -2877,7 +2928,7 @@
 //! the [`Read`] and [`Write`] traits, which provide the
 //! most general interface for reading and writing input and output.
 //!
-//! # Read and Write
+//! ## Read and Write
 //!
 //! Because they are traits, [`Read`] and [`Write`] are implemented by a number
 //! of other types, and you can implement them for your types too. As such,
@@ -3110,6 +3161,47 @@
 //! contract. The implementation of many of these functions are subject to change over
 //! time and may call fewer or more syscalls/library functions.
 //!
+//! ## I/O Safety
+//!
+//! Rust follows an I/O safety discipline that is comparable to its memory safety discipline. This
+//! means that file descriptors can be *exclusively owned*. (Here, &quot;file descriptor&quot; is meant to
+//! subsume similar concepts that exist across a wide range of operating systems even if they might
+//! use a different name, such as &quot;handle&quot;.) An exclusively owned file descriptor is one that no
+//! other code is allowed to access in any way, but the owner is allowed to access and even close
+//! it any time. A type that owns its file descriptor should usually close it in its `drop`
+//! function. Types like [`File`] own their file descriptor. Similarly, file descriptors
+//! can be *borrowed*, granting the temporary right to perform operations on this file descriptor.
+//! This indicates that the file descriptor will not be closed for the lifetime of the borrow, but
+//! it does *not* imply any right to close this file descriptor, since it will likely be owned by
+//! someone else.
+//!
+//! The platform-specific parts of the Rust standard library expose types that reflect these
+//! concepts, see [`os::unix`] and [`os::windows`].
+//!
+//! To uphold I/O safety, it is crucial that no code acts on file descriptors it does not own or
+//! borrow, and no code closes file descriptors it does not own. In other words, a safe function
+//! that takes a regular integer, treats it as a file descriptor, and acts on it, is *unsound*.
+//!
+//! Not upholding I/O safety and acting on a file descriptor without proof of ownership can lead to
+//! misbehavior and even Undefined Behavior in code that relies on ownership of its file
+//! descriptors: a closed file descriptor could be re-allocated, so the original owner of that file
+//! descriptor is now working on the wrong file. Some code might even rely on fully encapsulating
+//! its file descriptors with no operations being performed by any other part of the program.
+//!
+//! Note that exclusive ownership of a file descriptor does *not* imply exclusive ownership of the
+//! underlying kernel object that the file descriptor references (also called &quot;file description&quot; on
+//! some operating systems). File descriptors basically work like [`Arc`]: when you receive an owned
+//! file descriptor, you cannot know whether there are any other file descriptors that reference the
+//! same kernel object. However, when you create a new kernel object, you know that you are holding
+//! the only reference to it. Just be careful not to lend it to anyone, since they can obtain a
+//! clone and then you can no longer know what the reference count is! In that sense, [`OwnedFd`] is
+//! like `Arc` and [`BorrowedFd&lt;&#39;a&gt;`] is like `&amp;&#39;a Arc` (and similar for the Windows types). In
+//! particular, given a `BorrowedFd&lt;&#39;a&gt;`, you are not allowed to close the file descriptor -- just
+//! like how, given a `&amp;&#39;a Arc`, you are not allowed to decrement the reference count and
+//! potentially free the underlying object. There is no equivalent to `Box` for file descriptors in
+//! the standard library (that would be a type that guarantees that the reference count is `1`),
+//! however, it would be possible for a crate to define a type with those semantics.
+//!
 //! [`File`]: crate::fs::File
 //! [`TcpStream`]: crate::net::TcpStream
 //! [`io::stdout`]: stdout
@@ -3117,6 +3209,11 @@
 //! [`?` operator]: ../../book/appendix-02-operators.html
 //! [`Result`]: crate::result::Result
 //! [`.unwrap()`]: crate::result::Result::unwrap
+//! [`os::unix`]: ../os/unix/io/index.html
+//! [`os::windows`]: ../os/windows/io/index.html
+//! [`OwnedFd`]: ../os/fd/struct.OwnedFd.html
+//! [`BorrowedFd&lt;&#39;a&gt;`]: ../os/fd/struct.BorrowedFd.html
+//! [`Arc`]: crate::sync::Arc
 
 </span><span class="attr">#![stable(feature = <span class="string">&quot;rust1&quot;</span>, since = <span class="string">&quot;1.0.0&quot;</span>)]
 
@@ -4062,22 +4159,22 @@
     </span><span class="kw">pub fn </span>advance_slices(bufs: <span class="kw-2">&amp;mut &amp;mut </span>[IoSliceMut&lt;<span class="lifetime">&#39;a</span>&gt;], n: usize) {
         <span class="comment">// Number of buffers to remove.
         </span><span class="kw">let </span><span class="kw-2">mut </span>remove = <span class="number">0</span>;
-        <span class="comment">// Total length of all the to be removed buffers.
-        </span><span class="kw">let </span><span class="kw-2">mut </span>accumulated_len = <span class="number">0</span>;
+        <span class="comment">// Remaining length before reaching n.
+        </span><span class="kw">let </span><span class="kw-2">mut </span>left = n;
         <span class="kw">for </span>buf <span class="kw">in </span>bufs.iter() {
-            <span class="kw">if </span>accumulated_len + buf.len() &gt; n {
-                <span class="kw">break</span>;
-            } <span class="kw">else </span>{
-                accumulated_len += buf.len();
+            <span class="kw">if let </span><span class="prelude-val">Some</span>(remainder) = left.checked_sub(buf.len()) {
+                left = remainder;
                 remove += <span class="number">1</span>;
+            } <span class="kw">else </span>{
+                <span class="kw">break</span>;
             }
         }
 
         <span class="kw-2">*</span>bufs = <span class="kw-2">&amp;mut </span>take(bufs)[remove..];
         <span class="kw">if </span>bufs.is_empty() {
-            <span class="macro">assert!</span>(n == accumulated_len, <span class="string">&quot;advancing io slices beyond their length&quot;</span>);
+            <span class="macro">assert!</span>(left == <span class="number">0</span>, <span class="string">&quot;advancing io slices beyond their length&quot;</span>);
         } <span class="kw">else </span>{
-            bufs[<span class="number">0</span>].advance(n - accumulated_len)
+            bufs[<span class="number">0</span>].advance(left);
         }
     }
 }
@@ -4205,22 +4302,25 @@
     </span><span class="kw">pub fn </span>advance_slices(bufs: <span class="kw-2">&amp;mut &amp;mut </span>[IoSlice&lt;<span class="lifetime">&#39;a</span>&gt;], n: usize) {
         <span class="comment">// Number of buffers to remove.
         </span><span class="kw">let </span><span class="kw-2">mut </span>remove = <span class="number">0</span>;
-        <span class="comment">// Total length of all the to be removed buffers.
-        </span><span class="kw">let </span><span class="kw-2">mut </span>accumulated_len = <span class="number">0</span>;
+        <span class="comment">// Remaining length before reaching n. This prevents overflow
+        // that could happen if the length of slices in `bufs` were instead
+        // accumulated. Those slice may be aliased and, if they are large
+        // enough, their added length may overflow a `usize`.
+        </span><span class="kw">let </span><span class="kw-2">mut </span>left = n;
         <span class="kw">for </span>buf <span class="kw">in </span>bufs.iter() {
-            <span class="kw">if </span>accumulated_len + buf.len() &gt; n {
-                <span class="kw">break</span>;
-            } <span class="kw">else </span>{
-                accumulated_len += buf.len();
+            <span class="kw">if let </span><span class="prelude-val">Some</span>(remainder) = left.checked_sub(buf.len()) {
+                left = remainder;
                 remove += <span class="number">1</span>;
+            } <span class="kw">else </span>{
+                <span class="kw">break</span>;
             }
         }
 
         <span class="kw-2">*</span>bufs = <span class="kw-2">&amp;mut </span>take(bufs)[remove..];
         <span class="kw">if </span>bufs.is_empty() {
-            <span class="macro">assert!</span>(n == accumulated_len, <span class="string">&quot;advancing io slices beyond their length&quot;</span>);
+            <span class="macro">assert!</span>(left == <span class="number">0</span>, <span class="string">&quot;advancing io slices beyond their length&quot;</span>);
         } <span class="kw">else </span>{
-            bufs[<span class="number">0</span>].advance(n - accumulated_len)
+            bufs[<span class="number">0</span>].advance(left);
         }
     }
 }
@@ -4653,6 +4753,7 @@
 /// }
 /// ```
 </span><span class="attr">#[stable(feature = <span class="string">&quot;rust1&quot;</span>, since = <span class="string">&quot;1.0.0&quot;</span>)]
+#[cfg_attr(not(test), rustc_diagnostic_item = <span class="string">&quot;IoSeek&quot;</span>)]
 </span><span class="kw">pub trait </span>Seek {
     <span class="doccomment">/// Seek to an offset, in bytes, in a stream.
     ///
@@ -5716,6 +5817,7 @@
 /// [`lines`]: BufRead::lines
 </span><span class="attr">#[stable(feature = <span class="string">&quot;rust1&quot;</span>, since = <span class="string">&quot;1.0.0&quot;</span>)]
 #[derive(Debug)]
+#[cfg_attr(not(test), rustc_diagnostic_item = <span class="string">&quot;IoLines&quot;</span>)]
 </span><span class="kw">pub struct </span>Lines&lt;B&gt; {
     buf: B,
 }

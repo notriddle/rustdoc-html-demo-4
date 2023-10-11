@@ -175,16 +175,13 @@
 <p><code>async fn</code>/<code>impl trait</code> return type cannot contain a projection
 or <code>Self</code> that references lifetimes from a parent scope.</p>
 <p>Erroneous code example:</p>
-<pre><pre class="playground"><code class="language-rust compile_fail edition2018"><span class="boring">#![allow(unused)]
-</span><span class="boring">fn main() {
-</span>struct S&lt;'a&gt;(&amp;'a i32);
+<pre><code class="language-rust ignore edition2018">struct S&lt;'a&gt;(&amp;'a i32);
 
 impl&lt;'a&gt; S&lt;'a&gt; {
     async fn new(i: &amp;'a i32) -&gt; Self {
         S(&amp;22)
     }
-}
-<span class="boring">}</span></code></pre></pre>
+}</code></pre>
 <p>To fix this error we need to spell out <code>Self</code> to <code>S&lt;'a&gt;</code>:</p>
 <pre><pre class="playground"><code class="language-rust edition2018"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {

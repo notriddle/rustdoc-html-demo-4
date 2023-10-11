@@ -171,9 +171,10 @@
                 <div id="content" class="content">
                     <main>
                         <h1 id="error-code-e0551"><a class="header" href="#error-code-e0551">Error code E0551</a></h1>
+<h4 id="note-this-error-code-is-no-longer-emitted-by-the-compiler"><a class="header" href="#note-this-error-code-is-no-longer-emitted-by-the-compiler">Note: this error code is no longer emitted by the compiler</a></h4>
 <p>An invalid meta-item was used inside an attribute.</p>
 <p>Erroneous code example:</p>
-<pre><pre class="playground"><code class="language-rust compile_fail E0551"><span class="boring">#![allow(unused)]
+<pre><pre class="playground"><code class="language-rust compile_fail E0539"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
 </span>#[deprecated(note)] // error!
 fn i_am_deprecated() {}

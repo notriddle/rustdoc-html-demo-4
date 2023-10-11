@@ -195,6 +195,15 @@ default style.</p>
 <p>This should not be interpreted as forbidding developers from following a
 non-default style, or forbidding tools from adding any particular configuration
 options.</p>
+<h2 id="bugs"><a class="header" href="#bugs">Bugs</a></h2>
+<p>If the style guide differs from rustfmt, that may represent a bug in rustfmt,
+or a bug in the style guide; either way, please report it to the style team or
+the rustfmt team or both, for investigation and fix.</p>
+<p>If implementing a new formatting tool based on the style guide and default Rust
+style, please test it on the corpus of existing Rust code, and avoid causing
+widespread breakage. The implementation and testing of such a tool may surface
+bugs in either the style guide or rustfmt, as well as bugs in the tool itself.</p>
+<p>We typically resolve bugs in a fashion that avoids widespread breakage.</p>
 <h2 id="formatting-conventions"><a class="header" href="#formatting-conventions">Formatting conventions</a></h2>
 <h3 id="indentation-and-line-width"><a class="header" href="#indentation-and-line-width">Indentation and line width</a></h3>
 <ul>
@@ -677,25 +686,50 @@ where
 <span class="boring">}</span></code></pre></pre>
 <h2 id="type-aliases"><a class="header" href="#type-aliases">Type aliases</a></h2>
 <p>Keep type aliases on one line when they fit. If necessary to break the line, do
-so after the <code>=</code>, and block-indent the right-hand side:</p>
+so before the <code>=</code>, and block-indent the right-hand side:</p>
 <pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
 </span>pub type Foo = Bar&lt;T&gt;;
 
 // If multi-line is required
-type VeryLongType&lt;T, U: SomeBound&gt; =
-    AnEvenLongerType&lt;T, U, Foo&lt;T&gt;&gt;;
+type VeryLongType&lt;T, U: SomeBound&gt;
+    = AnEvenLongerType&lt;T, U, Foo&lt;T&gt;&gt;;
 <span class="boring">}</span></code></pre></pre>
-<p>Where possible avoid <code>where</code> clauses and keep type constraints inline. Where
-that is not possible split the line before and after the <code>where</code> clause (and
-split the <code>where</code> clause as normal), e.g.,</p>
+<p>When there is a trailing <code>where</code> clause after the type, and no <code>where</code> clause
+present before the type, break before the <code>=</code> and indent. Then break before the
+<code>where</code> keyword and format the clauses normally, e.g.,</p>
 <pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
-</span>type VeryLongType&lt;T, U&gt;
+</span>// With only a trailing where clause
+type VeryLongType&lt;T, U&gt;
+    = AnEvenLongerType&lt;T, U, Foo&lt;T&gt;&gt;
+where
+    T: U::AnAssociatedType,
+    U: SomeBound;
+<span class="boring">}</span></code></pre></pre>
+<p>When there is a <code>where</code> clause before the type, format it normally, and break
+after the last clause. Do not indent before the <code>=</code> to leave it visually
+distinct from the indented clauses that precede it. If there is additionally a
+<code>where</code> clause after the type, break before the <code>where</code> keyword and format the
+clauses normally.</p>
+<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>// With only a preceding where clause.
+type WithPrecedingWC&lt;T, U&gt;
 where
     T: U::AnAssociatedType,
     U: SomeBound,
 = AnEvenLongerType&lt;T, U, Foo&lt;T&gt;&gt;;
+
+// Or with both a preceding and trailing where clause.
+type WithPrecedingWC&lt;T, U&gt;
+where
+    T: U::AnAssociatedType,
+    U: SomeBound,
+= AnEvenLongerType&lt;T, U, Foo&lt;T&gt;&gt;
+where
+    T: U::AnAssociatedType2,
+    U: SomeBound2;
 <span class="boring">}</span></code></pre></pre>
 <h2 id="associated-types"><a class="header" href="#associated-types">Associated types</a></h2>
 <p>Format associated types like type aliases. Where an associated type has a
@@ -1329,6 +1363,22 @@ subsequent line. Put each sub-expression on its own line:</p>
 <span class="boring">}</span></code></pre></pre>
 <p>Prefer line-breaking at an assignment operator (either <code>=</code> or <code>+=</code>, etc.) rather
 than at other binary operators.</p>
+<h3 id="casts-as"><a class="header" href="#casts-as">Casts (<code>as</code>)</a></h3>
+<p>Format <code>as</code> casts like a binary operator. In particular, always include spaces
+around <code>as</code>, and if line-breaking, break before the <code>as</code> (never after) and
+block-indent the subsequent line. Format the type on the right-hand side using
+the rules for types.</p>
+<p>However, unlike with other binary operators, if chaining a series of <code>as</code> casts
+that require line-breaking, and line-breaking before the first <code>as</code> suffices to
+make the remainder fit on the next line, don't break before any subsequent
+<code>as</code>; instead, leave the series of types all on the same line:</p>
+<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>let cstr = very_long_expression()
+    as *const str as *const [u8] as *const std::os::raw::c_char;
+<span class="boring">}</span></code></pre></pre>
+<p>If the subsequent line still requires line-breaking, break and block-indent
+before each <code>as</code> as with other binary operators.</p>
 <h2 id="control-flow"><a class="header" href="#control-flow">Control flow</a></h2>
 <p>Do not include extraneous parentheses for <code>if</code> and <code>while</code> expressions.</p>
 <pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
@@ -1404,12 +1454,6 @@ assert_eq!(
     &quot;x and y were not equal, see {}&quot;,
     reason,
 );
-<span class="boring">}</span></code></pre></pre>
-<h2 id="casts-as"><a class="header" href="#casts-as">Casts (<code>as</code>)</a></h2>
-<p>Put spaces before and after <code>as</code>:</p>
-<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
-</span><span class="boring">fn main() {
-</span>let cstr = &quot;Hi\0&quot; as *const str as *const [u8] as *const std::os::raw::c_char;
 <span class="boring">}</span></code></pre></pre>
 <h2 id="chains-of-fields-and-method-calls"><a class="header" href="#chains-of-fields-and-method-calls">Chains of fields and method calls</a></h2>
 <p>A chain is a sequence of field accesses, method calls, and/or uses of the try

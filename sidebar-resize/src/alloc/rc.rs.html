@@ -1,5 +1,5 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `library/alloc/src/rc.rs`."><title>rc.rs - source</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/SourceSerif4-Regular-46f98efaafac5295.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/FiraSans-Regular-018c141bf0843ffd.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/FiraSans-Medium-8f9a781e4970d388.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/SourceCodePro-Regular-562dcc5011b6de7d.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/SourceSerif4-Bold-a2c9cd1067f8b328.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/SourceCodePro-Semibold-d899c5a5c4aeb14a.ttf.woff2"><link rel="stylesheet" href="../../static.files/normalize-76eba96aa4d2e634.css"><link rel="stylesheet" href="../../static.files/rustdoc-2baeb68bba9ca696.css"><meta name="rustdoc-vars" data-root-path="../../" data-static-root-path="../../static.files/" data-current-crate="alloc" data-themes="" data-resource-suffix="1.74.0" data-rustdoc-version="1.74.0-dev" data-channel="nightly" data-search-js="search-5d3eaacf19ebf04f.js" data-settings-js="settings-3c6e833083d168bb.js" ><script src="../../static.files/storage-dc6dee2b776f9a53.js"></script><script defer src="../../static.files/src-script-0f5d2696cdf44bd3.js"></script><script defer src="../../src-files1.74.0.js"></script><script defer src="../../static.files/main-462d7caac759d94a.js"></script><noscript><link rel="stylesheet" href="../../static.files/noscript-feafe1bb7466e4bd.css"></noscript><link rel="alternate icon" type="image/png" href="../../static.files/favicon-16x16-8b506e7a72182f1c.png"><link rel="alternate icon" type="image/png" href="../../static.files/favicon-32x32-422f7d1d52889060.png"><link rel="icon" type="image/svg+xml" href="../../static.files/favicon-2c020d218678b618.svg"></head><body class="rustdoc src"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"></nav><div class="sidebar-resizer"></div>
-    <main><nav class="sub"><a class="sub-logo-container" href="../../alloc/index.html"><img class="rust-logo" src="../../static.files/rust-logo-151179464ae7ed46.svg" alt="logo"></a><form class="search-form"><span></span><input class="search-input" name="search" aria-label="Run search in the documentation" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><div id="help-button" tabindex="-1"><a href="../../help.html" title="help">?</a></div><div id="settings-menu" tabindex="-1"><a href="../../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../../static.files/wheel-7b819b6101059cd0.svg"></a></div></form></nav><section id="main-content" class="content"><div class="example-wrap"><div data-nosnippet><pre class="src-line-numbers"><a href="#1" id="1">1</a>
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `library/alloc/src/rc.rs`."><title>rc.rs - source</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/SourceSerif4-Regular-46f98efaafac5295.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/FiraSans-Regular-018c141bf0843ffd.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/FiraSans-Medium-8f9a781e4970d388.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/SourceCodePro-Regular-562dcc5011b6de7d.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/SourceSerif4-Bold-a2c9cd1067f8b328.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/SourceCodePro-Semibold-d899c5a5c4aeb14a.ttf.woff2"><link rel="stylesheet" href="../../static.files/normalize-76eba96aa4d2e634.css"><link rel="stylesheet" href="../../static.files/rustdoc-4c1914efbd6b11e9.css"><meta name="rustdoc-vars" data-root-path="../../" data-static-root-path="../../static.files/" data-current-crate="alloc" data-themes="" data-resource-suffix="1.75.0" data-rustdoc-version="1.75.0-dev" data-channel="nightly" data-search-js="search-8fbf244ebcf71464.js" data-settings-js="settings-3c6e833083d168bb.js" ><script src="../../static.files/storage-dc6dee2b776f9a53.js"></script><script defer src="../../static.files/src-script-0f5d2696cdf44bd3.js"></script><script defer src="../../src-files1.75.0.js"></script><script defer src="../../static.files/main-8f5a221be21b7e80.js"></script><noscript><link rel="stylesheet" href="../../static.files/noscript-feafe1bb7466e4bd.css"></noscript><link rel="alternate icon" type="image/png" href="../../static.files/favicon-16x16-8b506e7a72182f1c.png"><link rel="alternate icon" type="image/png" href="../../static.files/favicon-32x32-422f7d1d52889060.png"><link rel="icon" type="image/svg+xml" href="../../static.files/favicon-2c020d218678b618.svg"></head><body class="rustdoc src"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"></nav><div class="sidebar-resizer"></div>
+    <main><nav class="sub"><a class="sub-logo-container" href="../../alloc/index.html"><img class="rust-logo" src="../../static.files/rust-logo-151179464ae7ed46.svg" alt="alloc"></a><form class="search-form"><span></span><input class="search-input" name="search" aria-label="Run search in the documentation" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><div id="help-button" tabindex="-1"><a href="../../help.html" title="help">?</a></div><div id="settings-menu" tabindex="-1"><a href="../../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../../static.files/wheel-7b819b6101059cd0.svg"></a></div></form></nav><section id="main-content" class="content"><div class="example-wrap"><div data-nosnippet><pre class="src-line-numbers"><a href="#1" id="1">1</a>
 <a href="#2" id="2">2</a>
 <a href="#3" id="3">3</a>
 <a href="#4" id="4">4</a>
@@ -3498,6 +3498,28 @@
 <a href="#3497" id="3497">3497</a>
 <a href="#3498" id="3498">3498</a>
 <a href="#3499" id="3499">3499</a>
+<a href="#3500" id="3500">3500</a>
+<a href="#3501" id="3501">3501</a>
+<a href="#3502" id="3502">3502</a>
+<a href="#3503" id="3503">3503</a>
+<a href="#3504" id="3504">3504</a>
+<a href="#3505" id="3505">3505</a>
+<a href="#3506" id="3506">3506</a>
+<a href="#3507" id="3507">3507</a>
+<a href="#3508" id="3508">3508</a>
+<a href="#3509" id="3509">3509</a>
+<a href="#3510" id="3510">3510</a>
+<a href="#3511" id="3511">3511</a>
+<a href="#3512" id="3512">3512</a>
+<a href="#3513" id="3513">3513</a>
+<a href="#3514" id="3514">3514</a>
+<a href="#3515" id="3515">3515</a>
+<a href="#3516" id="3516">3516</a>
+<a href="#3517" id="3517">3517</a>
+<a href="#3518" id="3518">3518</a>
+<a href="#3519" id="3519">3519</a>
+<a href="#3520" id="3520">3520</a>
+<a href="#3521" id="3521">3521</a>
 </pre></div><pre class="rust"><code><span class="doccomment">//! Single-threaded reference-counting pointers. &#39;Rc&#39; stands for &#39;Reference
 //! Counted&#39;.
 //!
@@ -5149,7 +5171,7 @@
     /// assert!(!Rc::ptr_eq(&amp;five, &amp;other_five));
     /// ```
     </span><span class="kw">pub fn </span>ptr_eq(this: <span class="kw-2">&amp;</span><span class="self">Self</span>, other: <span class="kw-2">&amp;</span><span class="self">Self</span>) -&gt; bool {
-        this.ptr.as_ptr() <span class="kw">as </span><span class="kw-2">*const </span>() == other.ptr.as_ptr() <span class="kw">as </span><span class="kw-2">*const </span>()
+        ptr::addr_eq(this.ptr.as_ptr(), other.ptr.as_ptr())
     }
 }
 
@@ -5909,6 +5931,27 @@
 }
 
 <span class="attr">#[cfg(not(no_global_oom_handling))]
+#[stable(feature = <span class="string">&quot;shared_from_array&quot;</span>, since = <span class="string">&quot;CURRENT_RUSTC_VERSION&quot;</span>)]
+</span><span class="kw">impl</span>&lt;T, <span class="kw">const </span>N: usize&gt; From&lt;[T; N]&gt; <span class="kw">for </span>Rc&lt;[T]&gt; {
+    <span class="doccomment">/// Converts a [`[T; N]`](prim@array) into an `Rc&lt;[T]&gt;`.
+    ///
+    /// The conversion moves the array into a newly allocated `Rc`.
+    ///
+    /// # Example
+    ///
+    /// ```
+    /// # use std::rc::Rc;
+    /// let original: [i32; 3] = [1, 2, 3];
+    /// let shared: Rc&lt;[i32]&gt; = Rc::from(original);
+    /// assert_eq!(&amp;[1, 2, 3], &amp;shared[..]);
+    /// ```
+    </span><span class="attr">#[inline]
+    </span><span class="kw">fn </span>from(v: [T; N]) -&gt; Rc&lt;[T]&gt; {
+        Rc::&lt;[T; N]&gt;::from(v)
+    }
+}
+
+<span class="attr">#[cfg(not(no_global_oom_handling))]
 #[stable(feature = <span class="string">&quot;shared_from_slice&quot;</span>, since = <span class="string">&quot;1.21.0&quot;</span>)]
 </span><span class="kw">impl</span>&lt;T: Clone&gt; From&lt;<span class="kw-2">&amp;</span>[T]&gt; <span class="kw">for </span>Rc&lt;[T]&gt; {
     <span class="doccomment">/// Allocate a reference-counted slice and fill it by cloning `v`&#39;s items.
@@ -6180,6 +6223,7 @@
 ///
 /// [`upgrade`]: Weak::upgrade
 </span><span class="attr">#[stable(feature = <span class="string">&quot;rc_weak&quot;</span>, since = <span class="string">&quot;1.4.0&quot;</span>)]
+#[cfg_attr(not(test), rustc_diagnostic_item = <span class="string">&quot;RcWeak&quot;</span>)]
 </span><span class="kw">pub struct </span>Weak&lt;
     T: <span class="question-mark">?</span>Sized,
     <span class="attr">#[unstable(feature = <span class="string">&quot;allocator_api&quot;</span>, issue = <span class="string">&quot;32838&quot;</span>)] </span>A: Allocator = Global,
@@ -6625,7 +6669,7 @@
     #[must_use]
     #[stable(feature = <span class="string">&quot;weak_ptr_eq&quot;</span>, since = <span class="string">&quot;1.39.0&quot;</span>)]
     </span><span class="kw">pub fn </span>ptr_eq(<span class="kw-2">&amp;</span><span class="self">self</span>, other: <span class="kw-2">&amp;</span><span class="self">Self</span>) -&gt; bool {
-        ptr::eq(<span class="self">self</span>.ptr.as_ptr() <span class="kw">as </span><span class="kw-2">*const </span>(), other.ptr.as_ptr() <span class="kw">as </span><span class="kw-2">*const </span>())
+        ptr::addr_eq(<span class="self">self</span>.ptr.as_ptr(), other.ptr.as_ptr())
     }
 }
 

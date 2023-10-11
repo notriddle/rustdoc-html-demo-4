@@ -1,5 +1,5 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `library/core/src/ptr/mod.rs`."><title>mod.rs - source</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../static.files/SourceSerif4-Regular-46f98efaafac5295.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../static.files/FiraSans-Regular-018c141bf0843ffd.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../static.files/FiraSans-Medium-8f9a781e4970d388.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../static.files/SourceCodePro-Regular-562dcc5011b6de7d.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../static.files/SourceSerif4-Bold-a2c9cd1067f8b328.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../static.files/SourceCodePro-Semibold-d899c5a5c4aeb14a.ttf.woff2"><link rel="stylesheet" href="../../../static.files/normalize-76eba96aa4d2e634.css"><link rel="stylesheet" href="../../../static.files/rustdoc-2baeb68bba9ca696.css"><meta name="rustdoc-vars" data-root-path="../../../" data-static-root-path="../../../static.files/" data-current-crate="core" data-themes="" data-resource-suffix="1.74.0" data-rustdoc-version="1.74.0-dev" data-channel="nightly" data-search-js="search-5d3eaacf19ebf04f.js" data-settings-js="settings-3c6e833083d168bb.js" ><script src="../../../static.files/storage-dc6dee2b776f9a53.js"></script><script defer src="../../../static.files/src-script-0f5d2696cdf44bd3.js"></script><script defer src="../../../src-files1.74.0.js"></script><script defer src="../../../static.files/main-462d7caac759d94a.js"></script><noscript><link rel="stylesheet" href="../../../static.files/noscript-feafe1bb7466e4bd.css"></noscript><link rel="alternate icon" type="image/png" href="../../../static.files/favicon-16x16-8b506e7a72182f1c.png"><link rel="alternate icon" type="image/png" href="../../../static.files/favicon-32x32-422f7d1d52889060.png"><link rel="icon" type="image/svg+xml" href="../../../static.files/favicon-2c020d218678b618.svg"></head><body class="rustdoc src"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"></nav><div class="sidebar-resizer"></div>
-    <main><nav class="sub"><a class="sub-logo-container" href="../../../core/index.html"><img class="rust-logo" src="../../../static.files/rust-logo-151179464ae7ed46.svg" alt="logo"></a><form class="search-form"><span></span><input class="search-input" name="search" aria-label="Run search in the documentation" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><div id="help-button" tabindex="-1"><a href="../../../help.html" title="help">?</a></div><div id="settings-menu" tabindex="-1"><a href="../../../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../../../static.files/wheel-7b819b6101059cd0.svg"></a></div></form></nav><section id="main-content" class="content"><div class="example-wrap"><div data-nosnippet><pre class="src-line-numbers"><a href="#1" id="1">1</a>
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `library/core/src/ptr/mod.rs`."><title>mod.rs - source</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../static.files/SourceSerif4-Regular-46f98efaafac5295.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../static.files/FiraSans-Regular-018c141bf0843ffd.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../static.files/FiraSans-Medium-8f9a781e4970d388.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../static.files/SourceCodePro-Regular-562dcc5011b6de7d.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../static.files/SourceSerif4-Bold-a2c9cd1067f8b328.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../static.files/SourceCodePro-Semibold-d899c5a5c4aeb14a.ttf.woff2"><link rel="stylesheet" href="../../../static.files/normalize-76eba96aa4d2e634.css"><link rel="stylesheet" href="../../../static.files/rustdoc-4c1914efbd6b11e9.css"><meta name="rustdoc-vars" data-root-path="../../../" data-static-root-path="../../../static.files/" data-current-crate="core" data-themes="" data-resource-suffix="1.75.0" data-rustdoc-version="1.75.0-dev" data-channel="nightly" data-search-js="search-8fbf244ebcf71464.js" data-settings-js="settings-3c6e833083d168bb.js" ><script src="../../../static.files/storage-dc6dee2b776f9a53.js"></script><script defer src="../../../static.files/src-script-0f5d2696cdf44bd3.js"></script><script defer src="../../../src-files1.75.0.js"></script><script defer src="../../../static.files/main-8f5a221be21b7e80.js"></script><noscript><link rel="stylesheet" href="../../../static.files/noscript-feafe1bb7466e4bd.css"></noscript><link rel="alternate icon" type="image/png" href="../../../static.files/favicon-16x16-8b506e7a72182f1c.png"><link rel="alternate icon" type="image/png" href="../../../static.files/favicon-32x32-422f7d1d52889060.png"><link rel="icon" type="image/svg+xml" href="../../../static.files/favicon-2c020d218678b618.svg"></head><body class="rustdoc src"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"></nav><div class="sidebar-resizer"></div>
+    <main><nav class="sub"><a class="sub-logo-container" href="../../../core/index.html"><img class="rust-logo" src="../../../static.files/rust-logo-151179464ae7ed46.svg" alt="core"></a><form class="search-form"><span></span><input class="search-input" name="search" aria-label="Run search in the documentation" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><div id="help-button" tabindex="-1"><a href="../../../help.html" title="help">?</a></div><div id="settings-menu" tabindex="-1"><a href="../../../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../../../static.files/wheel-7b819b6101059cd0.svg"></a></div></form></nav><section id="main-content" class="content"><div class="example-wrap"><div data-nosnippet><pre class="src-line-numbers"><a href="#1" id="1">1</a>
 <a href="#2" id="2">2</a>
 <a href="#3" id="3">3</a>
 <a href="#4" id="4">4</a>
@@ -2042,6 +2042,40 @@
 <a href="#2041" id="2041">2041</a>
 <a href="#2042" id="2042">2042</a>
 <a href="#2043" id="2043">2043</a>
+<a href="#2044" id="2044">2044</a>
+<a href="#2045" id="2045">2045</a>
+<a href="#2046" id="2046">2046</a>
+<a href="#2047" id="2047">2047</a>
+<a href="#2048" id="2048">2048</a>
+<a href="#2049" id="2049">2049</a>
+<a href="#2050" id="2050">2050</a>
+<a href="#2051" id="2051">2051</a>
+<a href="#2052" id="2052">2052</a>
+<a href="#2053" id="2053">2053</a>
+<a href="#2054" id="2054">2054</a>
+<a href="#2055" id="2055">2055</a>
+<a href="#2056" id="2056">2056</a>
+<a href="#2057" id="2057">2057</a>
+<a href="#2058" id="2058">2058</a>
+<a href="#2059" id="2059">2059</a>
+<a href="#2060" id="2060">2060</a>
+<a href="#2061" id="2061">2061</a>
+<a href="#2062" id="2062">2062</a>
+<a href="#2063" id="2063">2063</a>
+<a href="#2064" id="2064">2064</a>
+<a href="#2065" id="2065">2065</a>
+<a href="#2066" id="2066">2066</a>
+<a href="#2067" id="2067">2067</a>
+<a href="#2068" id="2068">2068</a>
+<a href="#2069" id="2069">2069</a>
+<a href="#2070" id="2070">2070</a>
+<a href="#2071" id="2071">2071</a>
+<a href="#2072" id="2072">2072</a>
+<a href="#2073" id="2073">2073</a>
+<a href="#2074" id="2074">2074</a>
+<a href="#2075" id="2075">2075</a>
+<a href="#2076" id="2076">2076</a>
+<a href="#2077" id="2077">2077</a>
 </pre></div><pre class="rust"><code><span class="doccomment">//! Manually manage memory through raw pointers.
 //!
 //! *[See also the pointer primitive types](pointer).*
@@ -2538,6 +2572,7 @@
 </span><span class="attr">#[stable(feature = <span class="string">&quot;drop_in_place&quot;</span>, since = <span class="string">&quot;1.8.0&quot;</span>)]
 #[lang = <span class="string">&quot;drop_in_place&quot;</span>]
 #[allow(unconditional_recursion)]
+#[rustc_diagnostic_item = <span class="string">&quot;ptr_drop_in_place&quot;</span>]
 </span><span class="kw">pub unsafe fn </span>drop_in_place&lt;T: <span class="question-mark">?</span>Sized&gt;(to_drop: <span class="kw-2">*mut </span>T) {
     <span class="comment">// Code here does not matter - this is replaced by the
     // real drop glue by the compiler.
@@ -2784,6 +2819,7 @@
 #[stable(feature = <span class="string">&quot;slice_from_raw_parts&quot;</span>, since = <span class="string">&quot;1.42.0&quot;</span>)]
 #[rustc_const_stable(feature = <span class="string">&quot;const_slice_from_raw_parts&quot;</span>, since = <span class="string">&quot;1.64.0&quot;</span>)]
 #[rustc_allow_const_fn_unstable(ptr_metadata)]
+#[rustc_diagnostic_item = <span class="string">&quot;ptr_slice_from_raw_parts&quot;</span>]
 </span><span class="kw">pub const fn </span>slice_from_raw_parts&lt;T&gt;(data: <span class="kw-2">*const </span>T, len: usize) -&gt; <span class="kw-2">*const </span>[T] {
     from_raw_parts(data.cast(), len)
 }
@@ -2816,6 +2852,7 @@
 </span><span class="attr">#[inline]
 #[stable(feature = <span class="string">&quot;slice_from_raw_parts&quot;</span>, since = <span class="string">&quot;1.42.0&quot;</span>)]
 #[rustc_const_unstable(feature = <span class="string">&quot;const_slice_from_raw_parts_mut&quot;</span>, issue = <span class="string">&quot;67456&quot;</span>)]
+#[rustc_diagnostic_item = <span class="string">&quot;ptr_slice_from_raw_parts_mut&quot;</span>]
 </span><span class="kw">pub const fn </span>slice_from_raw_parts_mut&lt;T&gt;(data: <span class="kw-2">*mut </span>T, len: usize) -&gt; <span class="kw-2">*mut </span>[T] {
     from_raw_parts_mut(data.cast(), len)
 }
@@ -2894,6 +2931,7 @@
 </span><span class="attr">#[inline]
 #[stable(feature = <span class="string">&quot;rust1&quot;</span>, since = <span class="string">&quot;1.0.0&quot;</span>)]
 #[rustc_const_unstable(feature = <span class="string">&quot;const_swap&quot;</span>, issue = <span class="string">&quot;83163&quot;</span>)]
+#[rustc_diagnostic_item = <span class="string">&quot;ptr_swap&quot;</span>]
 </span><span class="kw">pub const unsafe fn </span>swap&lt;T&gt;(x: <span class="kw-2">*mut </span>T, y: <span class="kw-2">*mut </span>T) {
     <span class="comment">// Give ourselves some scratch space to work with.
     // We do not have to worry about drops: `MaybeUninit` does nothing when dropped.
@@ -2955,6 +2993,7 @@
 </span><span class="attr">#[inline]
 #[stable(feature = <span class="string">&quot;swap_nonoverlapping&quot;</span>, since = <span class="string">&quot;1.27.0&quot;</span>)]
 #[rustc_const_unstable(feature = <span class="string">&quot;const_swap&quot;</span>, issue = <span class="string">&quot;83163&quot;</span>)]
+#[rustc_diagnostic_item = <span class="string">&quot;ptr_swap_nonoverlapping&quot;</span>]
 </span><span class="kw">pub const unsafe fn </span>swap_nonoverlapping&lt;T&gt;(x: <span class="kw-2">*mut </span>T, y: <span class="kw-2">*mut </span>T, count: usize) {
     <span class="attr">#[allow(unused)]
     </span><span class="macro">macro_rules! </span>attempt_swap_as_chunks {
@@ -3066,6 +3105,7 @@
 </span><span class="attr">#[inline]
 #[stable(feature = <span class="string">&quot;rust1&quot;</span>, since = <span class="string">&quot;1.0.0&quot;</span>)]
 #[rustc_const_unstable(feature = <span class="string">&quot;const_replace&quot;</span>, issue = <span class="string">&quot;83164&quot;</span>)]
+#[rustc_diagnostic_item = <span class="string">&quot;ptr_replace&quot;</span>]
 </span><span class="kw">pub const unsafe fn </span>replace&lt;T&gt;(dst: <span class="kw-2">*mut </span>T, <span class="kw-2">mut </span>src: T) -&gt; T {
     <span class="comment">// SAFETY: the caller must guarantee that `dst` is valid to be
     // cast to a mutable reference (valid for writes, aligned, initialized),
@@ -3191,6 +3231,7 @@
 #[rustc_const_stable(feature = <span class="string">&quot;const_ptr_read&quot;</span>, since = <span class="string">&quot;1.71.0&quot;</span>)]
 #[rustc_allow_const_fn_unstable(const_mut_refs, const_maybe_uninit_as_mut_ptr)]
 #[cfg_attr(miri, track_caller)] </span><span class="comment">// even without panics, this helps for Miri backtraces
+</span><span class="attr">#[rustc_diagnostic_item = <span class="string">&quot;ptr_read&quot;</span>]
 </span><span class="kw">pub const unsafe fn </span>read&lt;T&gt;(src: <span class="kw-2">*const </span>T) -&gt; T {
     <span class="comment">// It would be semantically correct to implement this via `copy_nonoverlapping`
     // and `MaybeUninit`, as was done before PR #109035. Calling `assume_init`
@@ -3308,6 +3349,7 @@
 #[rustc_const_stable(feature = <span class="string">&quot;const_ptr_read&quot;</span>, since = <span class="string">&quot;1.71.0&quot;</span>)]
 #[rustc_allow_const_fn_unstable(const_mut_refs, const_maybe_uninit_as_mut_ptr)]
 #[cfg_attr(miri, track_caller)] </span><span class="comment">// even without panics, this helps for Miri backtraces
+</span><span class="attr">#[rustc_diagnostic_item = <span class="string">&quot;ptr_read_unaligned&quot;</span>]
 </span><span class="kw">pub const unsafe fn </span>read_unaligned&lt;T&gt;(src: <span class="kw-2">*const </span>T) -&gt; T {
     <span class="kw">let </span><span class="kw-2">mut </span>tmp = MaybeUninit::&lt;T&gt;::uninit();
     <span class="comment">// SAFETY: the caller must guarantee that `src` is valid for reads.
@@ -3583,6 +3625,7 @@
 </span><span class="attr">#[inline]
 #[stable(feature = <span class="string">&quot;volatile&quot;</span>, since = <span class="string">&quot;1.9.0&quot;</span>)]
 #[cfg_attr(miri, track_caller)] </span><span class="comment">// even without panics, this helps for Miri backtraces
+</span><span class="attr">#[rustc_diagnostic_item = <span class="string">&quot;ptr_read_volatile&quot;</span>]
 </span><span class="kw">pub unsafe fn </span>read_volatile&lt;T&gt;(src: <span class="kw-2">*const </span>T) -&gt; T {
     <span class="comment">// SAFETY: the caller must uphold the safety contract for `volatile_load`.
     </span><span class="kw">unsafe </span>{
@@ -3908,8 +3951,33 @@
 /// ```
 </span><span class="attr">#[stable(feature = <span class="string">&quot;ptr_eq&quot;</span>, since = <span class="string">&quot;1.17.0&quot;</span>)]
 #[inline(always)]
+#[must_use = <span class="string">&quot;pointer comparison produces a value&quot;</span>]
+#[rustc_diagnostic_item = <span class="string">&quot;ptr_eq&quot;</span>]
 </span><span class="kw">pub fn </span>eq&lt;T: <span class="question-mark">?</span>Sized&gt;(a: <span class="kw-2">*const </span>T, b: <span class="kw-2">*const </span>T) -&gt; bool {
     a == b
+}
+
+<span class="doccomment">/// Compares the *addresses* of the two pointers for equality,
+/// ignoring any metadata in fat pointers.
+///
+/// If the arguments are thin pointers of the same type,
+/// then this is the same as [`eq`].
+///
+/// # Examples
+///
+/// ```
+/// #![feature(ptr_addr_eq)]
+///
+/// let whole: &amp;[i32; 3] = &amp;[1, 2, 3];
+/// let first: &amp;i32 = &amp;whole[0];
+/// assert!(std::ptr::addr_eq(whole, first));
+/// assert!(!std::ptr::eq::&lt;dyn std::fmt::Debug&gt;(whole, first));
+/// ```
+</span><span class="attr">#[unstable(feature = <span class="string">&quot;ptr_addr_eq&quot;</span>, issue = <span class="string">&quot;116324&quot;</span>)]
+#[inline(always)]
+#[must_use = <span class="string">&quot;pointer comparison produces a value&quot;</span>]
+</span><span class="kw">pub fn </span>addr_eq&lt;T: <span class="question-mark">?</span>Sized, U: <span class="question-mark">?</span>Sized&gt;(p: <span class="kw-2">*const </span>T, q: <span class="kw-2">*const </span>U) -&gt; bool {
+    (p <span class="kw">as </span><span class="kw-2">*const </span>()) == (q <span class="kw">as </span><span class="kw-2">*const </span>())
 }
 
 <span class="doccomment">/// Hash a raw pointer.

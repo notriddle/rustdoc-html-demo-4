@@ -1367,14 +1367,13 @@ problem.</p>
 }
 <span class="boring">}</span></code></pre></pre>
 <p>The machine code for <code>foo::&lt;u8&gt;()</code>, <code>foo::&lt;bool&gt;()</code>, <code>foo::&lt;String&gt;()</code>, or any
-other type substitution is different. Hence the compiler generates the
+other instantiation is different. Hence the compiler generates the
 implementation on-demand. If you call <code>foo()</code> with a <code>bool</code> parameter, the
 compiler will only generate code for <code>foo::&lt;bool&gt;()</code>. When we have additional
 type parameters, the number of monomorphized implementations the compiler
 generates does not grow drastically, since the compiler will only generate an
-implementation if the function is called with unparameterized substitutions
-(i.e., substitutions where none of the substituted types are themselves
-parameterized).</p>
+implementation if the function is called with fully concrete arguments
+(i.e., arguments which do not contain any generic parameters).</p>
 <p>However, with trait objects we have to make a table containing <em>every</em> object
 that implements the trait. Now, if it has type parameters, we need to add
 implementations for every type that implements the trait, and there could
@@ -2328,7 +2327,7 @@ fn main() {
 <p>An invalid number of generic parameters was passed to an intrinsic function.</p>
 <p>Erroneous code example:</p>
 <pre><pre class="playground"><code class="language-rust compile_fail E0094"><span class="boring">#![allow(unused)]
-</span>#![feature(intrinsics)]
+</span>#![feature(intrinsics, rustc_attrs)]
 #![allow(internal_features)]
 
 <span class="boring">fn main() {
@@ -2342,7 +2341,7 @@ fn main() {
 and verify with the function declaration in the Rust source code.
 Example:</p>
 <pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
-</span>#![feature(intrinsics)]
+</span>#![feature(intrinsics, rustc_attrs)]
 #![allow(internal_features)]
 
 <span class="boring">fn main() {
@@ -3982,7 +3981,7 @@ see <a href="https://rust-lang.github.io/rfcs/2451-re-rebalancing-coherence.html
 <h4 id="note-this-error-code-is-no-longer-emitted-by-the-compiler-22"><a class="header" href="#note-this-error-code-is-no-longer-emitted-by-the-compiler-22">Note: this error code is no longer emitted by the compiler.</a></h4>
 <p>You used a function or type which doesn't fit the requirements for where it was
 used. Erroneous code examples:</p>
-<pre><pre class="playground"><code class="language-rust compile_fail">#![feature(intrinsics)]
+<pre><pre class="playground"><code class="language-rust compile_fail">#![feature(intrinsics, rustc_attrs)]
 #![allow(internal_features)]
 
 extern &quot;rust-intrinsic&quot; {
@@ -4016,7 +4015,7 @@ impl Foo {
 }</code></pre></pre>
 <p>For the first code example, please check the function definition. Example:</p>
 <pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
-</span>#![feature(intrinsics)]
+</span>#![feature(intrinsics, rustc_attrs)]
 #![allow(internal_features)]
 
 <span class="boring">fn main() {
@@ -5023,25 +5022,27 @@ one arguments of type <code>usize</code>.</p>
 <p>Erroneous code example:</p>
 <pre><pre class="playground"><code class="language-rust compile_fail E0282"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
-</span>let x = &quot;hello&quot;.chars().rev().collect();
+</span>let x = Vec::new();
 <span class="boring">}</span></code></pre></pre>
 <p>This error indicates that type inference did not result in one unique possible
 type, and extra information is required. In most cases this can be provided
 by adding a type annotation. Sometimes you need to specify a generic type
 parameter manually.</p>
-<p>A common example is the <code>collect</code> method on <code>Iterator</code>. It has a generic type
-parameter with a <code>FromIterator</code> bound, which for a <code>char</code> iterator is
-implemented by <code>Vec</code> and <code>String</code> among others. Consider the following snippet
-that reverses the characters of a string:</p>
-<p>In the first code example, the compiler cannot infer what the type of <code>x</code> should
-be: <code>Vec&lt;char&gt;</code> and <code>String</code> are both suitable candidates. To specify which type
-to use, you can use a type annotation on <code>x</code>:</p>
+<p>In the example above, type <code>Vec</code> has a type parameter <code>T</code>. When calling
+<code>Vec::new</code>, barring any other later usage of the variable <code>x</code> that allows the
+compiler to infer what type <code>T</code> is, the compiler needs to be told what it is.</p>
+<p>The type can be specified on the variable:</p>
 <pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
-</span>let x: Vec&lt;char&gt; = &quot;hello&quot;.chars().rev().collect();
+</span>let x: Vec&lt;i32&gt; = Vec::new();
 <span class="boring">}</span></code></pre></pre>
-<p>It is not necessary to annotate the full type. Once the ambiguity is resolved,
-the compiler can infer the rest:</p>
+<p>The type can also be specified in the path of the expression:</p>
+<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>let x = Vec::&lt;i32&gt;::new();
+<span class="boring">}</span></code></pre></pre>
+<p>In cases with more complex types, it is not necessary to annotate the full
+type. Once the ambiguity is resolved, the compiler can infer the rest:</p>
 <pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
 </span>let x: Vec&lt;_&gt; = &quot;hello&quot;.chars().rev().collect();
@@ -5080,8 +5081,45 @@ impl&lt;T&gt; Foo&lt;T&gt; {
 <p>This will fail because the compiler does not know which instance of <code>Foo</code> to
 call <code>bar</code> on. Change <code>Foo::bar()</code> to <code>Foo::&lt;T&gt;::bar()</code> to resolve the error.</p>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="error-code-e0283"><a class="header" href="#error-code-e0283">Error code E0283</a></h1>
-<p>An implementation cannot be chosen unambiguously because of lack of information.</p>
+<p>The compiler could not infer a type and asked for a type annotation.</p>
 <p>Erroneous code example:</p>
+<pre><pre class="playground"><code class="language-rust compile_fail E0283"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>let x = &quot;hello&quot;.chars().rev().collect();
+<span class="boring">}</span></code></pre></pre>
+<p>This error indicates that type inference did not result in one unique possible
+type, and extra information is required. In most cases this can be provided
+by adding a type annotation. Sometimes you need to specify a generic type
+parameter manually.</p>
+<p>A common example is the <code>collect</code> method on <code>Iterator</code>. It has a generic type
+parameter with a <code>FromIterator</code> bound, which for a <code>char</code> iterator is
+implemented by <code>Vec</code> and <code>String</code> among others. Consider the following snippet
+that reverses the characters of a string:</p>
+<p>In the first code example, the compiler cannot infer what the type of <code>x</code> should
+be: <code>Vec&lt;char&gt;</code> and <code>String</code> are both suitable candidates. To specify which type
+to use, you can use a type annotation on <code>x</code>:</p>
+<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>let x: Vec&lt;char&gt; = &quot;hello&quot;.chars().rev().collect();
+<span class="boring">}</span></code></pre></pre>
+<p>It is not necessary to annotate the full type. Once the ambiguity is resolved,
+the compiler can infer the rest:</p>
+<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>let x: Vec&lt;_&gt; = &quot;hello&quot;.chars().rev().collect();
+<span class="boring">}</span></code></pre></pre>
+<p>Another way to provide the compiler with enough information, is to specify the
+generic type parameter:</p>
+<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>let x = &quot;hello&quot;.chars().rev().collect::&lt;Vec&lt;char&gt;&gt;();
+<span class="boring">}</span></code></pre></pre>
+<p>Again, you need not specify the full type if the compiler can infer it:</p>
+<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>let x = &quot;hello&quot;.chars().rev().collect::&lt;Vec&lt;_&gt;&gt;();
+<span class="boring">}</span></code></pre></pre>
+<p>We can see a self-contained example below:</p>
 <pre><pre class="playground"><code class="language-rust compile_fail E0283"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
 </span>struct Foo;
@@ -10497,9 +10535,10 @@ fn the_banished() {}
 fn the_banished() {} // ok!
 <span class="boring">}</span></code></pre></pre>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="error-code-e0551"><a class="header" href="#error-code-e0551">Error code E0551</a></h1>
+<h4 id="note-this-error-code-is-no-longer-emitted-by-the-compiler-53"><a class="header" href="#note-this-error-code-is-no-longer-emitted-by-the-compiler-53">Note: this error code is no longer emitted by the compiler</a></h4>
 <p>An invalid meta-item was used inside an attribute.</p>
 <p>Erroneous code example:</p>
-<pre><pre class="playground"><code class="language-rust compile_fail E0551"><span class="boring">#![allow(unused)]
+<pre><pre class="playground"><code class="language-rust compile_fail E0539"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
 </span>#[deprecated(note)] // error!
 fn i_am_deprecated() {}
@@ -11349,7 +11388,7 @@ let mut ss = SolarSystem { earth: 3 }; // declaring `ss` as mutable
 ss.earth = 2; // ok!
 <span class="boring">}</span></code></pre></pre>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="error-code-e0595"><a class="header" href="#error-code-e0595">Error code E0595</a></h1>
-<h4 id="note-this-error-code-is-no-longer-emitted-by-the-compiler-53"><a class="header" href="#note-this-error-code-is-no-longer-emitted-by-the-compiler-53">Note: this error code is no longer emitted by the compiler.</a></h4>
+<h4 id="note-this-error-code-is-no-longer-emitted-by-the-compiler-54"><a class="header" href="#note-this-error-code-is-no-longer-emitted-by-the-compiler-54">Note: this error code is no longer emitted by the compiler.</a></h4>
 <p>Closures cannot mutate immutable captured variables.</p>
 <p>Erroneous code example:</p>
 <pre><pre class="playground"><code class="language-rust compile_fail E0594"><span class="boring">#![allow(unused)]
@@ -11822,7 +11861,7 @@ fn i_am_a_function() {}
 i_am_a_function();
 <span class="boring">}</span></code></pre></pre>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="error-code-e0619"><a class="header" href="#error-code-e0619">Error code E0619</a></h1>
-<h4 id="note-this-error-code-is-no-longer-emitted-by-the-compiler-54"><a class="header" href="#note-this-error-code-is-no-longer-emitted-by-the-compiler-54">Note: this error code is no longer emitted by the compiler.</a></h4>
+<h4 id="note-this-error-code-is-no-longer-emitted-by-the-compiler-55"><a class="header" href="#note-this-error-code-is-no-longer-emitted-by-the-compiler-55">Note: this error code is no longer emitted by the compiler.</a></h4>
 <p>The type-checker needed to know the type of an expression, but that type had not
 yet been inferred.</p>
 <p>Erroneous code example:</p>
@@ -12230,7 +12269,7 @@ fn main() {
     foo(|x: i32| {});
 }</code></pre></pre>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="error-code-e0632"><a class="header" href="#error-code-e0632">Error code E0632</a></h1>
-<h4 id="note-this-error-code-is-no-longer-emitted-by-the-compiler-55"><a class="header" href="#note-this-error-code-is-no-longer-emitted-by-the-compiler-55">Note: this error code is no longer emitted by the compiler.</a></h4>
+<h4 id="note-this-error-code-is-no-longer-emitted-by-the-compiler-56"><a class="header" href="#note-this-error-code-is-no-longer-emitted-by-the-compiler-56">Note: this error code is no longer emitted by the compiler.</a></h4>
 <p>An explicit generic argument was provided when calling a function that
 uses <code>impl Trait</code> in argument position.</p>
 <p>Erroneous code example:</p>
@@ -12252,7 +12291,7 @@ bar::&lt;_, _&gt;(0i32, &quot;abc&quot;.to_string());
 bar(0i32, &quot;abc&quot;.to_string());
 <span class="boring">}</span></code></pre></pre>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="error-code-e0633"><a class="header" href="#error-code-e0633">Error code E0633</a></h1>
-<h4 id="note-this-error-code-is-no-longer-emitted-by-the-compiler-56"><a class="header" href="#note-this-error-code-is-no-longer-emitted-by-the-compiler-56">Note: this error code is no longer emitted by the compiler.</a></h4>
+<h4 id="note-this-error-code-is-no-longer-emitted-by-the-compiler-57"><a class="header" href="#note-this-error-code-is-no-longer-emitted-by-the-compiler-57">Note: this error code is no longer emitted by the compiler.</a></h4>
 <p>The <code>unwind</code> attribute was malformed.</p>
 <p>Erroneous code example:</p>
 <pre><pre class="playground"><code class="language-rust compile_fail">#![feature(unwind_attributes)]
@@ -12499,7 +12538,7 @@ reference its own <em>type</em>.</p>
 <span class="boring">fn main() {
 </span>#[start]
 fn start(_: isize, _: *const *const u8) -&gt; isize where (): Copy {
-    //^ error: start function is not allowed to have a where clause
+    //^ error: `#[start]` function is not allowed to have a where clause
     0
 }
 <span class="boring">}</span></code></pre></pre>
@@ -12639,18 +12678,18 @@ fn main() {
     crate::collider::earth::foo(); // ok!
 }</code></pre></pre>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="error-code-e0660"><a class="header" href="#error-code-e0660">Error code E0660</a></h1>
-<h4 id="note-this-error-code-is-no-longer-emitted-by-the-compiler-57"><a class="header" href="#note-this-error-code-is-no-longer-emitted-by-the-compiler-57">Note: this error code is no longer emitted by the compiler.</a></h4>
+<h4 id="note-this-error-code-is-no-longer-emitted-by-the-compiler-58"><a class="header" href="#note-this-error-code-is-no-longer-emitted-by-the-compiler-58">Note: this error code is no longer emitted by the compiler.</a></h4>
 <p>The argument to the <code>llvm_asm</code> macro is not well-formed.</p>
 <p>Erroneous code example:</p>
 <pre><code class="language-rust ignore (no longer emitted)">llvm_asm!(&quot;nop&quot; &quot;nop&quot;);</code></pre>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="error-code-e0661"><a class="header" href="#error-code-e0661">Error code E0661</a></h1>
-<h4 id="note-this-error-code-is-no-longer-emitted-by-the-compiler-58"><a class="header" href="#note-this-error-code-is-no-longer-emitted-by-the-compiler-58">Note: this error code is no longer emitted by the compiler.</a></h4>
+<h4 id="note-this-error-code-is-no-longer-emitted-by-the-compiler-59"><a class="header" href="#note-this-error-code-is-no-longer-emitted-by-the-compiler-59">Note: this error code is no longer emitted by the compiler.</a></h4>
 <p>An invalid syntax was passed to the second argument of an <code>llvm_asm</code> macro line.</p>
 <p>Erroneous code example:</p>
 <pre><code class="language-rust ignore (no longer emitted)">let a;
 llvm_asm!(&quot;nop&quot; : &quot;r&quot;(a));</code></pre>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="error-code-e0662"><a class="header" href="#error-code-e0662">Error code E0662</a></h1>
-<h4 id="note-this-error-code-is-no-longer-emitted-by-the-compiler-59"><a class="header" href="#note-this-error-code-is-no-longer-emitted-by-the-compiler-59">Note: this error code is no longer emitted by the compiler.</a></h4>
+<h4 id="note-this-error-code-is-no-longer-emitted-by-the-compiler-60"><a class="header" href="#note-this-error-code-is-no-longer-emitted-by-the-compiler-60">Note: this error code is no longer emitted by the compiler.</a></h4>
 <p>An invalid input operand constraint was passed to the <code>llvm_asm</code> macro
 (third line).</p>
 <p>Erroneous code example:</p>
@@ -12659,7 +12698,7 @@ llvm_asm!(&quot;nop&quot; : &quot;r&quot;(a));</code></pre>
           : &quot;=test&quot;(&quot;a&quot;)
          );</code></pre>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="error-code-e0663"><a class="header" href="#error-code-e0663">Error code E0663</a></h1>
-<h4 id="note-this-error-code-is-no-longer-emitted-by-the-compiler-60"><a class="header" href="#note-this-error-code-is-no-longer-emitted-by-the-compiler-60">Note: this error code is no longer emitted by the compiler.</a></h4>
+<h4 id="note-this-error-code-is-no-longer-emitted-by-the-compiler-61"><a class="header" href="#note-this-error-code-is-no-longer-emitted-by-the-compiler-61">Note: this error code is no longer emitted by the compiler.</a></h4>
 <p>An invalid input operand constraint was passed to the <code>llvm_asm</code> macro
 (third line).</p>
 <p>Erroneous code example:</p>
@@ -12668,7 +12707,7 @@ llvm_asm!(&quot;nop&quot; : &quot;r&quot;(a));</code></pre>
           : &quot;+test&quot;(&quot;a&quot;)
          );</code></pre>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="error-code-e0664"><a class="header" href="#error-code-e0664">Error code E0664</a></h1>
-<h4 id="note-this-error-code-is-no-longer-emitted-by-the-compiler-61"><a class="header" href="#note-this-error-code-is-no-longer-emitted-by-the-compiler-61">Note: this error code is no longer emitted by the compiler.</a></h4>
+<h4 id="note-this-error-code-is-no-longer-emitted-by-the-compiler-62"><a class="header" href="#note-this-error-code-is-no-longer-emitted-by-the-compiler-62">Note: this error code is no longer emitted by the compiler.</a></h4>
 <p>A clobber was surrounded by braces in the <code>llvm_asm</code> macro.</p>
 <p>Erroneous code example:</p>
 <pre><code class="language-rust ignore (no longer emitted)">llvm_asm!(&quot;mov $$0x200, %eax&quot;
@@ -12677,7 +12716,7 @@ llvm_asm!(&quot;nop&quot; : &quot;r&quot;(a));</code></pre>
           : &quot;{eax}&quot;
          );</code></pre>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="error-code-e0665"><a class="header" href="#error-code-e0665">Error code E0665</a></h1>
-<h4 id="note-this-error-code-is-no-longer-emitted-by-the-compiler-62"><a class="header" href="#note-this-error-code-is-no-longer-emitted-by-the-compiler-62">Note: this error code is no longer emitted by the compiler.</a></h4>
+<h4 id="note-this-error-code-is-no-longer-emitted-by-the-compiler-63"><a class="header" href="#note-this-error-code-is-no-longer-emitted-by-the-compiler-63">Note: this error code is no longer emitted by the compiler.</a></h4>
 <p>The <code>Default</code> trait was derived on an enum.</p>
 <p>Erroneous code example:</p>
 <pre><pre class="playground"><code class="language-rust compile_fail"><span class="boring">#![allow(unused)]
@@ -12748,7 +12787,7 @@ equivalent, you can do this instead:</p>
 }
 <span class="boring">}</span></code></pre></pre>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="error-code-e0668"><a class="header" href="#error-code-e0668">Error code E0668</a></h1>
-<h4 id="note-this-error-code-is-no-longer-emitted-by-the-compiler-63"><a class="header" href="#note-this-error-code-is-no-longer-emitted-by-the-compiler-63">Note: this error code is no longer emitted by the compiler.</a></h4>
+<h4 id="note-this-error-code-is-no-longer-emitted-by-the-compiler-64"><a class="header" href="#note-this-error-code-is-no-longer-emitted-by-the-compiler-64">Note: this error code is no longer emitted by the compiler.</a></h4>
 <p>Malformed inline assembly rejected by LLVM.</p>
 <p>Erroneous code example:</p>
 <pre><code class="language-rust ignore (no longer emitted)">#![feature(llvm_asm)]
@@ -12766,7 +12805,7 @@ assembly call.</p>
 <p>In particular, it can happen if you forgot the closing bracket of a register
 constraint (see issue #51430), like in the previous code example.</p>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="error-code-e0669"><a class="header" href="#error-code-e0669">Error code E0669</a></h1>
-<h4 id="note-this-error-code-is-no-longer-emitted-by-the-compiler-64"><a class="header" href="#note-this-error-code-is-no-longer-emitted-by-the-compiler-64">Note: this error code is no longer emitted by the compiler.</a></h4>
+<h4 id="note-this-error-code-is-no-longer-emitted-by-the-compiler-65"><a class="header" href="#note-this-error-code-is-no-longer-emitted-by-the-compiler-65">Note: this error code is no longer emitted by the compiler.</a></h4>
 <p>Cannot convert inline assembly operand to a single LLVM value.</p>
 <p>Erroneous code example:</p>
 <pre><code class="language-rust ignore (no longer emitted)">#![feature(llvm_asm)]
@@ -12791,7 +12830,7 @@ coerced into a register and thus we must fail with an error.</p>
 <span class="boring">}</span></code></pre></pre>
 <p>Switch to the Rust 2018 edition to use <code>async fn</code>.</p>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="error-code-e0671"><a class="header" href="#error-code-e0671">Error code E0671</a></h1>
-<h4 id="note-this-error-code-is-no-longer-emitted-by-the-compiler-65"><a class="header" href="#note-this-error-code-is-no-longer-emitted-by-the-compiler-65">Note: this error code is no longer emitted by the compiler.</a></h4>
+<h4 id="note-this-error-code-is-no-longer-emitted-by-the-compiler-66"><a class="header" href="#note-this-error-code-is-no-longer-emitted-by-the-compiler-66">Note: this error code is no longer emitted by the compiler.</a></h4>
 <p>Const parameters cannot depend on type parameters.
 The following is therefore invalid:</p>
 <pre><pre class="playground"><code class="language-rust compile_fail E0770"><span class="boring">#![allow(unused)]
@@ -12801,7 +12840,7 @@ The following is therefore invalid:</p>
 }
 <span class="boring">}</span></code></pre></pre>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="error-code-e0687"><a class="header" href="#error-code-e0687">Error code E0687</a></h1>
-<h4 id="note-this-error-code-is-no-longer-emitted-by-the-compiler-66"><a class="header" href="#note-this-error-code-is-no-longer-emitted-by-the-compiler-66">Note: this error code is no longer emitted by the compiler.</a></h4>
+<h4 id="note-this-error-code-is-no-longer-emitted-by-the-compiler-67"><a class="header" href="#note-this-error-code-is-no-longer-emitted-by-the-compiler-67">Note: this error code is no longer emitted by the compiler.</a></h4>
 <p>In-band lifetimes cannot be used in <code>fn</code>/<code>Fn</code> syntax.</p>
 <p>Erroneous code examples:</p>
 <pre><code class="language-rust ignore (feature got removed)">#![feature(in_band_lifetimes)]
@@ -12834,7 +12873,7 @@ impl&lt;'a&gt; Foo&lt;'a&gt; {
 }
 <span class="boring">}</span></code></pre></pre>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="error-code-e0688"><a class="header" href="#error-code-e0688">Error code E0688</a></h1>
-<h4 id="note-this-error-code-is-no-longer-emitted-by-the-compiler-67"><a class="header" href="#note-this-error-code-is-no-longer-emitted-by-the-compiler-67">Note: this error code is no longer emitted by the compiler.</a></h4>
+<h4 id="note-this-error-code-is-no-longer-emitted-by-the-compiler-68"><a class="header" href="#note-this-error-code-is-no-longer-emitted-by-the-compiler-68">Note: this error code is no longer emitted by the compiler.</a></h4>
 <p>In-band lifetimes were mixed with explicit lifetime binders.</p>
 <p>Erroneous code example:</p>
 <pre><code class="language-rust ignore (feature got removed)">#![feature(in_band_lifetimes)]
@@ -12924,7 +12963,7 @@ struct LengthWithUnit&lt;U&gt; {
 }
 <span class="boring">}</span></code></pre></pre>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="error-code-e0691"><a class="header" href="#error-code-e0691">Error code E0691</a></h1>
-<h4 id="note-this-error-code-is-no-longer-emitted-by-the-compiler-68"><a class="header" href="#note-this-error-code-is-no-longer-emitted-by-the-compiler-68">Note: this error code is no longer emitted by the compiler.</a></h4>
+<h4 id="note-this-error-code-is-no-longer-emitted-by-the-compiler-69"><a class="header" href="#note-this-error-code-is-no-longer-emitted-by-the-compiler-69">Note: this error code is no longer emitted by the compiler.</a></h4>
 <p>A struct, enum, or union with the <code>repr(transparent)</code> representation hint
 contains a zero-sized field that requires non-trivial alignment.</p>
 <p>Erroneous code example:</p>
@@ -13118,10 +13157,11 @@ which would consist only of variables with a static lifetime. Given
 this it would be better to use a proper function. The easiest fix
 is to remove the <code>static</code> keyword.</p>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="error-code-e0698"><a class="header" href="#error-code-e0698">Error code E0698</a></h1>
+<h4 id="note-this-error-code-is-no-longer-emitted-by-the-compiler-70"><a class="header" href="#note-this-error-code-is-no-longer-emitted-by-the-compiler-70">Note: this error code is no longer emitted by the compiler.</a></h4>
 <p>When using generators (or async) all type variables must be bound so a
 generator can be constructed.</p>
 <p>Erroneous code example:</p>
-<pre><pre class="playground"><code class="language-rust edition2018 compile_fail E0698"><span class="boring">#![allow(unused)]
+<pre><pre class="playground"><code class="language-rust edition2018 compile_fail E0282"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
 </span>async fn bar&lt;T&gt;() -&gt; () {}
 
@@ -13790,7 +13830,7 @@ fn bar(x: u8) -&gt; impl Future&lt;Output = u8&gt; {
 }
 <span class="boring">}</span></code></pre></pre>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="error-code-e0729"><a class="header" href="#error-code-e0729">Error code E0729</a></h1>
-<h4 id="note-this-error-code-is-no-longer-emitted-by-the-compiler-69"><a class="header" href="#note-this-error-code-is-no-longer-emitted-by-the-compiler-69">Note: this error code is no longer emitted by the compiler</a></h4>
+<h4 id="note-this-error-code-is-no-longer-emitted-by-the-compiler-71"><a class="header" href="#note-this-error-code-is-no-longer-emitted-by-the-compiler-71">Note: this error code is no longer emitted by the compiler</a></h4>
 <p>Support for Non-Lexical Lifetimes (NLL) has been included in the Rust compiler
 since 1.31, and has been enabled on the 2015 edition since 1.36. The new borrow
 checker for NLL uncovered some bugs in the old borrow checker, which in some
@@ -14452,7 +14492,7 @@ about <a href="https://doc.rust-lang.org/nightly/unstable-book/language-features
 /*! I am also terminated! */
 <span class="boring">}</span></code></pre></pre>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="error-code-e0759"><a class="header" href="#error-code-e0759">Error code E0759</a></h1>
-<h4 id="note-this-error-code-is-no-longer-emitted-by-the-compiler-70"><a class="header" href="#note-this-error-code-is-no-longer-emitted-by-the-compiler-70">Note: this error code is no longer emitted by the compiler.</a></h4>
+<h4 id="note-this-error-code-is-no-longer-emitted-by-the-compiler-72"><a class="header" href="#note-this-error-code-is-no-longer-emitted-by-the-compiler-72">Note: this error code is no longer emitted by the compiler.</a></h4>
 <p>Return type involving a trait did not require <code>'static</code> lifetime.</p>
 <p>Erroneous code examples:</p>
 <pre><pre class="playground"><code class="language-rust compile_fail"><span class="boring">#![allow(unused)]
@@ -14507,20 +14547,17 @@ fn bar&lt;'a&gt;(x: &amp;'a i32) -&gt; Box&lt;dyn Debug + 'a&gt; {
 }
 <span class="boring">}</span></code></pre></pre>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="error-code-e0760"><a class="header" href="#error-code-e0760">Error code E0760</a></h1>
-<h4 id="note-this-error-code-is-no-longer-emitted-by-the-compiler-71"><a class="header" href="#note-this-error-code-is-no-longer-emitted-by-the-compiler-71">Note: this error code is no longer emitted by the compiler.</a></h4>
+<h4 id="note-this-error-code-is-no-longer-emitted-by-the-compiler-73"><a class="header" href="#note-this-error-code-is-no-longer-emitted-by-the-compiler-73">Note: this error code is no longer emitted by the compiler.</a></h4>
 <p><code>async fn</code>/<code>impl trait</code> return type cannot contain a projection
 or <code>Self</code> that references lifetimes from a parent scope.</p>
 <p>Erroneous code example:</p>
-<pre><pre class="playground"><code class="language-rust compile_fail edition2018"><span class="boring">#![allow(unused)]
-</span><span class="boring">fn main() {
-</span>struct S&lt;'a&gt;(&amp;'a i32);
+<pre><code class="language-rust ignore edition2018">struct S&lt;'a&gt;(&amp;'a i32);
 
 impl&lt;'a&gt; S&lt;'a&gt; {
     async fn new(i: &amp;'a i32) -&gt; Self {
         S(&amp;22)
     }
-}
-<span class="boring">}</span></code></pre></pre>
+}</code></pre>
 <p>To fix this error we need to spell out <code>Self</code> to <code>S&lt;'a&gt;</code>:</p>
 <pre><pre class="playground"><code class="language-rust edition2018"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
@@ -14721,7 +14758,7 @@ names and binding them to new identifiers:</p>
 </span>fn foo&lt;T, const N: usize&gt;() {}
 <span class="boring">}</span></code></pre></pre>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="error-code-e0771"><a class="header" href="#error-code-e0771">Error code E0771</a></h1>
-<h4 id="note-this-error-code-is-no-longer-emitted-by-the-compiler-72"><a class="header" href="#note-this-error-code-is-no-longer-emitted-by-the-compiler-72">Note: this error code is no longer emitted by the compiler</a></h4>
+<h4 id="note-this-error-code-is-no-longer-emitted-by-the-compiler-74"><a class="header" href="#note-this-error-code-is-no-longer-emitted-by-the-compiler-74">Note: this error code is no longer emitted by the compiler</a></h4>
 <p>A non-<code>'static</code> lifetime was used in a const generic. This is currently not
 allowed.</p>
 <p>Erroneous code example:</p>
@@ -14741,7 +14778,7 @@ allowed.</p>
 <span class="boring">}</span></code></pre></pre>
 <p>For more information, see <a href="https://github.com/rust-lang/rust/issues/74052">GitHub issue #74052</a>.</p>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="error-code-e0772"><a class="header" href="#error-code-e0772">Error code E0772</a></h1>
-<h4 id="note-this-error-code-is-no-longer-emitted-by-the-compiler-73"><a class="header" href="#note-this-error-code-is-no-longer-emitted-by-the-compiler-73">Note: this error code is no longer emitted by the compiler.</a></h4>
+<h4 id="note-this-error-code-is-no-longer-emitted-by-the-compiler-75"><a class="header" href="#note-this-error-code-is-no-longer-emitted-by-the-compiler-75">Note: this error code is no longer emitted by the compiler.</a></h4>
 <p>A trait object has some specific lifetime <code>'1</code>, but it was used in a way that
 requires it to have a <code>'static</code> lifetime.</p>
 <p>Example of erroneous code:</p>

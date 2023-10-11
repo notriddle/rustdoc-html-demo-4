@@ -316,14 +316,13 @@ problem.</p>
 }
 <span class="boring">}</span></code></pre></pre>
 <p>The machine code for <code>foo::&lt;u8&gt;()</code>, <code>foo::&lt;bool&gt;()</code>, <code>foo::&lt;String&gt;()</code>, or any
-other type substitution is different. Hence the compiler generates the
+other instantiation is different. Hence the compiler generates the
 implementation on-demand. If you call <code>foo()</code> with a <code>bool</code> parameter, the
 compiler will only generate code for <code>foo::&lt;bool&gt;()</code>. When we have additional
 type parameters, the number of monomorphized implementations the compiler
 generates does not grow drastically, since the compiler will only generate an
-implementation if the function is called with unparameterized substitutions
-(i.e., substitutions where none of the substituted types are themselves
-parameterized).</p>
+implementation if the function is called with fully concrete arguments
+(i.e., arguments which do not contain any generic parameters).</p>
 <p>However, with trait objects we have to make a table containing <em>every</em> object
 that implements the trait. Now, if it has type parameters, we need to add
 implementations for every type that implements the trait, and there could

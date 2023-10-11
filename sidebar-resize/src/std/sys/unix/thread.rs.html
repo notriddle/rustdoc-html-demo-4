@@ -1,5 +1,5 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `library/std/src/sys/unix/thread.rs`."><title>thread.rs - source</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../../static.files/SourceSerif4-Regular-46f98efaafac5295.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../../static.files/FiraSans-Regular-018c141bf0843ffd.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../../static.files/FiraSans-Medium-8f9a781e4970d388.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../../static.files/SourceCodePro-Regular-562dcc5011b6de7d.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../../static.files/SourceSerif4-Bold-a2c9cd1067f8b328.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../../static.files/SourceCodePro-Semibold-d899c5a5c4aeb14a.ttf.woff2"><link rel="stylesheet" href="../../../../static.files/normalize-76eba96aa4d2e634.css"><link rel="stylesheet" href="../../../../static.files/rustdoc-2baeb68bba9ca696.css"><meta name="rustdoc-vars" data-root-path="../../../../" data-static-root-path="../../../../static.files/" data-current-crate="std" data-themes="" data-resource-suffix="1.74.0" data-rustdoc-version="1.74.0-dev" data-channel="nightly" data-search-js="search-5d3eaacf19ebf04f.js" data-settings-js="settings-3c6e833083d168bb.js" ><script src="../../../../static.files/storage-dc6dee2b776f9a53.js"></script><script defer src="../../../../static.files/src-script-0f5d2696cdf44bd3.js"></script><script defer src="../../../../src-files1.74.0.js"></script><script defer src="../../../../static.files/main-462d7caac759d94a.js"></script><noscript><link rel="stylesheet" href="../../../../static.files/noscript-feafe1bb7466e4bd.css"></noscript><link rel="alternate icon" type="image/png" href="../../../../static.files/favicon-16x16-8b506e7a72182f1c.png"><link rel="alternate icon" type="image/png" href="../../../../static.files/favicon-32x32-422f7d1d52889060.png"><link rel="icon" type="image/svg+xml" href="../../../../static.files/favicon-2c020d218678b618.svg"></head><body class="rustdoc src"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"></nav><div class="sidebar-resizer"></div>
-    <main><nav class="sub"><a class="sub-logo-container" href="../../../../std/index.html"><img class="rust-logo" src="../../../../static.files/rust-logo-151179464ae7ed46.svg" alt="logo"></a><form class="search-form"><span></span><input class="search-input" name="search" aria-label="Run search in the documentation" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><div id="help-button" tabindex="-1"><a href="../../../../help.html" title="help">?</a></div><div id="settings-menu" tabindex="-1"><a href="../../../../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../../../../static.files/wheel-7b819b6101059cd0.svg"></a></div></form></nav><section id="main-content" class="content"><div class="example-wrap"><div data-nosnippet><pre class="src-line-numbers"><a href="#1" id="1">1</a>
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `library/std/src/sys/unix/thread.rs`."><title>thread.rs - source</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../../static.files/SourceSerif4-Regular-46f98efaafac5295.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../../static.files/FiraSans-Regular-018c141bf0843ffd.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../../static.files/FiraSans-Medium-8f9a781e4970d388.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../../static.files/SourceCodePro-Regular-562dcc5011b6de7d.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../../static.files/SourceSerif4-Bold-a2c9cd1067f8b328.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../../static.files/SourceCodePro-Semibold-d899c5a5c4aeb14a.ttf.woff2"><link rel="stylesheet" href="../../../../static.files/normalize-76eba96aa4d2e634.css"><link rel="stylesheet" href="../../../../static.files/rustdoc-4c1914efbd6b11e9.css"><meta name="rustdoc-vars" data-root-path="../../../../" data-static-root-path="../../../../static.files/" data-current-crate="std" data-themes="" data-resource-suffix="1.75.0" data-rustdoc-version="1.75.0-dev" data-channel="nightly" data-search-js="search-8fbf244ebcf71464.js" data-settings-js="settings-3c6e833083d168bb.js" ><script src="../../../../static.files/storage-dc6dee2b776f9a53.js"></script><script defer src="../../../../static.files/src-script-0f5d2696cdf44bd3.js"></script><script defer src="../../../../src-files1.75.0.js"></script><script defer src="../../../../static.files/main-8f5a221be21b7e80.js"></script><noscript><link rel="stylesheet" href="../../../../static.files/noscript-feafe1bb7466e4bd.css"></noscript><link rel="alternate icon" type="image/png" href="../../../../static.files/favicon-16x16-8b506e7a72182f1c.png"><link rel="alternate icon" type="image/png" href="../../../../static.files/favicon-32x32-422f7d1d52889060.png"><link rel="icon" type="image/svg+xml" href="../../../../static.files/favicon-2c020d218678b618.svg"></head><body class="rustdoc src"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"></nav><div class="sidebar-resizer"></div>
+    <main><nav class="sub"><a class="sub-logo-container" href="../../../../std/index.html"><img class="rust-logo" src="../../../../static.files/rust-logo-151179464ae7ed46.svg" alt="std"></a><form class="search-form"><span></span><input class="search-input" name="search" aria-label="Run search in the documentation" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><div id="help-button" tabindex="-1"><a href="../../../../help.html" title="help">?</a></div><div id="settings-menu" tabindex="-1"><a href="../../../../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../../../../static.files/wheel-7b819b6101059cd0.svg"></a></div></form></nav><section id="main-content" class="content"><div class="example-wrap"><div data-nosnippet><pre class="src-line-numbers"><a href="#1" id="1">1</a>
 <a href="#2" id="2">2</a>
 <a href="#3" id="3">3</a>
 <a href="#4" id="4">4</a>
@@ -987,6 +987,29 @@
 <a href="#986" id="986">986</a>
 <a href="#987" id="987">987</a>
 <a href="#988" id="988">988</a>
+<a href="#989" id="989">989</a>
+<a href="#990" id="990">990</a>
+<a href="#991" id="991">991</a>
+<a href="#992" id="992">992</a>
+<a href="#993" id="993">993</a>
+<a href="#994" id="994">994</a>
+<a href="#995" id="995">995</a>
+<a href="#996" id="996">996</a>
+<a href="#997" id="997">997</a>
+<a href="#998" id="998">998</a>
+<a href="#999" id="999">999</a>
+<a href="#1000" id="1000">1000</a>
+<a href="#1001" id="1001">1001</a>
+<a href="#1002" id="1002">1002</a>
+<a href="#1003" id="1003">1003</a>
+<a href="#1004" id="1004">1004</a>
+<a href="#1005" id="1005">1005</a>
+<a href="#1006" id="1006">1006</a>
+<a href="#1007" id="1007">1007</a>
+<a href="#1008" id="1008">1008</a>
+<a href="#1009" id="1009">1009</a>
+<a href="#1010" id="1010">1010</a>
+<a href="#1011" id="1011">1011</a>
 </pre></div><pre class="rust"><code><span class="kw">use </span><span class="kw">crate</span>::cmp;
 <span class="kw">use </span><span class="kw">crate</span>::ffi::CStr;
 <span class="kw">use </span><span class="kw">crate</span>::io;
@@ -1205,8 +1228,10 @@
         target_os = <span class="string">&quot;l4re&quot;</span>,
         target_os = <span class="string">&quot;emscripten&quot;</span>,
         target_os = <span class="string">&quot;redox&quot;</span>,
-        target_os = <span class="string">&quot;vxworks&quot;
-    </span>))]
+        target_os = <span class="string">&quot;vxworks&quot;</span>,
+        target_os = <span class="string">&quot;hurd&quot;</span>,
+        target_os = <span class="string">&quot;aix&quot;</span>,
+    ))]
     </span><span class="kw">pub fn </span>set_name(_name: <span class="kw-2">&amp;</span>CStr) {
         <span class="comment">// Newlib, Emscripten, and VxWorks have no way to set a thread name.
     </span>}
@@ -1298,30 +1323,47 @@
             target_os = <span class="string">&quot;android&quot;</span>,
             target_os = <span class="string">&quot;emscripten&quot;</span>,
             target_os = <span class="string">&quot;fuchsia&quot;</span>,
+            target_os = <span class="string">&quot;hurd&quot;</span>,
             target_os = <span class="string">&quot;ios&quot;</span>,
             target_os = <span class="string">&quot;tvos&quot;</span>,
             target_os = <span class="string">&quot;linux&quot;</span>,
             target_os = <span class="string">&quot;macos&quot;</span>,
             target_os = <span class="string">&quot;solaris&quot;</span>,
             target_os = <span class="string">&quot;illumos&quot;</span>,
+            target_os = <span class="string">&quot;aix&quot;</span>,
         ))] </span>{
+            <span class="attr">#[allow(unused_assignments)]
+            #[allow(unused_mut)]
+            </span><span class="kw">let </span><span class="kw-2">mut </span>quota = usize::MAX;
+
             <span class="attr">#[cfg(any(target_os = <span class="string">&quot;android&quot;</span>, target_os = <span class="string">&quot;linux&quot;</span>))]
             </span>{
-                <span class="kw">let </span>quota = cgroups::quota().max(<span class="number">1</span>);
+                quota = cgroups::quota().max(<span class="number">1</span>);
                 <span class="kw">let </span><span class="kw-2">mut </span>set: libc::cpu_set_t = <span class="kw">unsafe </span>{ mem::zeroed() };
                 <span class="kw">unsafe </span>{
                     <span class="kw">if </span>libc::sched_getaffinity(<span class="number">0</span>, mem::size_of::&lt;libc::cpu_set_t&gt;(), <span class="kw-2">&amp;mut </span>set) == <span class="number">0 </span>{
                         <span class="kw">let </span>count = libc::CPU_COUNT(<span class="kw-2">&amp;</span>set) <span class="kw">as </span>usize;
                         <span class="kw">let </span>count = count.min(quota);
-                        <span class="comment">// SAFETY: affinity mask can&#39;t be empty and the quota gets clamped to a minimum of 1
-                        </span><span class="kw">return </span><span class="prelude-val">Ok</span>(NonZeroUsize::new_unchecked(count));
+
+                        <span class="comment">// According to sched_getaffinity&#39;s API it should always be non-zero, but
+                        // some old MIPS kernels were buggy and zero-initialized the mask if
+                        // none was explicitly set.
+                        // In that case we use the sysconf fallback.
+                        </span><span class="kw">if let </span><span class="prelude-val">Some</span>(count) = NonZeroUsize::new(count) {
+                            <span class="kw">return </span><span class="prelude-val">Ok</span>(count)
+                        }
                     }
                 }
             }
             <span class="kw">match unsafe </span>{ libc::sysconf(libc::_SC_NPROCESSORS_ONLN) } {
                 -<span class="number">1 </span>=&gt; <span class="prelude-val">Err</span>(io::Error::last_os_error()),
                 <span class="number">0 </span>=&gt; <span class="prelude-val">Err</span>(<span class="macro">io::const_io_error!</span>(io::ErrorKind::NotFound, <span class="string">&quot;The number of hardware threads is not known for the target platform&quot;</span>)),
-                cpus =&gt; <span class="prelude-val">Ok</span>(<span class="kw">unsafe </span>{ NonZeroUsize::new_unchecked(cpus <span class="kw">as </span>usize) }),
+                cpus =&gt; {
+                    <span class="kw">let </span>count = cpus <span class="kw">as </span>usize;
+                    <span class="comment">// Cover the unusual situation where we were able to get the quota but not the affinity mask
+                    </span><span class="kw">let </span>count = count.min(quota);
+                    <span class="prelude-val">Ok</span>(<span class="kw">unsafe </span>{ NonZeroUsize::new_unchecked(count) })
+                }
             }
         } <span class="kw">else if </span><span class="attr">#[cfg(any(target_os = <span class="string">&quot;freebsd&quot;</span>, target_os = <span class="string">&quot;dragonfly&quot;</span>, target_os = <span class="string">&quot;netbsd&quot;</span>))] </span>{
             <span class="kw">use </span><span class="kw">crate</span>::ptr;
@@ -1679,6 +1721,7 @@
 <span class="attr">#[cfg(all(
     not(target_os = <span class="string">&quot;linux&quot;</span>),
     not(target_os = <span class="string">&quot;freebsd&quot;</span>),
+    not(target_os = <span class="string">&quot;hurd&quot;</span>),
     not(target_os = <span class="string">&quot;macos&quot;</span>),
     not(target_os = <span class="string">&quot;netbsd&quot;</span>),
     not(target_os = <span class="string">&quot;openbsd&quot;</span>),
@@ -1699,6 +1742,7 @@
 <span class="attr">#[cfg(any(
     target_os = <span class="string">&quot;linux&quot;</span>,
     target_os = <span class="string">&quot;freebsd&quot;</span>,
+    target_os = <span class="string">&quot;hurd&quot;</span>,
     target_os = <span class="string">&quot;macos&quot;</span>,
     target_os = <span class="string">&quot;netbsd&quot;</span>,
     target_os = <span class="string">&quot;openbsd&quot;</span>,
@@ -1755,6 +1799,7 @@
     <span class="attr">#[cfg(any(
         target_os = <span class="string">&quot;android&quot;</span>,
         target_os = <span class="string">&quot;freebsd&quot;</span>,
+        target_os = <span class="string">&quot;hurd&quot;</span>,
         target_os = <span class="string">&quot;linux&quot;</span>,
         target_os = <span class="string">&quot;netbsd&quot;</span>,
         target_os = <span class="string">&quot;l4re&quot;
@@ -1892,6 +1937,7 @@
     <span class="attr">#[cfg(any(
         target_os = <span class="string">&quot;android&quot;</span>,
         target_os = <span class="string">&quot;freebsd&quot;</span>,
+        target_os = <span class="string">&quot;hurd&quot;</span>,
         target_os = <span class="string">&quot;linux&quot;</span>,
         target_os = <span class="string">&quot;netbsd&quot;</span>,
         target_os = <span class="string">&quot;l4re&quot;
@@ -1923,7 +1969,7 @@
             <span class="macro">assert_eq!</span>(libc::pthread_attr_getstack(<span class="kw-2">&amp;</span>attr, <span class="kw-2">&amp;mut </span>stackptr, <span class="kw-2">&amp;mut </span>size), <span class="number">0</span>);
 
             <span class="kw">let </span>stackaddr = stackptr.addr();
-            ret = <span class="kw">if </span><span class="macro">cfg!</span>(any(target_os = <span class="string">&quot;freebsd&quot;</span>, target_os = <span class="string">&quot;netbsd&quot;</span>)) {
+            ret = <span class="kw">if </span><span class="macro">cfg!</span>(any(target_os = <span class="string">&quot;freebsd&quot;</span>, target_os = <span class="string">&quot;netbsd&quot;</span>, target_os = <span class="string">&quot;hurd&quot;</span>)) {
                 <span class="prelude-val">Some</span>(stackaddr - guardsize..stackaddr)
             } <span class="kw">else if </span><span class="macro">cfg!</span>(all(target_os = <span class="string">&quot;linux&quot;</span>, target_env = <span class="string">&quot;musl&quot;</span>)) {
                 <span class="prelude-val">Some</span>(stackaddr - guardsize..stackaddr)

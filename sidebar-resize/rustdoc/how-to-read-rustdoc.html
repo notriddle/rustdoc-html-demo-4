@@ -83,7 +83,7 @@
 
         <nav id="sidebar" class="sidebar" aria-label="Table of contents">
             <div class="sidebar-scrollbox">
-                <ol class="chapter"><li class="chapter-item expanded "><a href="what-is-rustdoc.html"><strong aria-hidden="true">1.</strong> What is rustdoc?</a></li><li class="chapter-item expanded "><a href="command-line-arguments.html"><strong aria-hidden="true">2.</strong> Command-line arguments</a></li><li class="chapter-item expanded "><a href="how-to-read-rustdoc.html" class="active"><strong aria-hidden="true">3.</strong> How to read rustdoc output</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="read-documentation/in-doc-settings.html"><strong aria-hidden="true">3.1.</strong> In-doc settings</a></li></ol></li><li class="chapter-item expanded "><a href="how-to-write-documentation.html"><strong aria-hidden="true">4.</strong> How to write documentation</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="write-documentation/what-to-include.html"><strong aria-hidden="true">4.1.</strong> What to include (and exclude)</a></li><li class="chapter-item expanded "><a href="write-documentation/the-doc-attribute.html"><strong aria-hidden="true">4.2.</strong> The #[doc] attribute</a></li><li class="chapter-item expanded "><a href="write-documentation/re-exports.html"><strong aria-hidden="true">4.3.</strong> Re-exports</a></li><li class="chapter-item expanded "><a href="write-documentation/linking-to-items-by-name.html"><strong aria-hidden="true">4.4.</strong> Linking to items by name</a></li><li class="chapter-item expanded "><a href="write-documentation/documentation-tests.html"><strong aria-hidden="true">4.5.</strong> Documentation tests</a></li></ol></li><li class="chapter-item expanded "><a href="lints.html"><strong aria-hidden="true">5.</strong> Rustdoc-specific lints</a></li><li class="chapter-item expanded "><a href="scraped-examples.html"><strong aria-hidden="true">6.</strong> Scraped examples</a></li><li class="chapter-item expanded "><a href="advanced-features.html"><strong aria-hidden="true">7.</strong> Advanced features</a></li><li class="chapter-item expanded "><a href="unstable-features.html"><strong aria-hidden="true">8.</strong> Unstable features</a></li><li class="chapter-item expanded "><a href="deprecated-features.html"><strong aria-hidden="true">9.</strong> Deprecated features</a></li><li class="chapter-item expanded "><a href="references.html"><strong aria-hidden="true">10.</strong> References</a></li></ol>
+                <ol class="chapter"><li class="chapter-item expanded "><a href="what-is-rustdoc.html"><strong aria-hidden="true">1.</strong> What is rustdoc?</a></li><li class="chapter-item expanded "><a href="command-line-arguments.html"><strong aria-hidden="true">2.</strong> Command-line arguments</a></li><li class="chapter-item expanded "><a href="how-to-read-rustdoc.html" class="active"><strong aria-hidden="true">3.</strong> How to read rustdoc output</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="read-documentation/in-doc-settings.html"><strong aria-hidden="true">3.1.</strong> In-doc settings</a></li><li class="chapter-item expanded "><a href="read-documentation/search.html"><strong aria-hidden="true">3.2.</strong> Search</a></li></ol></li><li class="chapter-item expanded "><a href="how-to-write-documentation.html"><strong aria-hidden="true">4.</strong> How to write documentation</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="write-documentation/what-to-include.html"><strong aria-hidden="true">4.1.</strong> What to include (and exclude)</a></li><li class="chapter-item expanded "><a href="write-documentation/the-doc-attribute.html"><strong aria-hidden="true">4.2.</strong> The #[doc] attribute</a></li><li class="chapter-item expanded "><a href="write-documentation/re-exports.html"><strong aria-hidden="true">4.3.</strong> Re-exports</a></li><li class="chapter-item expanded "><a href="write-documentation/linking-to-items-by-name.html"><strong aria-hidden="true">4.4.</strong> Linking to items by name</a></li><li class="chapter-item expanded "><a href="write-documentation/documentation-tests.html"><strong aria-hidden="true">4.5.</strong> Documentation tests</a></li></ol></li><li class="chapter-item expanded "><a href="lints.html"><strong aria-hidden="true">5.</strong> Rustdoc-specific lints</a></li><li class="chapter-item expanded "><a href="scraped-examples.html"><strong aria-hidden="true">6.</strong> Scraped examples</a></li><li class="chapter-item expanded "><a href="advanced-features.html"><strong aria-hidden="true">7.</strong> Advanced features</a></li><li class="chapter-item expanded "><a href="unstable-features.html"><strong aria-hidden="true">8.</strong> Unstable features</a></li><li class="chapter-item expanded "><a href="deprecated-features.html"><strong aria-hidden="true">9.</strong> Deprecated features</a></li><li class="chapter-item expanded "><a href="references.html"><strong aria-hidden="true">10.</strong> References</a></li></ol>
             </div>
             <div id="sidebar-resize-handle" class="sidebar-resize-handle"></div>
         </nav>
@@ -231,49 +231,8 @@ alongside the current crate's name and version,
 or the current item whose documentation is being displayed.</p>
 <h2 id="the-theme-picker-and-search-interface"><a class="header" href="#the-theme-picker-and-search-interface">The Theme Picker and Search Interface</a></h2>
 <p>When viewing <code>rustdoc</code>'s output in a browser with JavaScript enabled,
-a dynamic interface appears at the top of the page composed of the search
-interface, help screen, and options.</p>
-<h3 id="the-search-interface"><a class="header" href="#the-search-interface">The Search Interface</a></h3>
-<p>Typing in the search bar instantly searches the available documentation for
-the string entered with a fuzzy matching algorithm that is tolerant of minor
-typos.</p>
-<p>By default, the search results given are &quot;In Names&quot;,
-meaning that the fuzzy match is made against the names of items.
-Matching names are shown on the left, and the first few words of their
-descriptions are given on the right.
-By clicking an item, you will navigate to its particular documentation.</p>
-<p>There are two other sets of results, shown as tabs in the search results pane.
-&quot;In Parameters&quot; shows matches for the string in the types of parameters to
-functions, and &quot;In Return Types&quot; shows matches in the return types of functions.
-Both are very useful when looking for a function whose name you can't quite
-bring to mind when you know the type you have or want.</p>
-<p>Names in the search interface can be prefixed with an item type followed by a
-colon (such as <code>mod:</code>) to restrict the results to just that kind of item. Also,
-searching for <code>println!</code> will search for a macro named <code>println</code>, just like
-searching for <code>macro:println</code> does.</p>
-<p>Function signature searches can query generics, wrapped in angle brackets, and
-traits are normalized like types in the search engine. For example, a function
-with the signature <code>fn my_function&lt;I: Iterator&lt;Item=u32&gt;&gt;(input: I) -&gt; usize</code>
-can be matched with the following queries:</p>
-<ul>
-<li><code>Iterator&lt;u32&gt; -&gt; usize</code></li>
-<li><code>trait:Iterator&lt;primitive:u32&gt; -&gt; primitive:usize</code></li>
-<li><code>Iterator -&gt; usize</code></li>
-</ul>
-<p>Generics and function parameters are order-agnostic, but sensitive to nesting
-and number of matches. For example, a function with the signature
-<code>fn read_all(&amp;mut self: impl Read) -&gt; Result&lt;Vec&lt;u8&gt;, Error&gt;</code>
-will match these queries:</p>
-<ul>
-<li><code>Read -&gt; Result&lt;Vec&lt;u8&gt;, Error&gt;</code></li>
-<li><code>Read -&gt; Result&lt;Error, Vec&gt;</code></li>
-<li><code>Read -&gt; Result&lt;Vec&lt;u8&gt;&gt;</code></li>
-</ul>
-<p>But it <em>does not</em> match <code>Result&lt;Vec, u8&gt;</code> or <code>Result&lt;u8&lt;Vec&gt;&gt;</code>.</p>
-<p>Function signature searches also support arrays and slices. The explicit name
-<code>primitive:slice&lt;u8&gt;</code> and <code>primitive:array&lt;u8&gt;</code> can be used to match a slice
-or array of bytes, while square brackets <code>[u8]</code> will match either one. Empty
-square brackets, <code>[]</code>, will match any slice regardless of what it contains.</p>
+a dynamic interface appears at the top of the page composed of the <a href="read-documentation/search.html">search</a>
+interface, help screen, and <a href="read-documentation/in-doc-settings.html">options</a>.</p>
 <p>Paths are supported as well, you can look for <code>Vec::new</code> or <code>Option::Some</code> or
 even <code>module::module_child::another_child::struct::field</code>. Whitespace characters
 are considered the same as <code>::</code>, so if you write <code>Vec    new</code>, it will be

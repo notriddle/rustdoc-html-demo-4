@@ -1,5 +1,5 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `library/core/src/../../stdarch/crates/core_arch/src/x86/sse.rs`."><title>sse.rs - source</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../../../../../static.files/SourceSerif4-Regular-46f98efaafac5295.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../../../../../static.files/FiraSans-Regular-018c141bf0843ffd.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../../../../../static.files/FiraSans-Medium-8f9a781e4970d388.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../../../../../static.files/SourceCodePro-Regular-562dcc5011b6de7d.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../../../../../static.files/SourceSerif4-Bold-a2c9cd1067f8b328.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../../../../../static.files/SourceCodePro-Semibold-d899c5a5c4aeb14a.ttf.woff2"><link rel="stylesheet" href="../../../../../../../static.files/normalize-76eba96aa4d2e634.css"><link rel="stylesheet" href="../../../../../../../static.files/rustdoc-2baeb68bba9ca696.css"><meta name="rustdoc-vars" data-root-path="../../../../../../../" data-static-root-path="../../../../../../../static.files/" data-current-crate="core" data-themes="" data-resource-suffix="1.74.0" data-rustdoc-version="1.74.0-dev" data-channel="nightly" data-search-js="search-5d3eaacf19ebf04f.js" data-settings-js="settings-3c6e833083d168bb.js" ><script src="../../../../../../../static.files/storage-dc6dee2b776f9a53.js"></script><script defer src="../../../../../../../static.files/src-script-0f5d2696cdf44bd3.js"></script><script defer src="../../../../../../../src-files1.74.0.js"></script><script defer src="../../../../../../../static.files/main-462d7caac759d94a.js"></script><noscript><link rel="stylesheet" href="../../../../../../../static.files/noscript-feafe1bb7466e4bd.css"></noscript><link rel="alternate icon" type="image/png" href="../../../../../../../static.files/favicon-16x16-8b506e7a72182f1c.png"><link rel="alternate icon" type="image/png" href="../../../../../../../static.files/favicon-32x32-422f7d1d52889060.png"><link rel="icon" type="image/svg+xml" href="../../../../../../../static.files/favicon-2c020d218678b618.svg"></head><body class="rustdoc src"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"></nav><div class="sidebar-resizer"></div>
-    <main><nav class="sub"><a class="sub-logo-container" href="../../../../../../../core/index.html"><img class="rust-logo" src="../../../../../../../static.files/rust-logo-151179464ae7ed46.svg" alt="logo"></a><form class="search-form"><span></span><input class="search-input" name="search" aria-label="Run search in the documentation" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><div id="help-button" tabindex="-1"><a href="../../../../../../../help.html" title="help">?</a></div><div id="settings-menu" tabindex="-1"><a href="../../../../../../../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../../../../../../../static.files/wheel-7b819b6101059cd0.svg"></a></div></form></nav><section id="main-content" class="content"><div class="example-wrap"><div data-nosnippet><pre class="src-line-numbers"><a href="#1" id="1">1</a>
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `library/core/src/../../stdarch/crates/core_arch/src/x86/sse.rs`."><title>sse.rs - source</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../../../../../static.files/SourceSerif4-Regular-46f98efaafac5295.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../../../../../static.files/FiraSans-Regular-018c141bf0843ffd.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../../../../../static.files/FiraSans-Medium-8f9a781e4970d388.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../../../../../static.files/SourceCodePro-Regular-562dcc5011b6de7d.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../../../../../static.files/SourceSerif4-Bold-a2c9cd1067f8b328.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../../../../../static.files/SourceCodePro-Semibold-d899c5a5c4aeb14a.ttf.woff2"><link rel="stylesheet" href="../../../../../../../static.files/normalize-76eba96aa4d2e634.css"><link rel="stylesheet" href="../../../../../../../static.files/rustdoc-4c1914efbd6b11e9.css"><meta name="rustdoc-vars" data-root-path="../../../../../../../" data-static-root-path="../../../../../../../static.files/" data-current-crate="core" data-themes="" data-resource-suffix="1.75.0" data-rustdoc-version="1.75.0-dev" data-channel="nightly" data-search-js="search-8fbf244ebcf71464.js" data-settings-js="settings-3c6e833083d168bb.js" ><script src="../../../../../../../static.files/storage-dc6dee2b776f9a53.js"></script><script defer src="../../../../../../../static.files/src-script-0f5d2696cdf44bd3.js"></script><script defer src="../../../../../../../src-files1.75.0.js"></script><script defer src="../../../../../../../static.files/main-8f5a221be21b7e80.js"></script><noscript><link rel="stylesheet" href="../../../../../../../static.files/noscript-feafe1bb7466e4bd.css"></noscript><link rel="alternate icon" type="image/png" href="../../../../../../../static.files/favicon-16x16-8b506e7a72182f1c.png"><link rel="alternate icon" type="image/png" href="../../../../../../../static.files/favicon-32x32-422f7d1d52889060.png"><link rel="icon" type="image/svg+xml" href="../../../../../../../static.files/favicon-2c020d218678b618.svg"></head><body class="rustdoc src"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"></nav><div class="sidebar-resizer"></div>
+    <main><nav class="sub"><a class="sub-logo-container" href="../../../../../../../core/index.html"><img class="rust-logo" src="../../../../../../../static.files/rust-logo-151179464ae7ed46.svg" alt="core"></a><form class="search-form"><span></span><input class="search-input" name="search" aria-label="Run search in the documentation" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><div id="help-button" tabindex="-1"><a href="../../../../../../../help.html" title="help">?</a></div><div id="settings-menu" tabindex="-1"><a href="../../../../../../../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../../../../../../../static.files/wheel-7b819b6101059cd0.svg"></a></div></form></nav><section id="main-content" class="content"><div class="example-wrap"><div data-nosnippet><pre class="src-line-numbers"><a href="#1" id="1">1</a>
 <a href="#2" id="2">2</a>
 <a href="#3" id="3">3</a>
 <a href="#4" id="4">4</a>
@@ -3274,6 +3274,99 @@
 <a href="#3273" id="3273">3273</a>
 <a href="#3274" id="3274">3274</a>
 <a href="#3275" id="3275">3275</a>
+<a href="#3276" id="3276">3276</a>
+<a href="#3277" id="3277">3277</a>
+<a href="#3278" id="3278">3278</a>
+<a href="#3279" id="3279">3279</a>
+<a href="#3280" id="3280">3280</a>
+<a href="#3281" id="3281">3281</a>
+<a href="#3282" id="3282">3282</a>
+<a href="#3283" id="3283">3283</a>
+<a href="#3284" id="3284">3284</a>
+<a href="#3285" id="3285">3285</a>
+<a href="#3286" id="3286">3286</a>
+<a href="#3287" id="3287">3287</a>
+<a href="#3288" id="3288">3288</a>
+<a href="#3289" id="3289">3289</a>
+<a href="#3290" id="3290">3290</a>
+<a href="#3291" id="3291">3291</a>
+<a href="#3292" id="3292">3292</a>
+<a href="#3293" id="3293">3293</a>
+<a href="#3294" id="3294">3294</a>
+<a href="#3295" id="3295">3295</a>
+<a href="#3296" id="3296">3296</a>
+<a href="#3297" id="3297">3297</a>
+<a href="#3298" id="3298">3298</a>
+<a href="#3299" id="3299">3299</a>
+<a href="#3300" id="3300">3300</a>
+<a href="#3301" id="3301">3301</a>
+<a href="#3302" id="3302">3302</a>
+<a href="#3303" id="3303">3303</a>
+<a href="#3304" id="3304">3304</a>
+<a href="#3305" id="3305">3305</a>
+<a href="#3306" id="3306">3306</a>
+<a href="#3307" id="3307">3307</a>
+<a href="#3308" id="3308">3308</a>
+<a href="#3309" id="3309">3309</a>
+<a href="#3310" id="3310">3310</a>
+<a href="#3311" id="3311">3311</a>
+<a href="#3312" id="3312">3312</a>
+<a href="#3313" id="3313">3313</a>
+<a href="#3314" id="3314">3314</a>
+<a href="#3315" id="3315">3315</a>
+<a href="#3316" id="3316">3316</a>
+<a href="#3317" id="3317">3317</a>
+<a href="#3318" id="3318">3318</a>
+<a href="#3319" id="3319">3319</a>
+<a href="#3320" id="3320">3320</a>
+<a href="#3321" id="3321">3321</a>
+<a href="#3322" id="3322">3322</a>
+<a href="#3323" id="3323">3323</a>
+<a href="#3324" id="3324">3324</a>
+<a href="#3325" id="3325">3325</a>
+<a href="#3326" id="3326">3326</a>
+<a href="#3327" id="3327">3327</a>
+<a href="#3328" id="3328">3328</a>
+<a href="#3329" id="3329">3329</a>
+<a href="#3330" id="3330">3330</a>
+<a href="#3331" id="3331">3331</a>
+<a href="#3332" id="3332">3332</a>
+<a href="#3333" id="3333">3333</a>
+<a href="#3334" id="3334">3334</a>
+<a href="#3335" id="3335">3335</a>
+<a href="#3336" id="3336">3336</a>
+<a href="#3337" id="3337">3337</a>
+<a href="#3338" id="3338">3338</a>
+<a href="#3339" id="3339">3339</a>
+<a href="#3340" id="3340">3340</a>
+<a href="#3341" id="3341">3341</a>
+<a href="#3342" id="3342">3342</a>
+<a href="#3343" id="3343">3343</a>
+<a href="#3344" id="3344">3344</a>
+<a href="#3345" id="3345">3345</a>
+<a href="#3346" id="3346">3346</a>
+<a href="#3347" id="3347">3347</a>
+<a href="#3348" id="3348">3348</a>
+<a href="#3349" id="3349">3349</a>
+<a href="#3350" id="3350">3350</a>
+<a href="#3351" id="3351">3351</a>
+<a href="#3352" id="3352">3352</a>
+<a href="#3353" id="3353">3353</a>
+<a href="#3354" id="3354">3354</a>
+<a href="#3355" id="3355">3355</a>
+<a href="#3356" id="3356">3356</a>
+<a href="#3357" id="3357">3357</a>
+<a href="#3358" id="3358">3358</a>
+<a href="#3359" id="3359">3359</a>
+<a href="#3360" id="3360">3360</a>
+<a href="#3361" id="3361">3361</a>
+<a href="#3362" id="3362">3362</a>
+<a href="#3363" id="3363">3363</a>
+<a href="#3364" id="3364">3364</a>
+<a href="#3365" id="3365">3365</a>
+<a href="#3366" id="3366">3366</a>
+<a href="#3367" id="3367">3367</a>
+<a href="#3368" id="3368">3368</a>
 </pre></div><pre class="rust"><code><span class="doccomment">//! Streaming SIMD Extensions (SSE)
 
 </span><span class="kw">use crate</span>::{
@@ -4066,8 +4159,7 @@
 ///
 /// The result is rounded according to the current rounding mode. If the result
 /// cannot be represented as a 32 bit integer the result will be `0x8000_0000`
-/// (`i32::MIN`) or an invalid operation floating point exception if
-/// unmasked (see [`_mm_setcsr`](fn._mm_setcsr.html)).
+/// (`i32::MIN`).
 ///
 /// This corresponds to the `CVTSS2SI` instruction (with 32 bit output).
 ///
@@ -4097,8 +4189,7 @@
 ///
 /// The result is rounded always using truncation (round towards zero). If the
 /// result cannot be represented as a 32 bit integer the result will be
-/// `0x8000_0000` (`i32::MIN`) or an invalid operation floating point
-/// exception if unmasked (see [`_mm_setcsr`](fn._mm_setcsr.html)).
+/// `0x8000_0000` (`i32::MIN`).
 ///
 /// This corresponds to the `CVTTSS2SI` instruction (with 32 bit output).
 ///
@@ -4641,6 +4732,15 @@
 
 <span class="doccomment">/// Gets the unsigned 32-bit value of the MXCSR control and status register.
 ///
+/// Note that Rust makes no guarantees whatsoever about the contents of this register: Rust
+/// floating-point operations may or may not result in this register getting updated with exception
+/// state, and the register can change between two invocations of this function even when no
+/// floating-point operations appear in the source code (since floating-point operations appearing
+/// earlier or later can be reordered).
+///
+/// If you need to perform some floating-point operations and check whether they raised an
+/// exception, use an inline assembly block for the entire sequence of operations.
+///
 /// For more info see [`_mm_setcsr`](fn._mm_setcsr.html)
 ///
 /// [Intel&#39;s documentation](https://www.intel.com/content/www/us/en/docs/intrinsics-guide/index.html#text=_mm_getcsr)
@@ -4648,6 +4748,10 @@
 #[target_feature(enable = <span class="string">&quot;sse&quot;</span>)]
 #[cfg_attr(test, assert_instr(stmxcsr))]
 #[stable(feature = <span class="string">&quot;simd_x86&quot;</span>, since = <span class="string">&quot;1.27.0&quot;</span>)]
+#[deprecated(
+    since = <span class="string">&quot;1.75.0&quot;</span>,
+    note = <span class="string">&quot;see `_mm_getcsr` documentation - use inline assembly instead&quot;
+</span>)]
 </span><span class="kw">pub unsafe fn </span>_mm_getcsr() -&gt; u32 {
     <span class="kw">let </span><span class="kw-2">mut </span>result = <span class="number">0_i32</span>;
     stmxcsr(<span class="kw-2">&amp;mut </span>result <span class="kw">as </span><span class="kw-2">*mut </span><span class="kw">_ as </span><span class="kw-2">*mut </span>i8);
@@ -4676,6 +4780,16 @@
 ///
 /// * The *denormals-are-zero mode flag* turns all numbers which would be
 /// denormalized (exponent bits are all zeros) into zeros.
+///
+/// Note that modifying the masking flags, rounding mode, or denormals-are-zero mode flags leads to
+/// **immediate Undefined Behavior**: Rust assumes that these are always in their default state and
+/// will optimize accordingly. This even applies when the register is altered and later reset to its
+/// original value without any floating-point operations appearing in the source code between those
+/// operations (since floating-point operations appearing earlier or later can be reordered).
+///
+/// If you need to perform some floating-point operations under a different masking flags, rounding
+/// mode, or denormals-are-zero mode, use an inline assembly block and make sure to restore the
+/// original MXCSR register state before the end of the block.
 ///
 /// ## Exception Flags
 ///
@@ -4785,6 +4899,10 @@
 #[target_feature(enable = <span class="string">&quot;sse&quot;</span>)]
 #[cfg_attr(test, assert_instr(ldmxcsr))]
 #[stable(feature = <span class="string">&quot;simd_x86&quot;</span>, since = <span class="string">&quot;1.27.0&quot;</span>)]
+#[deprecated(
+    since = <span class="string">&quot;1.75.0&quot;</span>,
+    note = <span class="string">&quot;see `_mm_setcsr` documentation - use inline assembly instead&quot;
+</span>)]
 </span><span class="kw">pub unsafe fn </span>_mm_setcsr(val: u32) {
     ldmxcsr(<span class="kw-2">&amp;</span>val <span class="kw">as </span><span class="kw-2">*const </span><span class="kw">_ as </span><span class="kw-2">*const </span>i8);
 }
@@ -4864,9 +4982,14 @@
 ///
 /// [Intel&#39;s documentation](https://www.intel.com/content/www/us/en/docs/intrinsics-guide/index.html#text=_MM_GET_EXCEPTION_MASK)
 </span><span class="attr">#[inline]
-#[allow(non_snake_case)]
+#[allow(deprecated)] </span><span class="comment">// Deprecated function implemented on top of deprecated function
+</span><span class="attr">#[allow(non_snake_case)]
 #[target_feature(enable = <span class="string">&quot;sse&quot;</span>)]
 #[stable(feature = <span class="string">&quot;simd_x86&quot;</span>, since = <span class="string">&quot;1.27.0&quot;</span>)]
+#[deprecated(
+    since = <span class="string">&quot;1.75.0&quot;</span>,
+    note = <span class="string">&quot;see `_mm_getcsr` documentation - use inline assembly instead&quot;
+</span>)]
 </span><span class="kw">pub unsafe fn </span>_MM_GET_EXCEPTION_MASK() -&gt; u32 {
     _mm_getcsr() &amp; _MM_MASK_MASK
 }
@@ -4875,9 +4998,14 @@
 ///
 /// [Intel&#39;s documentation](https://www.intel.com/content/www/us/en/docs/intrinsics-guide/index.html#text=_MM_GET_EXCEPTION_STATE)
 </span><span class="attr">#[inline]
-#[allow(non_snake_case)]
+#[allow(deprecated)] </span><span class="comment">// Deprecated function implemented on top of deprecated function
+</span><span class="attr">#[allow(non_snake_case)]
 #[target_feature(enable = <span class="string">&quot;sse&quot;</span>)]
 #[stable(feature = <span class="string">&quot;simd_x86&quot;</span>, since = <span class="string">&quot;1.27.0&quot;</span>)]
+#[deprecated(
+    since = <span class="string">&quot;1.75.0&quot;</span>,
+    note = <span class="string">&quot;see `_mm_getcsr` documentation - use inline assembly instead&quot;
+</span>)]
 </span><span class="kw">pub unsafe fn </span>_MM_GET_EXCEPTION_STATE() -&gt; u32 {
     _mm_getcsr() &amp; _MM_EXCEPT_MASK
 }
@@ -4886,9 +5014,14 @@
 ///
 /// [Intel&#39;s documentation](https://www.intel.com/content/www/us/en/docs/intrinsics-guide/index.html#text=_MM_GET_FLUSH_ZERO_MODE)
 </span><span class="attr">#[inline]
-#[allow(non_snake_case)]
+#[allow(deprecated)] </span><span class="comment">// Deprecated function implemented on top of deprecated function
+</span><span class="attr">#[allow(non_snake_case)]
 #[target_feature(enable = <span class="string">&quot;sse&quot;</span>)]
 #[stable(feature = <span class="string">&quot;simd_x86&quot;</span>, since = <span class="string">&quot;1.27.0&quot;</span>)]
+#[deprecated(
+    since = <span class="string">&quot;1.75.0&quot;</span>,
+    note = <span class="string">&quot;see `_mm_getcsr` documentation - use inline assembly instead&quot;
+</span>)]
 </span><span class="kw">pub unsafe fn </span>_MM_GET_FLUSH_ZERO_MODE() -&gt; u32 {
     _mm_getcsr() &amp; _MM_FLUSH_ZERO_MASK
 }
@@ -4897,9 +5030,14 @@
 ///
 /// [Intel&#39;s documentation](https://www.intel.com/content/www/us/en/docs/intrinsics-guide/index.html#text=_MM_GET_ROUNDING_MODE)
 </span><span class="attr">#[inline]
-#[allow(non_snake_case)]
+#[allow(deprecated)] </span><span class="comment">// Deprecated function implemented on top of deprecated function
+</span><span class="attr">#[allow(non_snake_case)]
 #[target_feature(enable = <span class="string">&quot;sse&quot;</span>)]
 #[stable(feature = <span class="string">&quot;simd_x86&quot;</span>, since = <span class="string">&quot;1.27.0&quot;</span>)]
+#[deprecated(
+    since = <span class="string">&quot;1.75.0&quot;</span>,
+    note = <span class="string">&quot;see `_mm_getcsr` documentation - use inline assembly instead&quot;
+</span>)]
 </span><span class="kw">pub unsafe fn </span>_MM_GET_ROUNDING_MODE() -&gt; u32 {
     _mm_getcsr() &amp; _MM_ROUND_MASK
 }
@@ -4908,9 +5046,14 @@
 ///
 /// [Intel&#39;s documentation](https://www.intel.com/content/www/us/en/docs/intrinsics-guide/index.html#text=_MM_SET_EXCEPTION_MASK)
 </span><span class="attr">#[inline]
-#[allow(non_snake_case)]
+#[allow(deprecated)] </span><span class="comment">// Deprecated function implemented on top of deprecated function
+</span><span class="attr">#[allow(non_snake_case)]
 #[target_feature(enable = <span class="string">&quot;sse&quot;</span>)]
 #[stable(feature = <span class="string">&quot;simd_x86&quot;</span>, since = <span class="string">&quot;1.27.0&quot;</span>)]
+#[deprecated(
+    since = <span class="string">&quot;1.75.0&quot;</span>,
+    note = <span class="string">&quot;see `_mm_setcsr` documentation - use inline assembly instead&quot;
+</span>)]
 </span><span class="kw">pub unsafe fn </span>_MM_SET_EXCEPTION_MASK(x: u32) {
     _mm_setcsr((_mm_getcsr() &amp; !_MM_MASK_MASK) | x)
 }
@@ -4919,9 +5062,14 @@
 ///
 /// [Intel&#39;s documentation](https://www.intel.com/content/www/us/en/docs/intrinsics-guide/index.html#text=_MM_SET_EXCEPTION_STATE)
 </span><span class="attr">#[inline]
-#[allow(non_snake_case)]
+#[allow(deprecated)] </span><span class="comment">// Deprecated function implemented on top of deprecated function
+</span><span class="attr">#[allow(non_snake_case)]
 #[target_feature(enable = <span class="string">&quot;sse&quot;</span>)]
 #[stable(feature = <span class="string">&quot;simd_x86&quot;</span>, since = <span class="string">&quot;1.27.0&quot;</span>)]
+#[deprecated(
+    since = <span class="string">&quot;1.75.0&quot;</span>,
+    note = <span class="string">&quot;see `_mm_setcsr` documentation - use inline assembly instead&quot;
+</span>)]
 </span><span class="kw">pub unsafe fn </span>_MM_SET_EXCEPTION_STATE(x: u32) {
     _mm_setcsr((_mm_getcsr() &amp; !_MM_EXCEPT_MASK) | x)
 }
@@ -4930,9 +5078,14 @@
 ///
 /// [Intel&#39;s documentation](https://www.intel.com/content/www/us/en/docs/intrinsics-guide/index.html#text=_MM_SET_FLUSH_ZERO_MODE)
 </span><span class="attr">#[inline]
-#[allow(non_snake_case)]
+#[allow(deprecated)] </span><span class="comment">// Deprecated function implemented on top of deprecated function
+</span><span class="attr">#[allow(non_snake_case)]
 #[target_feature(enable = <span class="string">&quot;sse&quot;</span>)]
 #[stable(feature = <span class="string">&quot;simd_x86&quot;</span>, since = <span class="string">&quot;1.27.0&quot;</span>)]
+#[deprecated(
+    since = <span class="string">&quot;1.75.0&quot;</span>,
+    note = <span class="string">&quot;see `_mm_setcsr` documentation - use inline assembly instead&quot;
+</span>)]
 </span><span class="kw">pub unsafe fn </span>_MM_SET_FLUSH_ZERO_MODE(x: u32) {
     <span class="kw">let </span>val = (_mm_getcsr() &amp; !_MM_FLUSH_ZERO_MASK) | x;
     <span class="comment">// println!(&quot;setting csr={:x}&quot;, val);
@@ -4943,9 +5096,14 @@
 ///
 /// [Intel&#39;s documentation](https://www.intel.com/content/www/us/en/docs/intrinsics-guide/index.html#text=_MM_SET_ROUNDING_MODE)
 </span><span class="attr">#[inline]
-#[allow(non_snake_case)]
+#[allow(deprecated)] </span><span class="comment">// Deprecated function implemented on top of deprecated function
+</span><span class="attr">#[allow(non_snake_case)]
 #[target_feature(enable = <span class="string">&quot;sse&quot;</span>)]
 #[stable(feature = <span class="string">&quot;simd_x86&quot;</span>, since = <span class="string">&quot;1.27.0&quot;</span>)]
+#[deprecated(
+    since = <span class="string">&quot;1.75.0&quot;</span>,
+    note = <span class="string">&quot;see `_mm_setcsr` documentation - use inline assembly instead&quot;
+</span>)]
 </span><span class="kw">pub unsafe fn </span>_MM_SET_ROUNDING_MODE(x: u32) {
     _mm_setcsr((_mm_getcsr() &amp; !_MM_ROUND_MASK) | x)
 }
@@ -5250,7 +5408,11 @@
         <span class="kw">let </span>a = _mm_setr_ps(<span class="number">4.0</span>, <span class="number">13.0</span>, <span class="number">16.0</span>, <span class="number">100.0</span>);
         <span class="kw">let </span>r = _mm_rcp_ss(a);
         <span class="kw">let </span>e = _mm_setr_ps(<span class="number">0.24993896</span>, <span class="number">13.0</span>, <span class="number">16.0</span>, <span class="number">100.0</span>);
-        assert_eq_m128(r, e);
+        <span class="kw">let </span>rel_err = <span class="number">0.00048828125</span>;
+        <span class="macro">assert_approx_eq!</span>(get_m128(r, <span class="number">0</span>), get_m128(e, <span class="number">0</span>), <span class="number">2. </span>* rel_err);
+        <span class="kw">for </span>i <span class="kw">in </span><span class="number">1</span>..<span class="number">4 </span>{
+            <span class="macro">assert_eq!</span>(get_m128(r, i), get_m128(e, i));
+        }
     }
 
     <span class="attr">#[simd_test(enable = <span class="string">&quot;sse&quot;</span>)]
@@ -5331,7 +5493,18 @@
         <span class="kw">let </span>b = _mm_setr_ps(-<span class="number">100.0</span>, <span class="number">20.0</span>, <span class="number">0.0</span>, -<span class="number">5.0</span>);
         <span class="kw">let </span>r = _mm_max_ps(a, b);
         assert_eq_m128(r, _mm_setr_ps(-<span class="number">1.0</span>, <span class="number">20.0</span>, <span class="number">0.0</span>, -<span class="number">5.0</span>));
-    }
+
+        <span class="comment">// Check SSE-specific semantics for -0.0 handling.
+        </span><span class="kw">let </span>a = _mm_setr_ps(-<span class="number">0.0</span>, <span class="number">0.0</span>, <span class="number">0.0</span>, <span class="number">0.0</span>);
+        <span class="kw">let </span>b = _mm_setr_ps(<span class="number">0.0</span>, <span class="number">0.0</span>, <span class="number">0.0</span>, <span class="number">0.0</span>);
+        <span class="kw">let </span>r1: [u8; <span class="number">16</span>] = transmute(_mm_max_ps(a, b));
+        <span class="kw">let </span>r2: [u8; <span class="number">16</span>] = transmute(_mm_max_ps(b, a));
+        <span class="kw">let </span>a: [u8; <span class="number">16</span>] = transmute(a);
+        <span class="kw">let </span>b: [u8; <span class="number">16</span>] = transmute(b);
+        <span class="macro">assert_eq!</span>(r1, b);
+        <span class="macro">assert_eq!</span>(r2, a);
+        <span class="macro">assert_ne!</span>(a, b); <span class="comment">// sanity check that -0.0 is actually present
+    </span>}
 
     <span class="attr">#[simd_test(enable = <span class="string">&quot;sse&quot;</span>)]
     </span><span class="kw">unsafe fn </span>test_mm_and_ps() {
@@ -6042,7 +6215,9 @@
         }
     }
 
-    <span class="attr">#[simd_test(enable = <span class="string">&quot;sse&quot;</span>)]
+    <span class="attr">#[allow(deprecated)] </span><span class="comment">// FIXME: This test uses deprecated CSR access functions
+    </span><span class="attr">#[simd_test(enable = <span class="string">&quot;sse&quot;</span>)]
+    #[cfg_attr(miri, ignore)] </span><span class="comment">// Uses _mm_setcsr, which is not supported by Miri
     </span><span class="kw">unsafe fn </span>test_mm_comieq_ss_vs_ucomieq_ss() {
         <span class="comment">// If one of the arguments is a quiet NaN `comieq_ss` should signal an
         // Invalid Operation Exception while `ucomieq_ss` should not.
@@ -6348,7 +6523,7 @@
         <span class="kw">let </span><span class="kw-2">mut </span>p = vals.as_mut_ptr();
 
         <span class="kw">if </span>(p <span class="kw">as </span>usize) &amp; <span class="number">0xf </span>!= <span class="number">0 </span>{
-            ofs = ((<span class="number">16 </span>- (p <span class="kw">as </span>usize)) &amp; <span class="number">0xf</span>) &gt;&gt; <span class="number">2</span>;
+            ofs = (<span class="number">16 </span>- ((p <span class="kw">as </span>usize) &amp; <span class="number">0xf</span>)) &gt;&gt; <span class="number">2</span>;
             p = p.add(ofs);
         }
 
@@ -6374,7 +6549,7 @@
 
         <span class="comment">// Align p to 16-byte boundary
         </span><span class="kw">if </span>(p <span class="kw">as </span>usize) &amp; <span class="number">0xf </span>!= <span class="number">0 </span>{
-            ofs = ((<span class="number">16 </span>- (p <span class="kw">as </span>usize)) &amp; <span class="number">0xf</span>) &gt;&gt; <span class="number">2</span>;
+            ofs = (<span class="number">16 </span>- ((p <span class="kw">as </span>usize) &amp; <span class="number">0xf</span>)) &gt;&gt; <span class="number">2</span>;
             p = p.add(ofs);
         }
 
@@ -6400,7 +6575,7 @@
 
         <span class="comment">// Align p to 16-byte boundary
         </span><span class="kw">if </span>(p <span class="kw">as </span>usize) &amp; <span class="number">0xf </span>!= <span class="number">0 </span>{
-            ofs = ((<span class="number">16 </span>- (p <span class="kw">as </span>usize)) &amp; <span class="number">0xf</span>) &gt;&gt; <span class="number">2</span>;
+            ofs = (<span class="number">16 </span>- ((p <span class="kw">as </span>usize) &amp; <span class="number">0xf</span>)) &gt;&gt; <span class="number">2</span>;
             p = p.add(ofs);
         }
 
@@ -6462,11 +6637,15 @@
     }
 
     <span class="attr">#[simd_test(enable = <span class="string">&quot;sse&quot;</span>)]
+    </span><span class="comment">// Miri cannot support this until it is clear how it fits in the Rust memory model
+    </span><span class="attr">#[cfg_attr(miri, ignore)]
     </span><span class="kw">unsafe fn </span>test_mm_sfence() {
         _mm_sfence();
     }
 
-    <span class="attr">#[simd_test(enable = <span class="string">&quot;sse&quot;</span>)]
+    <span class="attr">#[allow(deprecated)] </span><span class="comment">// FIXME: This tests functions that are immediate UB
+    </span><span class="attr">#[simd_test(enable = <span class="string">&quot;sse&quot;</span>)]
+    #[cfg_attr(miri, ignore)] </span><span class="comment">// Miri does not support accesing the CSR
     </span><span class="kw">unsafe fn </span>test_mm_getcsr_setcsr_1() {
         <span class="kw">let </span>saved_csr = _mm_getcsr();
 
@@ -6482,7 +6661,9 @@
         assert_eq_m128(r, exp); <span class="comment">// first component is a denormalized f32
     </span>}
 
-    <span class="attr">#[simd_test(enable = <span class="string">&quot;sse&quot;</span>)]
+    <span class="attr">#[allow(deprecated)] </span><span class="comment">// FIXME: This tests functions that are immediate UB
+    </span><span class="attr">#[simd_test(enable = <span class="string">&quot;sse&quot;</span>)]
+    #[cfg_attr(miri, ignore)] </span><span class="comment">// Miri does not support accesing the CSR
     </span><span class="kw">unsafe fn </span>test_mm_getcsr_setcsr_2() {
         <span class="comment">// Same as _mm_setcsr_1 test, but with opposite flag value.
 
@@ -6500,7 +6681,9 @@
         assert_eq_m128(r, exp); <span class="comment">// first component is a denormalized f32
     </span>}
 
-    <span class="attr">#[simd_test(enable = <span class="string">&quot;sse&quot;</span>)]
+    <span class="attr">#[allow(deprecated)] </span><span class="comment">// FIXME: This tests functions that are immediate UB
+    </span><span class="attr">#[simd_test(enable = <span class="string">&quot;sse&quot;</span>)]
+    #[cfg_attr(miri, ignore)] </span><span class="comment">// Miri does not support accesing the CSR
     </span><span class="kw">unsafe fn </span>test_mm_getcsr_setcsr_underflow() {
         _MM_SET_EXCEPTION_STATE(<span class="number">0</span>);
 
@@ -6539,6 +6722,9 @@
     }
 
     <span class="attr">#[simd_test(enable = <span class="string">&quot;sse&quot;</span>)]
+    </span><span class="comment">// Miri cannot support this until it is clear how it fits in the Rust memory model
+    // (non-temporal store)
+    </span><span class="attr">#[cfg_attr(miri, ignore)]
     </span><span class="kw">unsafe fn </span>test_mm_stream_ps() {
         <span class="kw">let </span>a = _mm_set1_ps(<span class="number">7.0</span>);
         <span class="kw">let </span><span class="kw-2">mut </span>mem = Memory { data: [-<span class="number">1.0</span>; <span class="number">4</span>] };

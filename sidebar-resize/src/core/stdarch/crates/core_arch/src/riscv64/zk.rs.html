@@ -1,5 +1,5 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `library/core/src/../../stdarch/crates/core_arch/src/riscv64/zk.rs`."><title>zk.rs - source</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../../../../../static.files/SourceSerif4-Regular-46f98efaafac5295.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../../../../../static.files/FiraSans-Regular-018c141bf0843ffd.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../../../../../static.files/FiraSans-Medium-8f9a781e4970d388.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../../../../../static.files/SourceCodePro-Regular-562dcc5011b6de7d.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../../../../../static.files/SourceSerif4-Bold-a2c9cd1067f8b328.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../../../../../static.files/SourceCodePro-Semibold-d899c5a5c4aeb14a.ttf.woff2"><link rel="stylesheet" href="../../../../../../../static.files/normalize-76eba96aa4d2e634.css"><link rel="stylesheet" href="../../../../../../../static.files/rustdoc-2baeb68bba9ca696.css"><meta name="rustdoc-vars" data-root-path="../../../../../../../" data-static-root-path="../../../../../../../static.files/" data-current-crate="core" data-themes="" data-resource-suffix="1.74.0" data-rustdoc-version="1.74.0-dev" data-channel="nightly" data-search-js="search-5d3eaacf19ebf04f.js" data-settings-js="settings-3c6e833083d168bb.js" ><script src="../../../../../../../static.files/storage-dc6dee2b776f9a53.js"></script><script defer src="../../../../../../../static.files/src-script-0f5d2696cdf44bd3.js"></script><script defer src="../../../../../../../src-files1.74.0.js"></script><script defer src="../../../../../../../static.files/main-462d7caac759d94a.js"></script><noscript><link rel="stylesheet" href="../../../../../../../static.files/noscript-feafe1bb7466e4bd.css"></noscript><link rel="alternate icon" type="image/png" href="../../../../../../../static.files/favicon-16x16-8b506e7a72182f1c.png"><link rel="alternate icon" type="image/png" href="../../../../../../../static.files/favicon-32x32-422f7d1d52889060.png"><link rel="icon" type="image/svg+xml" href="../../../../../../../static.files/favicon-2c020d218678b618.svg"></head><body class="rustdoc src"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"></nav><div class="sidebar-resizer"></div>
-    <main><nav class="sub"><a class="sub-logo-container" href="../../../../../../../core/index.html"><img class="rust-logo" src="../../../../../../../static.files/rust-logo-151179464ae7ed46.svg" alt="logo"></a><form class="search-form"><span></span><input class="search-input" name="search" aria-label="Run search in the documentation" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><div id="help-button" tabindex="-1"><a href="../../../../../../../help.html" title="help">?</a></div><div id="settings-menu" tabindex="-1"><a href="../../../../../../../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../../../../../../../static.files/wheel-7b819b6101059cd0.svg"></a></div></form></nav><section id="main-content" class="content"><div class="example-wrap"><div data-nosnippet><pre class="src-line-numbers"><a href="#1" id="1">1</a>
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `library/core/src/../../stdarch/crates/core_arch/src/riscv64/zk.rs`."><title>zk.rs - source</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../../../../../static.files/SourceSerif4-Regular-46f98efaafac5295.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../../../../../static.files/FiraSans-Regular-018c141bf0843ffd.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../../../../../static.files/FiraSans-Medium-8f9a781e4970d388.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../../../../../static.files/SourceCodePro-Regular-562dcc5011b6de7d.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../../../../../static.files/SourceSerif4-Bold-a2c9cd1067f8b328.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../../../../../static.files/SourceCodePro-Semibold-d899c5a5c4aeb14a.ttf.woff2"><link rel="stylesheet" href="../../../../../../../static.files/normalize-76eba96aa4d2e634.css"><link rel="stylesheet" href="../../../../../../../static.files/rustdoc-4c1914efbd6b11e9.css"><meta name="rustdoc-vars" data-root-path="../../../../../../../" data-static-root-path="../../../../../../../static.files/" data-current-crate="core" data-themes="" data-resource-suffix="1.75.0" data-rustdoc-version="1.75.0-dev" data-channel="nightly" data-search-js="search-8fbf244ebcf71464.js" data-settings-js="settings-3c6e833083d168bb.js" ><script src="../../../../../../../static.files/storage-dc6dee2b776f9a53.js"></script><script defer src="../../../../../../../static.files/src-script-0f5d2696cdf44bd3.js"></script><script defer src="../../../../../../../src-files1.75.0.js"></script><script defer src="../../../../../../../static.files/main-8f5a221be21b7e80.js"></script><noscript><link rel="stylesheet" href="../../../../../../../static.files/noscript-feafe1bb7466e4bd.css"></noscript><link rel="alternate icon" type="image/png" href="../../../../../../../static.files/favicon-16x16-8b506e7a72182f1c.png"><link rel="alternate icon" type="image/png" href="../../../../../../../static.files/favicon-32x32-422f7d1d52889060.png"><link rel="icon" type="image/svg+xml" href="../../../../../../../static.files/favicon-2c020d218678b618.svg"></head><body class="rustdoc src"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"></nav><div class="sidebar-resizer"></div>
+    <main><nav class="sub"><a class="sub-logo-container" href="../../../../../../../core/index.html"><img class="rust-logo" src="../../../../../../../static.files/rust-logo-151179464ae7ed46.svg" alt="core"></a><form class="search-form"><span></span><input class="search-input" name="search" aria-label="Run search in the documentation" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><div id="help-button" tabindex="-1"><a href="../../../../../../../help.html" title="help">?</a></div><div id="settings-menu" tabindex="-1"><a href="../../../../../../../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../../../../../../../static.files/wheel-7b819b6101059cd0.svg"></a></div></form></nav><section id="main-content" class="content"><div class="example-wrap"><div data-nosnippet><pre class="src-line-numbers"><a href="#1" id="1">1</a>
 <a href="#2" id="2">2</a>
 <a href="#3" id="3">3</a>
 <a href="#4" id="4">4</a>
@@ -280,6 +280,23 @@
 <a href="#279" id="279">279</a>
 <a href="#280" id="280">280</a>
 <a href="#281" id="281">281</a>
+<a href="#282" id="282">282</a>
+<a href="#283" id="283">283</a>
+<a href="#284" id="284">284</a>
+<a href="#285" id="285">285</a>
+<a href="#286" id="286">286</a>
+<a href="#287" id="287">287</a>
+<a href="#288" id="288">288</a>
+<a href="#289" id="289">289</a>
+<a href="#290" id="290">290</a>
+<a href="#291" id="291">291</a>
+<a href="#292" id="292">292</a>
+<a href="#293" id="293">293</a>
+<a href="#294" id="294">294</a>
+<a href="#295" id="295">295</a>
+<a href="#296" id="296">296</a>
+<a href="#297" id="297">297</a>
+<a href="#298" id="298">298</a>
 </pre></div><pre class="rust"><code><span class="attr">#[cfg(test)]
 </span><span class="kw">use </span>stdarch_test::assert_instr;
 
@@ -301,6 +318,9 @@
 
     <span class="attr">#[link_name = <span class="string">&quot;llvm.riscv.aes64ks2&quot;</span>]
     </span><span class="kw">fn </span>_aes64ks2(rs1: i64, rs2: i64) -&gt; i64;
+
+    <span class="attr">#[link_name = <span class="string">&quot;llvm.riscv.aes64im&quot;</span>]
+    </span><span class="kw">fn </span>_aes64im(rs1: i64) -&gt; i64;
 
     <span class="attr">#[link_name = <span class="string">&quot;llvm.riscv.sha512sig0&quot;</span>]
     </span><span class="kw">fn </span>_sha512sig0(rs1: i64) -&gt; i64;
@@ -332,9 +352,8 @@
 ///
 /// This function is safe to use if the `zkne` target feature is present.
 </span><span class="attr">#[target_feature(enable = <span class="string">&quot;zkne&quot;</span>)]
-</span><span class="comment">// See #1464
-// #[cfg_attr(test, assert_instr(aes64es))]
-</span><span class="attr">#[inline]
+#[cfg_attr(test, assert_instr(aes64es))]
+#[inline]
 </span><span class="kw">pub unsafe fn </span>aes64es(rs1: u64, rs2: u64) -&gt; u64 {
     _aes64es(rs1 <span class="kw">as </span>i64, rs2 <span class="kw">as </span>i64) <span class="kw">as </span>u64
 }
@@ -356,9 +375,8 @@
 ///
 /// This function is safe to use if the `zkne` target feature is present.
 </span><span class="attr">#[target_feature(enable = <span class="string">&quot;zkne&quot;</span>)]
-</span><span class="comment">// See #1464
-// #[cfg_attr(test, assert_instr(aes64esm))]
-</span><span class="attr">#[inline]
+#[cfg_attr(test, assert_instr(aes64esm))]
+#[inline]
 </span><span class="kw">pub unsafe fn </span>aes64esm(rs1: u64, rs2: u64) -&gt; u64 {
     _aes64esm(rs1 <span class="kw">as </span>i64, rs2 <span class="kw">as </span>i64) <span class="kw">as </span>u64
 }
@@ -380,9 +398,8 @@
 ///
 /// This function is safe to use if the `zknd` target feature is present.
 </span><span class="attr">#[target_feature(enable = <span class="string">&quot;zknd&quot;</span>)]
-</span><span class="comment">// See #1464
-// #[cfg_attr(test, assert_instr(aes64ds))]
-</span><span class="attr">#[inline]
+#[cfg_attr(test, assert_instr(aes64ds))]
+#[inline]
 </span><span class="kw">pub unsafe fn </span>aes64ds(rs1: u64, rs2: u64) -&gt; u64 {
     _aes64ds(rs1 <span class="kw">as </span>i64, rs2 <span class="kw">as </span>i64) <span class="kw">as </span>u64
 }
@@ -404,9 +421,8 @@
 ///
 /// This function is safe to use if the `zknd` target feature is present.
 </span><span class="attr">#[target_feature(enable = <span class="string">&quot;zknd&quot;</span>)]
-</span><span class="comment">// See #1464
-// #[cfg_attr(test, assert_instr(aes64dsm))]
-</span><span class="attr">#[inline]
+#[cfg_attr(test, assert_instr(aes64dsm))]
+#[inline]
 </span><span class="kw">pub unsafe fn </span>aes64dsm(rs1: u64, rs2: u64) -&gt; u64 {
     _aes64dsm(rs1 <span class="kw">as </span>i64, rs2 <span class="kw">as </span>i64) <span class="kw">as </span>u64
 }
@@ -434,9 +450,8 @@
 /// This function is safe to use if the `zkne` or `zknd` target feature is present.
 </span><span class="attr">#[target_feature(enable = <span class="string">&quot;zkne&quot;</span>, enable = <span class="string">&quot;zknd&quot;</span>)]
 #[rustc_legacy_const_generics(<span class="number">1</span>)]
-</span><span class="comment">// See #1464
-// #[cfg_attr(test, assert_instr(aes64ks1i, RNUM = 0))]
-</span><span class="attr">#[inline]
+#[cfg_attr(test, assert_instr(aes64ks1i, RNUM = <span class="number">0</span>))]
+#[inline]
 </span><span class="kw">pub unsafe fn </span>aes64ks1i&lt;<span class="kw">const </span>RNUM: u8&gt;(rs1: u64) -&gt; u64 {
     <span class="macro">static_assert!</span>(RNUM &lt;= <span class="number">10</span>);
 
@@ -459,11 +474,34 @@
 ///
 /// This function is safe to use if the `zkne` or `zknd` target feature is present.
 </span><span class="attr">#[target_feature(enable = <span class="string">&quot;zkne&quot;</span>, enable = <span class="string">&quot;zknd&quot;</span>)]
-</span><span class="comment">// See #1464
-// #[cfg_attr(test, assert_instr(aes64ks2))]
-</span><span class="attr">#[inline]
+#[cfg_attr(test, assert_instr(aes64ks2))]
+#[inline]
 </span><span class="kw">pub unsafe fn </span>aes64ks2(rs1: u64, rs2: u64) -&gt; u64 {
     _aes64ks2(rs1 <span class="kw">as </span>i64, rs2 <span class="kw">as </span>i64) <span class="kw">as </span>u64
+}
+
+<span class="doccomment">/// This instruction accelerates the inverse MixColumns step of the AES Block Cipher, and is used to aid creation of
+/// the decryption KeySchedule.
+///
+/// The instruction applies the inverse MixColumns transformation to two columns of the state array, packed
+/// into a single 64-bit register. It is used to create the inverse cipher KeySchedule, according to the equivalent
+/// inverse cipher construction in (Page 23, Section 5.3.5). This instruction must always be implemented
+/// such that its execution latency does not depend on the data being operated on.
+///
+/// Source: RISC-V Cryptography Extensions Volume I: Scalar &amp; Entropy Source Instructions
+///
+/// Version: v1.0.1
+///
+/// Section: 3.9
+///
+/// # Safety
+///
+/// This function is safe to use if the `zkne` or `zknd` target feature is present.
+</span><span class="attr">#[target_feature(enable = <span class="string">&quot;zkne&quot;</span>, enable = <span class="string">&quot;zknd&quot;</span>)]
+#[cfg_attr(test, assert_instr(aes64im))]
+#[inline]
+</span><span class="kw">pub unsafe fn </span>aes64im(rs1: u64) -&gt; u64 {
+    _aes64im(rs1 <span class="kw">as </span>i64) <span class="kw">as </span>u64
 }
 
 <span class="doccomment">/// Implements the Sigma0 transformation function as used in the SHA2-512 hash function \[49\]
@@ -483,9 +521,8 @@
 ///
 /// This function is safe to use if the `zknh` target feature is present.
 </span><span class="attr">#[target_feature(enable = <span class="string">&quot;zknh&quot;</span>)]
-</span><span class="comment">// See #1464
-// #[cfg_attr(test, assert_instr(sha512sig0))]
-</span><span class="attr">#[inline]
+#[cfg_attr(test, assert_instr(sha512sig0))]
+#[inline]
 </span><span class="kw">pub unsafe fn </span>sha512sig0(rs1: u64) -&gt; u64 {
     _sha512sig0(rs1 <span class="kw">as </span>i64) <span class="kw">as </span>u64
 }
@@ -507,9 +544,8 @@
 ///
 /// This function is safe to use if the `zknh` target feature is present.
 </span><span class="attr">#[target_feature(enable = <span class="string">&quot;zknh&quot;</span>)]
-</span><span class="comment">// See #1464
-// #[cfg_attr(test, assert_instr(sha512sig1))]
-</span><span class="attr">#[inline]
+#[cfg_attr(test, assert_instr(sha512sig1))]
+#[inline]
 </span><span class="kw">pub unsafe fn </span>sha512sig1(rs1: u64) -&gt; u64 {
     _sha512sig1(rs1 <span class="kw">as </span>i64) <span class="kw">as </span>u64
 }
@@ -531,9 +567,8 @@
 ///
 /// This function is safe to use if the `zknh` target feature is present.
 </span><span class="attr">#[target_feature(enable = <span class="string">&quot;zknh&quot;</span>)]
-</span><span class="comment">// See #1464
-// #[cfg_attr(test, assert_instr(sha512sum0))]
-</span><span class="attr">#[inline]
+#[cfg_attr(test, assert_instr(sha512sum0))]
+#[inline]
 </span><span class="kw">pub unsafe fn </span>sha512sum0(rs1: u64) -&gt; u64 {
     _sha512sum0(rs1 <span class="kw">as </span>i64) <span class="kw">as </span>u64
 }
@@ -555,9 +590,8 @@
 ///
 /// This function is safe to use if the `zknh` target feature is present.
 </span><span class="attr">#[target_feature(enable = <span class="string">&quot;zknh&quot;</span>)]
-</span><span class="comment">// See #1464
-// #[cfg_attr(test, assert_instr(sha512sum1))]
-</span><span class="attr">#[inline]
+#[cfg_attr(test, assert_instr(sha512sum1))]
+#[inline]
 </span><span class="kw">pub unsafe fn </span>sha512sum1(rs1: u64) -&gt; u64 {
     _sha512sum1(rs1 <span class="kw">as </span>i64) <span class="kw">as </span>u64
 }

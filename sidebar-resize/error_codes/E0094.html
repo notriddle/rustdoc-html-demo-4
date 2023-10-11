@@ -174,7 +174,7 @@
 <p>An invalid number of generic parameters was passed to an intrinsic function.</p>
 <p>Erroneous code example:</p>
 <pre><pre class="playground"><code class="language-rust compile_fail E0094"><span class="boring">#![allow(unused)]
-</span>#![feature(intrinsics)]
+</span>#![feature(intrinsics, rustc_attrs)]
 #![allow(internal_features)]
 
 <span class="boring">fn main() {
@@ -188,7 +188,7 @@
 and verify with the function declaration in the Rust source code.
 Example:</p>
 <pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
-</span>#![feature(intrinsics)]
+</span>#![feature(intrinsics, rustc_attrs)]
 #![allow(internal_features)]
 
 <span class="boring">fn main() {

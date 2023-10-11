@@ -175,25 +175,27 @@
 <p>Erroneous code example:</p>
 <pre><pre class="playground"><code class="language-rust compile_fail E0282"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
-</span>let x = &quot;hello&quot;.chars().rev().collect();
+</span>let x = Vec::new();
 <span class="boring">}</span></code></pre></pre>
 <p>This error indicates that type inference did not result in one unique possible
 type, and extra information is required. In most cases this can be provided
 by adding a type annotation. Sometimes you need to specify a generic type
 parameter manually.</p>
-<p>A common example is the <code>collect</code> method on <code>Iterator</code>. It has a generic type
-parameter with a <code>FromIterator</code> bound, which for a <code>char</code> iterator is
-implemented by <code>Vec</code> and <code>String</code> among others. Consider the following snippet
-that reverses the characters of a string:</p>
-<p>In the first code example, the compiler cannot infer what the type of <code>x</code> should
-be: <code>Vec&lt;char&gt;</code> and <code>String</code> are both suitable candidates. To specify which type
-to use, you can use a type annotation on <code>x</code>:</p>
+<p>In the example above, type <code>Vec</code> has a type parameter <code>T</code>. When calling
+<code>Vec::new</code>, barring any other later usage of the variable <code>x</code> that allows the
+compiler to infer what type <code>T</code> is, the compiler needs to be told what it is.</p>
+<p>The type can be specified on the variable:</p>
 <pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
-</span>let x: Vec&lt;char&gt; = &quot;hello&quot;.chars().rev().collect();
+</span>let x: Vec&lt;i32&gt; = Vec::new();
 <span class="boring">}</span></code></pre></pre>
-<p>It is not necessary to annotate the full type. Once the ambiguity is resolved,
-the compiler can infer the rest:</p>
+<p>The type can also be specified in the path of the expression:</p>
+<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>let x = Vec::&lt;i32&gt;::new();
+<span class="boring">}</span></code></pre></pre>
+<p>In cases with more complex types, it is not necessary to annotate the full
+type. Once the ambiguity is resolved, the compiler can infer the rest:</p>
 <pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
 </span>let x: Vec&lt;_&gt; = &quot;hello&quot;.chars().rev().collect();

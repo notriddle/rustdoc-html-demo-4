@@ -7083,16 +7083,92 @@ undefined behavior).</p>
 <p><strong>NOTE:</strong> The simplest way would use &quot;extern types&quot;.
 But it's currently (as of June 2021) unstable and has some unresolved questions, see the <a href="https://rust-lang.github.io/rfcs/1861-extern-types.html">RFC page</a> and the <a href="https://github.com/rust-lang/rust/issues/43467">tracking issue</a> for more details.</p>
 </blockquote>
-<div style="break-before: page; page-break-before: always;"></div><h1 id="beneath-std"><a class="header" href="#beneath-std">Beneath std</a></h1>
-<p>This section documents (or will document) features that are provided by the standard library and
-that <code>#![no_std]</code> developers have to deal with (i.e. provide) to build <code>#![no_std]</code> binary crates. A
-(likely incomplete) list of such features is shown below:</p>
-<ul>
-<li><code>#[lang = &quot;eh_personality&quot;]</code></li>
-<li><code>#[lang = &quot;start&quot;]</code></li>
-<li><code>#[lang = &quot;termination&quot;]</code></li>
-<li><code>#[panic_implementation]</code></li>
-</ul>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="beneath-std"><a class="header" href="#beneath-std">Beneath <code>std</code></a></h1>
+<p>This section documents features that are normally provided by the <code>std</code> crate and
+that <code>#![no_std]</code> developers have to deal with (i.e. provide) to build
+<code>#![no_std]</code> binary crates.</p>
+<h2 id="using-libc"><a class="header" href="#using-libc">Using <code>libc</code></a></h2>
+<p>In order to build a <code>#[no_std]</code> executable we will need <code>libc</code> as a dependency.
+We can specify this using our <code>Cargo.toml</code> file:</p>
+<pre><code class="language-toml">[dependencies]
+libc = { version = &quot;0.2.146&quot;, default-features = false }
+</code></pre>
+<p>Note that the default features have been disabled. This is a critical step -
+<strong>the default features of <code>libc</code> include the <code>std</code> crate and so must be
+disabled.</strong></p>
+<p>Alternatively, we can use the unstable <code>rustc_private</code> private feature together
+with an <code>extern crate libc;</code> declaration as shown in the examples below.</p>
+<h2 id="writing-an-executable-without-std"><a class="header" href="#writing-an-executable-without-std">Writing an executable without <code>std</code></a></h2>
+<p>We will probably need a nightly version of the compiler to produce
+a <code>#![no_std]</code> executable because on many platforms, we have to provide the
+<code>eh_personality</code> <a href="https://doc.rust-lang.org/nightly/unstable-book/language-features/lang-items.html">lang item</a>, which is unstable.</p>
+<p>Controlling the entry point is possible in two ways: the <code>#[start]</code> attribute,
+or overriding the default shim for the C <code>main</code> function with your own.
+Additionally, it's required to define a <a href="panic-handler.html">panic handler function</a>.</p>
+<p>The function marked <code>#[start]</code> is passed the command line parameters
+in the same format as C (aside from the exact integer types being used):</p>
+<pre><pre class="playground"><code class="language-rust edition2021">#![feature(start, lang_items, core_intrinsics, rustc_private)]
+#![allow(internal_features)]
+#![no_std]
+
+// Necessary for `panic = &quot;unwind&quot;` builds on some platforms.
+#![feature(panic_unwind)]
+extern crate unwind;
+
+// Pull in the system libc library for what crt0.o likely requires.
+extern crate libc;
+
+use core::panic::PanicInfo;
+
+// Entry point for this program.
+#[start]
+fn main(_argc: isize, _argv: *const *const u8) -&gt; isize {
+    0
+}
+
+// These functions are used by the compiler, but not for an empty program like this.
+// They are normally provided by `std`.
+#[lang = &quot;eh_personality&quot;]
+fn rust_eh_personality() {}
+#[panic_handler]
+fn panic_handler(_info: &amp;PanicInfo) -&gt; ! { core::intrinsics::abort() }</code></pre></pre>
+<p>To override the compiler-inserted <code>main</code> shim, we have to disable it
+with <code>#![no_main]</code> and then create the appropriate symbol with the
+correct ABI and the correct name, which requires overriding the
+compiler's name mangling too:</p>
+<pre><pre class="playground"><code class="language-rust edition2021">#![feature(lang_items, core_intrinsics, rustc_private)]
+#![allow(internal_features)]
+#![no_std]
+#![no_main]
+
+// Necessary for `panic = &quot;unwind&quot;` builds on some platforms.
+#![feature(panic_unwind)]
+extern crate unwind;
+
+// Pull in the system libc library for what crt0.o likely requires.
+extern crate libc;
+
+use core::ffi::{c_char, c_int};
+use core::panic::PanicInfo;
+
+// Entry point for this program.
+#[no_mangle] // ensure that this symbol is included in the output as `main`
+extern &quot;C&quot; fn main(_argc: c_int, _argv: *const *const c_char) -&gt; c_int {
+    0
+}
+
+// These functions are used by the compiler, but not for an empty program like this.
+// They are normally provided by `std`.
+#[lang = &quot;eh_personality&quot;]
+fn rust_eh_personality() {}
+#[panic_handler]
+fn panic_handler(_info: &amp;PanicInfo) -&gt; ! { core::intrinsics::abort() }</code></pre></pre>
+<p>If you are working with a target that doesn't have binary releases of the
+standard library available via rustup (this probably means you are building the
+<code>core</code> crate yourself) and need compiler-rt intrinsics (i.e. you are probably
+getting linker errors when building an executable:
+<code>undefined reference to `__aeabi_memcpy'</code>), you need to manually link to the
+<a href="https://crates.io/crates/compiler_builtins"><code>compiler_builtins</code> crate</a> to get those intrinsics and solve the linker errors.</p>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="panic_handler"><a class="header" href="#panic_handler">#[panic_handler]</a></h1>
 <p><code>#[panic_handler]</code> is used to define the behavior of <code>panic!</code> in <code>#![no_std]</code> applications.
 The <code>#[panic_handler]</code> attribute must be applied to a function with signature <code>fn(&amp;PanicInfo) -&gt; !</code> and such function must appear <em>once</em> in the dependency graph of a binary / dylib / cdylib

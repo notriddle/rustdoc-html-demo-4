@@ -300,6 +300,7 @@ of the involved counterpart. For example, <code>[&quot;SomeType&quot;, &quot;*&q
 <li><a href="https://rust-lang.github.io/rust-clippy/master/index.html#type_repetition_in_bounds"><code>type_repetition_in_bounds</code></a></li>
 <li><a href="https://rust-lang.github.io/rust-clippy/master/index.html#tuple_array_conversions"><code>tuple_array_conversions</code></a></li>
 <li><a href="https://rust-lang.github.io/rust-clippy/master/index.html#manual_try_fold"><code>manual_try_fold</code></a></li>
+<li><a href="https://rust-lang.github.io/rust-clippy/master/index.html#manual_hash_one"><code>manual_hash_one</code></a></li>
 </ul>
 <h2 id="cognitive-complexity-threshold"><a class="header" href="#cognitive-complexity-threshold"><code>cognitive-complexity-threshold</code></a></h2>
 <p>The maximum cognitive complexity a function can have</p>
@@ -745,7 +746,7 @@ configuration of Clippy. By default, any configuration will replace the default 
 </ul>
 <h2 id="accept-comment-above-statement"><a class="header" href="#accept-comment-above-statement"><code>accept-comment-above-statement</code></a></h2>
 <p>Whether to accept a safety comment to be placed above the statement containing the <code>unsafe</code> block</p>
-<p><strong>Default Value:</strong> <code>false</code> (<code>bool</code>)</p>
+<p><strong>Default Value:</strong> <code>true</code> (<code>bool</code>)</p>
 <hr />
 <p><strong>Affected lints:</strong></p>
 <ul>
@@ -753,7 +754,7 @@ configuration of Clippy. By default, any configuration will replace the default 
 </ul>
 <h2 id="accept-comment-above-attributes"><a class="header" href="#accept-comment-above-attributes"><code>accept-comment-above-attributes</code></a></h2>
 <p>Whether to accept a safety comment to be placed above the attributes for the <code>unsafe</code> block</p>
-<p><strong>Default Value:</strong> <code>false</code> (<code>bool</code>)</p>
+<p><strong>Default Value:</strong> <code>true</code> (<code>bool</code>)</p>
 <hr />
 <p><strong>Affected lints:</strong></p>
 <ul>
@@ -783,6 +784,14 @@ be linted.</p>
 <p><strong>Affected lints:</strong></p>
 <ul>
 <li><a href="https://rust-lang.github.io/rust-clippy/master/index.html#absolute_paths"><code>absolute_paths</code></a></li>
+</ul>
+<h2 id="allowed-dotfiles"><a class="header" href="#allowed-dotfiles"><code>allowed-dotfiles</code></a></h2>
+<p>Additional dotfiles (files or directories starting with a dot) to allow</p>
+<p><strong>Default Value:</strong> <code>{}</code> (<code>rustc_data_structures::fx::FxHashSet&lt;String&gt;</code>)</p>
+<hr />
+<p><strong>Affected lints:</strong></p>
+<ul>
+<li><a href="https://rust-lang.github.io/rust-clippy/master/index.html#path_ends_with_ext"><code>path_ends_with_ext</code></a></li>
 </ul>
 <h2 id="enforce-iter-loop-reborrow"><a class="header" href="#enforce-iter-loop-reborrow"><code>enforce-iter-loop-reborrow</code></a></h2>
 <h4 id="example-3"><a class="header" href="#example-3">Example</a></h4>

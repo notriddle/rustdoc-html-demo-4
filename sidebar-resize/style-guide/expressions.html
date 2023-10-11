@@ -447,6 +447,22 @@ subsequent line. Put each sub-expression on its own line:</p>
 <span class="boring">}</span></code></pre></pre>
 <p>Prefer line-breaking at an assignment operator (either <code>=</code> or <code>+=</code>, etc.) rather
 than at other binary operators.</p>
+<h3 id="casts-as"><a class="header" href="#casts-as">Casts (<code>as</code>)</a></h3>
+<p>Format <code>as</code> casts like a binary operator. In particular, always include spaces
+around <code>as</code>, and if line-breaking, break before the <code>as</code> (never after) and
+block-indent the subsequent line. Format the type on the right-hand side using
+the rules for types.</p>
+<p>However, unlike with other binary operators, if chaining a series of <code>as</code> casts
+that require line-breaking, and line-breaking before the first <code>as</code> suffices to
+make the remainder fit on the next line, don't break before any subsequent
+<code>as</code>; instead, leave the series of types all on the same line:</p>
+<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>let cstr = very_long_expression()
+    as *const str as *const [u8] as *const std::os::raw::c_char;
+<span class="boring">}</span></code></pre></pre>
+<p>If the subsequent line still requires line-breaking, break and block-indent
+before each <code>as</code> as with other binary operators.</p>
 <h2 id="control-flow"><a class="header" href="#control-flow">Control flow</a></h2>
 <p>Do not include extraneous parentheses for <code>if</code> and <code>while</code> expressions.</p>
 <pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
@@ -522,12 +538,6 @@ assert_eq!(
     &quot;x and y were not equal, see {}&quot;,
     reason,
 );
-<span class="boring">}</span></code></pre></pre>
-<h2 id="casts-as"><a class="header" href="#casts-as">Casts (<code>as</code>)</a></h2>
-<p>Put spaces before and after <code>as</code>:</p>
-<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
-</span><span class="boring">fn main() {
-</span>let cstr = &quot;Hi\0&quot; as *const str as *const [u8] as *const std::os::raw::c_char;
 <span class="boring">}</span></code></pre></pre>
 <h2 id="chains-of-fields-and-method-calls"><a class="header" href="#chains-of-fields-and-method-calls">Chains of fields and method calls</a></h2>
 <p>A chain is a sequence of field accesses, method calls, and/or uses of the try

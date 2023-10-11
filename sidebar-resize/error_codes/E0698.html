@@ -171,10 +171,11 @@
                 <div id="content" class="content">
                     <main>
                         <h1 id="error-code-e0698"><a class="header" href="#error-code-e0698">Error code E0698</a></h1>
+<h4 id="note-this-error-code-is-no-longer-emitted-by-the-compiler"><a class="header" href="#note-this-error-code-is-no-longer-emitted-by-the-compiler">Note: this error code is no longer emitted by the compiler.</a></h4>
 <p>When using generators (or async) all type variables must be bound so a
 generator can be constructed.</p>
 <p>Erroneous code example:</p>
-<pre><pre class="playground"><code class="language-rust edition2018 compile_fail E0698"><span class="boring">#![allow(unused)]
+<pre><pre class="playground"><code class="language-rust edition2018 compile_fail E0282"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
 </span>async fn bar&lt;T&gt;() -&gt; () {}
 

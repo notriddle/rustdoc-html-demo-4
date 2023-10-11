@@ -481,25 +481,50 @@ where
 <span class="boring">}</span></code></pre></pre>
 <h2 id="type-aliases"><a class="header" href="#type-aliases">Type aliases</a></h2>
 <p>Keep type aliases on one line when they fit. If necessary to break the line, do
-so after the <code>=</code>, and block-indent the right-hand side:</p>
+so before the <code>=</code>, and block-indent the right-hand side:</p>
 <pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
 </span>pub type Foo = Bar&lt;T&gt;;
 
 // If multi-line is required
-type VeryLongType&lt;T, U: SomeBound&gt; =
-    AnEvenLongerType&lt;T, U, Foo&lt;T&gt;&gt;;
+type VeryLongType&lt;T, U: SomeBound&gt;
+    = AnEvenLongerType&lt;T, U, Foo&lt;T&gt;&gt;;
 <span class="boring">}</span></code></pre></pre>
-<p>Where possible avoid <code>where</code> clauses and keep type constraints inline. Where
-that is not possible split the line before and after the <code>where</code> clause (and
-split the <code>where</code> clause as normal), e.g.,</p>
+<p>When there is a trailing <code>where</code> clause after the type, and no <code>where</code> clause
+present before the type, break before the <code>=</code> and indent. Then break before the
+<code>where</code> keyword and format the clauses normally, e.g.,</p>
 <pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
-</span>type VeryLongType&lt;T, U&gt;
+</span>// With only a trailing where clause
+type VeryLongType&lt;T, U&gt;
+    = AnEvenLongerType&lt;T, U, Foo&lt;T&gt;&gt;
+where
+    T: U::AnAssociatedType,
+    U: SomeBound;
+<span class="boring">}</span></code></pre></pre>
+<p>When there is a <code>where</code> clause before the type, format it normally, and break
+after the last clause. Do not indent before the <code>=</code> to leave it visually
+distinct from the indented clauses that precede it. If there is additionally a
+<code>where</code> clause after the type, break before the <code>where</code> keyword and format the
+clauses normally.</p>
+<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>// With only a preceding where clause.
+type WithPrecedingWC&lt;T, U&gt;
 where
     T: U::AnAssociatedType,
     U: SomeBound,
 = AnEvenLongerType&lt;T, U, Foo&lt;T&gt;&gt;;
+
+// Or with both a preceding and trailing where clause.
+type WithPrecedingWC&lt;T, U&gt;
+where
+    T: U::AnAssociatedType,
+    U: SomeBound,
+= AnEvenLongerType&lt;T, U, Foo&lt;T&gt;&gt;
+where
+    T: U::AnAssociatedType2,
+    U: SomeBound2;
 <span class="boring">}</span></code></pre></pre>
 <h2 id="associated-types"><a class="header" href="#associated-types">Associated types</a></h2>
 <p>Format associated types like type aliases. Where an associated type has a

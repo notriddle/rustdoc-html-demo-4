@@ -174,7 +174,7 @@
 <h4 id="note-this-error-code-is-no-longer-emitted-by-the-compiler"><a class="header" href="#note-this-error-code-is-no-longer-emitted-by-the-compiler">Note: this error code is no longer emitted by the compiler.</a></h4>
 <p>You used a function or type which doesn't fit the requirements for where it was
 used. Erroneous code examples:</p>
-<pre><pre class="playground"><code class="language-rust compile_fail">#![feature(intrinsics)]
+<pre><pre class="playground"><code class="language-rust compile_fail">#![feature(intrinsics, rustc_attrs)]
 #![allow(internal_features)]
 
 extern &quot;rust-intrinsic&quot; {
@@ -208,7 +208,7 @@ impl Foo {
 }</code></pre></pre>
 <p>For the first code example, please check the function definition. Example:</p>
 <pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
-</span>#![feature(intrinsics)]
+</span>#![feature(intrinsics, rustc_attrs)]
 #![allow(internal_features)]
 
 <span class="boring">fn main() {

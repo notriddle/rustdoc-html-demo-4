@@ -1,5 +1,5 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `library/core/src/convert/mod.rs`."><title>mod.rs - source</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../static.files/SourceSerif4-Regular-46f98efaafac5295.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../static.files/FiraSans-Regular-018c141bf0843ffd.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../static.files/FiraSans-Medium-8f9a781e4970d388.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../static.files/SourceCodePro-Regular-562dcc5011b6de7d.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../static.files/SourceSerif4-Bold-a2c9cd1067f8b328.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../static.files/SourceCodePro-Semibold-d899c5a5c4aeb14a.ttf.woff2"><link rel="stylesheet" href="../../../static.files/normalize-76eba96aa4d2e634.css"><link rel="stylesheet" href="../../../static.files/rustdoc-2baeb68bba9ca696.css"><meta name="rustdoc-vars" data-root-path="../../../" data-static-root-path="../../../static.files/" data-current-crate="core" data-themes="" data-resource-suffix="1.74.0" data-rustdoc-version="1.74.0-dev" data-channel="nightly" data-search-js="search-5d3eaacf19ebf04f.js" data-settings-js="settings-3c6e833083d168bb.js" ><script src="../../../static.files/storage-dc6dee2b776f9a53.js"></script><script defer src="../../../static.files/src-script-0f5d2696cdf44bd3.js"></script><script defer src="../../../src-files1.74.0.js"></script><script defer src="../../../static.files/main-462d7caac759d94a.js"></script><noscript><link rel="stylesheet" href="../../../static.files/noscript-feafe1bb7466e4bd.css"></noscript><link rel="alternate icon" type="image/png" href="../../../static.files/favicon-16x16-8b506e7a72182f1c.png"><link rel="alternate icon" type="image/png" href="../../../static.files/favicon-32x32-422f7d1d52889060.png"><link rel="icon" type="image/svg+xml" href="../../../static.files/favicon-2c020d218678b618.svg"></head><body class="rustdoc src"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"></nav><div class="sidebar-resizer"></div>
-    <main><nav class="sub"><a class="sub-logo-container" href="../../../core/index.html"><img class="rust-logo" src="../../../static.files/rust-logo-151179464ae7ed46.svg" alt="logo"></a><form class="search-form"><span></span><input class="search-input" name="search" aria-label="Run search in the documentation" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><div id="help-button" tabindex="-1"><a href="../../../help.html" title="help">?</a></div><div id="settings-menu" tabindex="-1"><a href="../../../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../../../static.files/wheel-7b819b6101059cd0.svg"></a></div></form></nav><section id="main-content" class="content"><div class="example-wrap"><div data-nosnippet><pre class="src-line-numbers"><a href="#1" id="1">1</a>
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `library/core/src/convert/mod.rs`."><title>mod.rs - source</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../static.files/SourceSerif4-Regular-46f98efaafac5295.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../static.files/FiraSans-Regular-018c141bf0843ffd.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../static.files/FiraSans-Medium-8f9a781e4970d388.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../static.files/SourceCodePro-Regular-562dcc5011b6de7d.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../static.files/SourceSerif4-Bold-a2c9cd1067f8b328.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../static.files/SourceCodePro-Semibold-d899c5a5c4aeb14a.ttf.woff2"><link rel="stylesheet" href="../../../static.files/normalize-76eba96aa4d2e634.css"><link rel="stylesheet" href="../../../static.files/rustdoc-4c1914efbd6b11e9.css"><meta name="rustdoc-vars" data-root-path="../../../" data-static-root-path="../../../static.files/" data-current-crate="core" data-themes="" data-resource-suffix="1.75.0" data-rustdoc-version="1.75.0-dev" data-channel="nightly" data-search-js="search-8fbf244ebcf71464.js" data-settings-js="settings-3c6e833083d168bb.js" ><script src="../../../static.files/storage-dc6dee2b776f9a53.js"></script><script defer src="../../../static.files/src-script-0f5d2696cdf44bd3.js"></script><script defer src="../../../src-files1.75.0.js"></script><script defer src="../../../static.files/main-8f5a221be21b7e80.js"></script><noscript><link rel="stylesheet" href="../../../static.files/noscript-feafe1bb7466e4bd.css"></noscript><link rel="alternate icon" type="image/png" href="../../../static.files/favicon-16x16-8b506e7a72182f1c.png"><link rel="alternate icon" type="image/png" href="../../../static.files/favicon-32x32-422f7d1d52889060.png"><link rel="icon" type="image/svg+xml" href="../../../static.files/favicon-2c020d218678b618.svg"></head><body class="rustdoc src"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"></nav><div class="sidebar-resizer"></div>
+    <main><nav class="sub"><a class="sub-logo-container" href="../../../core/index.html"><img class="rust-logo" src="../../../static.files/rust-logo-151179464ae7ed46.svg" alt="core"></a><form class="search-form"><span></span><input class="search-input" name="search" aria-label="Run search in the documentation" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><div id="help-button" tabindex="-1"><a href="../../../help.html" title="help">?</a></div><div id="settings-menu" tabindex="-1"><a href="../../../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../../../static.files/wheel-7b819b6101059cd0.svg"></a></div></form></nav><section id="main-content" class="content"><div class="example-wrap"><div data-nosnippet><pre class="src-line-numbers"><a href="#1" id="1">1</a>
 <a href="#2" id="2">2</a>
 <a href="#3" id="3">3</a>
 <a href="#4" id="4">4</a>
@@ -927,6 +927,48 @@
 <a href="#926" id="926">926</a>
 <a href="#927" id="927">927</a>
 <a href="#928" id="928">928</a>
+<a href="#929" id="929">929</a>
+<a href="#930" id="930">930</a>
+<a href="#931" id="931">931</a>
+<a href="#932" id="932">932</a>
+<a href="#933" id="933">933</a>
+<a href="#934" id="934">934</a>
+<a href="#935" id="935">935</a>
+<a href="#936" id="936">936</a>
+<a href="#937" id="937">937</a>
+<a href="#938" id="938">938</a>
+<a href="#939" id="939">939</a>
+<a href="#940" id="940">940</a>
+<a href="#941" id="941">941</a>
+<a href="#942" id="942">942</a>
+<a href="#943" id="943">943</a>
+<a href="#944" id="944">944</a>
+<a href="#945" id="945">945</a>
+<a href="#946" id="946">946</a>
+<a href="#947" id="947">947</a>
+<a href="#948" id="948">948</a>
+<a href="#949" id="949">949</a>
+<a href="#950" id="950">950</a>
+<a href="#951" id="951">951</a>
+<a href="#952" id="952">952</a>
+<a href="#953" id="953">953</a>
+<a href="#954" id="954">954</a>
+<a href="#955" id="955">955</a>
+<a href="#956" id="956">956</a>
+<a href="#957" id="957">957</a>
+<a href="#958" id="958">958</a>
+<a href="#959" id="959">959</a>
+<a href="#960" id="960">960</a>
+<a href="#961" id="961">961</a>
+<a href="#962" id="962">962</a>
+<a href="#963" id="963">963</a>
+<a href="#964" id="964">964</a>
+<a href="#965" id="965">965</a>
+<a href="#966" id="966">966</a>
+<a href="#967" id="967">967</a>
+<a href="#968" id="968">968</a>
+<a href="#969" id="969">969</a>
+<a href="#970" id="970">970</a>
 </pre></div><pre class="rust"><code><span class="doccomment">//! Traits for conversions between types.
 //!
 //! The traits in this module provide a way to convert from one type to another type.
@@ -1029,6 +1071,7 @@
 </span><span class="attr">#[stable(feature = <span class="string">&quot;convert_id&quot;</span>, since = <span class="string">&quot;1.33.0&quot;</span>)]
 #[rustc_const_stable(feature = <span class="string">&quot;const_identity&quot;</span>, since = <span class="string">&quot;1.33.0&quot;</span>)]
 #[inline(always)]
+#[rustc_diagnostic_item = <span class="string">&quot;convert_identity&quot;</span>]
 </span><span class="kw">pub const fn </span>identity&lt;T&gt;(x: T) -&gt; T {
     x
 }
@@ -1407,6 +1450,46 @@
 /// - `From&lt;T&gt; for U` implies [`Into`]`&lt;U&gt; for T`
 /// - `From` is reflexive, which means that `From&lt;T&gt; for T` is implemented
 ///
+/// # When to implement `From`
+///
+/// While there&#39;s no technical restrictions on which conversions can be done using
+/// a `From` implementation, the general expectation is that the conversions
+/// should typically be restricted as follows:
+///
+/// * The conversion is *infallible*: if the conversion can fail, use [`TryFrom`]
+///   instead; don&#39;t provide a `From` impl that panics.
+///
+/// * The conversion is *lossless*: semantically, it should not lose or discard
+///   information. For example, `i32: From&lt;u16&gt;` exists, where the original
+///   value can be recovered using `u16: TryFrom&lt;i32&gt;`.  And `String: From&lt;&amp;str&gt;`
+///   exists, where you can get something equivalent to the original value via
+///   `Deref`.  But `From` cannot be used to convert from `u32` to `u16`, since
+///   that cannot succeed in a lossless way.  (There&#39;s some wiggle room here for
+///   information not considered semantically relevant.  For example,
+///   `Box&lt;[T]&gt;: From&lt;Vec&lt;T&gt;&gt;` exists even though it might not preserve capacity,
+///   like how two vectors can be equal despite differing capacities.)
+///
+/// * The conversion is *value-preserving*: the conceptual kind and meaning of
+///   the resulting value is the same, even though the Rust type and technical
+///   representation might be different.  For example `-1_i8 as u8` is *lossless*,
+///   since `as` casting back can recover the original value, but that conversion
+///   is *not* available via `From` because `-1` and `255` are different conceptual
+///   values (despite being identical bit patterns technically).  But
+///   `f32: From&lt;i16&gt;` *is* available because `1_i16` and `1.0_f32` are conceptually
+///   the same real number (despite having very different bit patterns technically).
+///   `String: From&lt;char&gt;` is available because they&#39;re both *text*, but
+///   `String: From&lt;u32&gt;` is *not* available, since `1` (a number) and `&quot;1&quot;`
+///   (text) are too different.  (Converting values to text is instead covered
+///   by the [`Display`](crate::fmt::Display) trait.)
+///
+/// * The conversion is *obvious*: it&#39;s the only reasonable conversion between
+///   the two types.  Otherwise it&#39;s better to have it be a named method or
+///   constructor, like how [`str::as_bytes`] is a method and how integers have
+///   methods like [`u32::from_ne_bytes`], [`u32::from_le_bytes`], and
+///   [`u32::from_be_bytes`], none of which are `From` implementations.  Whereas
+///   there&#39;s only one reasonable way to wrap an [`Ipv6Addr`](crate::net::Ipv6Addr)
+///   into an [`IpAddr`](crate::net::IpAddr), thus `IpAddr: From&lt;Ipv6Addr&gt;` exists.
+///
 /// # Examples
 ///
 /// [`String`] implements `From&lt;&amp;str&gt;`:
@@ -1571,6 +1654,7 @@
 
     <span class="doccomment">/// Performs the conversion.
     </span><span class="attr">#[stable(feature = <span class="string">&quot;try_from&quot;</span>, since = <span class="string">&quot;1.34.0&quot;</span>)]
+    #[rustc_diagnostic_item = <span class="string">&quot;try_from_fn&quot;</span>]
     </span><span class="kw">fn </span>try_from(value: T) -&gt; <span class="prelude-ty">Result</span>&lt;<span class="self">Self</span>, <span class="self">Self</span>::Error&gt;;
 }
 

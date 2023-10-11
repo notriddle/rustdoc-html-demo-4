@@ -171,8 +171,45 @@
                 <div id="content" class="content">
                     <main>
                         <h1 id="error-code-e0283"><a class="header" href="#error-code-e0283">Error code E0283</a></h1>
-<p>An implementation cannot be chosen unambiguously because of lack of information.</p>
+<p>The compiler could not infer a type and asked for a type annotation.</p>
 <p>Erroneous code example:</p>
+<pre><pre class="playground"><code class="language-rust compile_fail E0283"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>let x = &quot;hello&quot;.chars().rev().collect();
+<span class="boring">}</span></code></pre></pre>
+<p>This error indicates that type inference did not result in one unique possible
+type, and extra information is required. In most cases this can be provided
+by adding a type annotation. Sometimes you need to specify a generic type
+parameter manually.</p>
+<p>A common example is the <code>collect</code> method on <code>Iterator</code>. It has a generic type
+parameter with a <code>FromIterator</code> bound, which for a <code>char</code> iterator is
+implemented by <code>Vec</code> and <code>String</code> among others. Consider the following snippet
+that reverses the characters of a string:</p>
+<p>In the first code example, the compiler cannot infer what the type of <code>x</code> should
+be: <code>Vec&lt;char&gt;</code> and <code>String</code> are both suitable candidates. To specify which type
+to use, you can use a type annotation on <code>x</code>:</p>
+<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>let x: Vec&lt;char&gt; = &quot;hello&quot;.chars().rev().collect();
+<span class="boring">}</span></code></pre></pre>
+<p>It is not necessary to annotate the full type. Once the ambiguity is resolved,
+the compiler can infer the rest:</p>
+<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>let x: Vec&lt;_&gt; = &quot;hello&quot;.chars().rev().collect();
+<span class="boring">}</span></code></pre></pre>
+<p>Another way to provide the compiler with enough information, is to specify the
+generic type parameter:</p>
+<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>let x = &quot;hello&quot;.chars().rev().collect::&lt;Vec&lt;char&gt;&gt;();
+<span class="boring">}</span></code></pre></pre>
+<p>Again, you need not specify the full type if the compiler can infer it:</p>
+<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>let x = &quot;hello&quot;.chars().rev().collect::&lt;Vec&lt;_&gt;&gt;();
+<span class="boring">}</span></code></pre></pre>
+<p>We can see a self-contained example below:</p>
 <pre><pre class="playground"><code class="language-rust compile_fail E0283"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
 </span>struct Foo;
