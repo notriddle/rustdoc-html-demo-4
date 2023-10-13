@@ -1555,6 +1555,49 @@ href="https://doc.rust-lang.org/${channel}/rustdoc/how-to-read-rustdoc.html\
     resizer.addEventListener("pointerdown", initResize, false);
 }());
 
+// This function adds the table of contents, if it's enabled
+(function() {
+    const topDoc = document.querySelector(".top-doc");
+    if (!topDoc) {
+        return;
+    }
+    const sidebar = document.querySelector(".sidebar");
+    if (!sidebar) {
+        return;
+    }
+    let tocSection = document.querySelector("section.sidebar-elems");
+    let toc = null;
+    let loc = document.querySelector("section.sidebar-elems h2.location");
+    onEachLazy(topDoc.querySelectorAll("h2"), h2 => {
+        if (!tocSection) {
+            tocSection = document.createElement("section");
+            tocSection.className = "sidebar-elems";
+            sidebar.appendChild(tocSection);
+        }
+        if (!loc) {
+            if (hasClass(document.body, "crate")) {
+                loc = document.createElement("h2");
+                loc.className = "location";
+                loc.innerText = `Crate ${window.currentCrate}`;
+                tocSection.insertBefore(loc, tocSection.firstElementChild);
+            }
+        }
+        if (tocSection && !toc) {
+            toc = document.createElement("ul");
+            toc.className = "block";
+            insertAfter(toc, loc);
+        }
+        if (loc && h2.hasAttribute("id")) {
+            const a = document.createElement("a");
+            a.href = `#${h2.id}`;
+            a.innerText = h2.innerText;
+            const li = document.createElement("li");
+            li.appendChild(a);
+            toc.appendChild(li);
+        }
+    });
+}());
+
 // This section handles the copy button that appears next to the path breadcrumbs
 (function() {
     let reset_button_timeout = null;
