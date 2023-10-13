@@ -1578,7 +1578,10 @@ href="https://doc.rust-lang.org/${channel}/rustdoc/how-to-read-rustdoc.html\
             if (hasClass(document.body, "crate")) {
                 loc = document.createElement("h2");
                 loc.className = "location";
-                loc.innerText = `Crate ${window.currentCrate}`;
+                const locLink = document.createElement("a");
+                locLink.href = "#";
+                locLink.innerText = `Crate ${window.currentCrate}`;
+                loc.appendChild(locLink);
                 tocSection.insertBefore(loc, tocSection.firstElementChild);
             }
         }
