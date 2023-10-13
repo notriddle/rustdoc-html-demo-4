@@ -554,6 +554,14 @@ img {
 	visibility: visible;
 }
 
+/*
+	TOC shows crate location when turned on.
+	If we aren't running with split sidebar, hide it.
+*/
+.toc.location {
+	display: none;
+}
+
 .hide-toc .toc {
 	display: none !important;
 }
@@ -635,6 +643,9 @@ img {
 		flex-grow: 1;
 		overflow-y: scroll;
 		overscroll-behavior: contain;
+	}
+	html:not(.sidebar-nosplit) .toc.location {
+		display: block;
 	}
 }
 
