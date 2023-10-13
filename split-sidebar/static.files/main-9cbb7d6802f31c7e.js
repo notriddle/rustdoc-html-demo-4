@@ -1577,7 +1577,7 @@ href="https://doc.rust-lang.org/${channel}/rustdoc/how-to-read-rustdoc.html\
         if (!loc) {
             if (hasClass(document.body, "crate")) {
                 loc = document.createElement("h2");
-                loc.className = "location";
+                loc.className = "location toc";
                 const locLink = document.createElement("a");
                 locLink.href = "#";
                 locLink.innerText = `Crate ${window.currentCrate}`;
@@ -1587,7 +1587,7 @@ href="https://doc.rust-lang.org/${channel}/rustdoc/how-to-read-rustdoc.html\
         }
         if (tocSection && !toc) {
             toc = document.createElement("ul");
-            toc.className = "block";
+            toc.className = "block toc";
             insertAfter(toc, loc);
         }
         if (loc && h2.hasAttribute("id")) {

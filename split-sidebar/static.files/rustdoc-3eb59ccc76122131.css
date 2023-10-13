@@ -554,6 +554,10 @@ img {
 	visibility: visible;
 }
 
+.hide-toc .toc {
+	display: none !important;
+}
+
 /*
 	We can't use CSS variables in container queries.
 	To work around this, we layer on a few different hacks.
